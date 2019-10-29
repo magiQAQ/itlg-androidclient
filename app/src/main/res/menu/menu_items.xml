@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/menu_add_operation_log"
+        android:title="@string/add_operation_log"
+        android:icon="@mipmap/watering"
+        app:showAsAction="never"/>
+    <item android:id="@+id/menu_add_device_data"
+        android:title="@string/add_device_data"
+        android:icon="@mipmap/tools"
+        app:showAsAction="never"/>
+    <item android:id="@+id/menu_add_new_farm"
+        android:title="@string/add_new_farm"
+        android:icon="@mipmap/farm"
+        app:showAsAction="never"/>
+</menu>
