@@ -1,6 +1,5 @@
 package com.itlg.client.ui.activity;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
