@@ -18,11 +18,9 @@ public abstract class CommonCallback<T> extends StringCallback {
 
     private static final String TAG = "CommonCallback";
     private Type type;
-    private String typeName;
 
     public CommonCallback() {
         type = getSuperclassTypeParameter(getClass());
-        typeName = getTypeName(type);
     }
 
     /**
@@ -42,17 +40,6 @@ public abstract class CommonCallback<T> extends StringCallback {
         return $Gson$Types.canonicalize(parameterized.getActualTypeArguments()[0]);
     }
 
-    /**
-     * @param type type
-     * @return 得到当前type的类名
-     */
-    private static String getTypeName(Type type) {
-        // 像. | 这样的符号需要加上转义
-        String[] temp = type.toString().split("\\.");
-        return temp[temp.length - 1];
-    }
-
-
     @Override
     public void onError(Call call, Exception e, int id) {
         onFail(e);
@@ -68,8 +55,8 @@ public abstract class CommonCallback<T> extends StringCallback {
             JSONObject jsonObject = new JSONObject(response);
             boolean succ = jsonObject.getBoolean("succ");
             if (succ) {
-                JSONObject data = jsonObject.getJSONObject("data");
-                onSuccess(GsonUtils.getGson().fromJson(data.getString(typeName.toLowerCase()), type));
+                String data = jsonObject.getString("data");
+                onSuccess(GsonUtils.getGson().fromJson(data, type));
             } else {
                 onFail(new RuntimeException(jsonObject.getString("stmt")));
             }

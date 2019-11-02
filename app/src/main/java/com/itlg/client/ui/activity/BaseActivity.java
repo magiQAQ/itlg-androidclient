@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.itlg.client.ItlgApplication;
 import com.itlg.client.R;
 
 @SuppressLint("Registered")
@@ -40,6 +41,10 @@ public class BaseActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    protected ItlgApplication getMyApplication(){
+        return (ItlgApplication)getApplication();
     }
 
 }

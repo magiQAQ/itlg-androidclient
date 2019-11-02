@@ -8,7 +8,9 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.itlg.client.R;
+import com.itlg.client.UserInfoHolder;
 import com.itlg.client.bean.User;
+import com.itlg.client.utils.ToastUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -16,6 +18,9 @@ import java.lang.reflect.Method;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * 操作员登录后看到的界面
+ */
 public class OperatorActivity extends BaseActivity {
 
     @BindView(R.id.viewPager)
@@ -23,6 +28,8 @@ public class OperatorActivity extends BaseActivity {
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bottomNavigation;
     private User user;
+    private UserInfoHolder holder = UserInfoHolder.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +37,20 @@ public class OperatorActivity extends BaseActivity {
         setContentView(R.layout.activity_operater);
         ButterKnife.bind(this);
 
-        user = (User) getIntent().getSerializableExtra("user");
+        user = holder.getUser();
         setTitle("操作员 " + user.getName());
         setupSimpleToolbar();
+        //验证用户是否为合法登录
+        if (user.getPrivilege()!=1){
+            ToastUtils.showToast("你的身份不是操作员");
+            finish();
+        }
+
+        initView();
+    }
+
+    private void initView() {
+
     }
 
     @Override
@@ -54,11 +72,7 @@ public class OperatorActivity extends BaseActivity {
                 Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
                 method.setAccessible(true);
                 method.invoke(menu, true);
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             }
 

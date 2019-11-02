@@ -235,8 +235,8 @@ public class RegisterActivity extends BaseActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     if (jsonObject.getBoolean("succ")){
-                        JSONObject data = jsonObject.getJSONObject("data");
-                        ToastUtils.showToast("注册成功，" + data.getString("name"));
+                        String data = jsonObject.getString("data");
+                        ToastUtils.showToast("注册成功，" + data);
 
                         //这册成功后将账号密码传回
                         Intent intent = new Intent();
