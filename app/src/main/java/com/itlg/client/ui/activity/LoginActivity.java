@@ -38,7 +38,7 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        setStatusBarColor(R.color.white, false);
+        setStatusBarColor(R.color.transparent, false);
 
         //如果用户已经登录过,直接跳转到主界面
         if (userInfoHolder.getUser().getPrivilege() > 1) {

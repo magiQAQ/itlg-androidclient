@@ -5,8 +5,6 @@ import com.itlg.client.config.Config;
 import com.itlg.client.net.CommonCallback;
 import com.zhy.http.okhttp.OkHttpUtils;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 
 public class OperationLogBiz {
@@ -21,7 +19,7 @@ public class OperationLogBiz {
     public void getOperationLogs(int userId, int sch_page, CommonCallback<ArrayList<OperationLog>> commonCallback){
         OkHttpUtils.post()
                 .url(Config.BASEURL)
-                .addParams("key","getOperationLogByPhone")
+                .addParams("key", "OperationLogTP.getOperationLogByPhone")
                 .addParams("userId",String.valueOf(userId))
                 .addParams("sch_page",String.valueOf(sch_page))
                 .tag(this)

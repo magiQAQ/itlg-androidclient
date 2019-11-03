@@ -4,12 +4,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.itlg.client.R;
 import com.itlg.client.UserInfoHolder;
 import com.itlg.client.bean.User;
+import com.itlg.client.ui.adapter.FragmentAdapter;
+import com.itlg.client.ui.fragment.DeviceDataFragment;
+import com.itlg.client.ui.fragment.FarmInfoFragment;
+import com.itlg.client.ui.fragment.OperationLogFragment;
 import com.itlg.client.utils.ToastUtils;
 
 import java.lang.reflect.InvocationTargetException;
@@ -17,6 +22,7 @@ import java.lang.reflect.Method;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnPageChange;
 
 /**
  * 操作员登录后看到的界面
@@ -27,7 +33,6 @@ public class OperatorActivity extends BaseActivity {
     ViewPager viewPager;
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bottomNavigation;
-    private User user;
     private UserInfoHolder holder = UserInfoHolder.getInstance();
 
 
@@ -37,7 +42,9 @@ public class OperatorActivity extends BaseActivity {
         setContentView(R.layout.activity_operater);
         ButterKnife.bind(this);
 
-        user = holder.getUser();
+        setStatusBarColor(R.color.blueGreen, true);
+
+        User user = holder.getUser();
         setTitle("操作员 " + user.getName());
         setupSimpleToolbar();
         //验证用户是否为合法登录
@@ -49,9 +56,36 @@ public class OperatorActivity extends BaseActivity {
         initView();
     }
 
-    private void initView() {
 
+    private void initView() {
+        Fragment[] fragments = {OperationLogFragment.getInstance(),
+                DeviceDataFragment.getInstance(),
+                FarmInfoFragment.getInstance()};
+        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
+        viewPager.setAdapter(adapter);
+        bottomNavigation.setOnNavigationItemSelectedListener(menuItem -> {
+            switch (menuItem.getItemId()) {
+                case R.id.navigation_operation:
+                    viewPager.setCurrentItem(0);
+                    break;
+                case R.id.navigation_device_data:
+                    viewPager.setCurrentItem(1);
+                    break;
+                case R.id.navigation_farm_info:
+                    viewPager.setCurrentItem(2);
+                    break;
+            }
+            return false;
+        });
     }
+
+
+    @OnPageChange(R.id.viewPager)
+    public void onViewPagerChange(int position) {
+        bottomNavigation.setSelectedItemId(bottomNavigation
+                .getMenu().getItem(position).getItemId());
+    }
+
 
     @Override
     protected void onDestroy() {

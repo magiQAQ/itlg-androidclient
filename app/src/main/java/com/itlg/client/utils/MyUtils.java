@@ -17,6 +17,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class MyUtils {
 
@@ -29,16 +33,17 @@ public class MyUtils {
 
     /**
      * 通过相册返回的contentUri得到图片和旋转信息,修正后保存
-     * @param context 上下文
+     *
+     * @param context    上下文
      * @param contentUri 相册返回的contentUri
      * @return 保存的图片路径
      */
-    public static String convertUri(Context context,Uri contentUri){
+    public static String convertUri(Context context, Uri contentUri) {
         InputStream inputStream;
         try {
             inputStream = context.getContentResolver().openInputStream(contentUri);
-            if (inputStream==null){
-                Log.e(TAG,"相册传回的uri有误");
+            if (inputStream == null) {
+                Log.e(TAG, "相册传回的uri有误");
                 return null;
             }
             //这里inputStream需要用两次,先转化为ByteArrayOutputStream
@@ -55,9 +60,9 @@ public class MyUtils {
             outputStream.close();
             //将图片保存并返回图片路径
             return saveBitmap(context, bitmap, ORIGIN_AVATAR_FILENAME);
-        } catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
@@ -66,8 +71,8 @@ public class MyUtils {
     /**
      * 将图片保存到外部的私有文件夹,不需要文件读写权限
      *
-     * @param context 上下文
-     * @param bitmap 位图
+     * @param context  上下文
+     * @param bitmap   位图
      * @param fileName 文件名
      * @return 该文件的路径
      */
@@ -130,7 +135,7 @@ public class MyUtils {
                     degree = 270;
                     break;
                 case ExifInterface.ORIENTATION_UNDEFINED:
-                    Log.e(TAG,"图片方向没有被定义");
+                    Log.e(TAG, "图片方向没有被定义");
                     break;
             }
         } catch (IOException e) {
@@ -166,15 +171,16 @@ public class MyUtils {
 
     /**
      * 输入流不支持mark和reset方法时,就需要通过此方法来复制
+     *
      * @param inputStream 要复制的输入流
      * @return 复制完的输出流
      */
-    public static ByteArrayOutputStream copyStream(InputStream inputStream){
+    public static ByteArrayOutputStream copyStream(InputStream inputStream) {
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];
             int len;
-            while ((len = inputStream.read(buffer)) > -1 ) {
+            while ((len = inputStream.read(buffer)) > -1) {
                 outputStream.write(buffer, 0, len);
             }
             outputStream.flush();
@@ -184,6 +190,43 @@ public class MyUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * yyyy-MM-dd HH:mm:ss或yyyy年MM月dd日
+     *
+     * @param time long型的时间值
+     * @return 转化完成的字符串
+     */
+    public static String longTypeTimeToString(long time) {
+        Date date = new Date(time);
+        //date.getYear()方法已过时 calendar一开始默认是系统时间
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        //将系统时间取出后,将其赋值为传入的时间
+        calendar.setTime(date);
+        SimpleDateFormat simpleDateFormat;
+        if (calendar.get(Calendar.YEAR) != year) {
+            //不是同一年需要显示年份
+            simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日", Locale.CHINA);
+        } else if (calendar.get(Calendar.MONTH) != month) {
+            //不是同一月需要显示月份
+            simpleDateFormat = new SimpleDateFormat("MM月dd日", Locale.CHINA);
+        } else if (calendar.get(Calendar.DAY_OF_MONTH) != day) {
+            //不是同一天显示日和几点几分
+            simpleDateFormat = new SimpleDateFormat("dd日 hh:mm", Locale.CHINA);
+        } else if (calendar.get(Calendar.HOUR_OF_DAY) != hour) {
+            //不是同一小时显示几点几分
+            simpleDateFormat = new SimpleDateFormat("hh:mm", Locale.CHINA);
+        } else {
+            //同一小时的话就显示多少分钟以前
+            return String.format(Locale.CHINA, "%d分钟前", minute - calendar.get(Calendar.MINUTE));
+        }
+        return simpleDateFormat.format(date);
     }
 
 }
