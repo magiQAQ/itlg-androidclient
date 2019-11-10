@@ -12,28 +12,12 @@ public class UserInfoHolder {
     private static final String KEY_NAME = "key_name";
     private static final String KEY_EMAIL = "key_email";
     private static final String KEY_CELLPHONE = "key_cellphone";
-    private static final String KEY_USERIMG = "key_userImg";
-    private static final String KEY_RECORDTIME = "key_recordTime";
+    private static final String KEY_USER_IMG = "key_userImg";
+    private static final String KEY_RECORD_TIME = "key_recordTime";
     private static final String KEY_PRIVILEGE = "key_privilege";
 
     public static UserInfoHolder getInstance() {
         return instance;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-        if (user != null) {
-            SharedPreferencesUtils instance = SharedPreferencesUtils.getInstance();
-            instance.put(KEY_ID, user.getId());
-            instance.put(KEY_USERNAME, user.getUsername());
-            instance.put(KEY_PASSWORD, user.getPassword());
-            instance.put(KEY_NAME, user.getName());
-            instance.put(KEY_EMAIL,user.getEmail());
-            instance.put(KEY_CELLPHONE,user.getCellphone());
-            instance.put(KEY_USERIMG,user.getUserImg());
-            instance.put(KEY_RECORDTIME,user.getRecordTime());
-            instance.put(KEY_PRIVILEGE,user.getPrivilege());
-        }
     }
 
     public User getUser() {
@@ -45,8 +29,8 @@ public class UserInfoHolder {
             String name = (String) instance.get(KEY_NAME,"");
             String email = (String) instance.get(KEY_EMAIL,"");
             String cellphone = (String) instance.get(KEY_CELLPHONE,"");
-            String userImg = (String) instance.get(KEY_USERIMG,"");
-            long recordTime = (long) instance.get(KEY_RECORDTIME, 0L);
+            String userImg = (String) instance.get(KEY_USER_IMG, "");
+            long recordTime = (long) instance.get(KEY_RECORD_TIME, 0L);
             int privilege = (int) instance.get(KEY_PRIVILEGE, 0);
             user = new User();
             user.setId(id);
@@ -60,5 +44,29 @@ public class UserInfoHolder {
             user.setPrivilege(privilege);
         }
         return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+        if (user != null) {
+            SharedPreferencesUtils instance = SharedPreferencesUtils.getInstance();
+            instance.put(KEY_ID, user.getId());
+            instance.put(KEY_USERNAME, user.getUsername());
+            instance.put(KEY_PASSWORD, user.getPassword());
+            instance.put(KEY_NAME, user.getName());
+            instance.put(KEY_EMAIL, user.getEmail());
+            instance.put(KEY_CELLPHONE, user.getCellphone());
+            instance.put(KEY_USER_IMG, user.getUserImg());
+            instance.put(KEY_RECORD_TIME, user.getRecordTime());
+            instance.put(KEY_PRIVILEGE, user.getPrivilege());
+        }
+    }
+
+    public void clearUser() {
+        if (user != null) {
+            user = null;
+        }
+        //先把sp中的用户信息全部清除掉
+        SharedPreferencesUtils.getInstance().clear();
     }
 }

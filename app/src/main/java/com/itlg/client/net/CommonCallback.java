@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Objects;
 
 import okhttp3.Call;
 
@@ -19,7 +20,7 @@ public abstract class CommonCallback<T> extends StringCallback {
     private static final String TAG = "CommonCallback";
     private Type type;
 
-    public CommonCallback() {
+    protected CommonCallback() {
         type = getSuperclassTypeParameter(getClass());
     }
 
@@ -37,7 +38,7 @@ public abstract class CommonCallback<T> extends StringCallback {
         }
         //参数化类型
         ParameterizedType parameterized = (ParameterizedType) superclass;
-        return $Gson$Types.canonicalize(parameterized.getActualTypeArguments()[0]);
+        return $Gson$Types.canonicalize(Objects.requireNonNull(parameterized).getActualTypeArguments()[0]);
     }
 
     @Override
@@ -61,7 +62,7 @@ public abstract class CommonCallback<T> extends StringCallback {
                 onFail(new RuntimeException(jsonObject.getString("stmt")));
             }
         } catch (JSONException e) {
-            Log.e("json", response);
+            Log.e(TAG, response);
             onFail(e);
             e.printStackTrace();
         }

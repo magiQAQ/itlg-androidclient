@@ -40,13 +40,25 @@ public class LoginActivity extends BaseActivity {
 
         setStatusBarColor(R.color.transparent, false);
 
-        //如果用户已经登录过,直接跳转到主界面
-        if (userInfoHolder.getUser().getPrivilege() > 1) {
-            toNormalUserActivity(userInfoHolder.getUser());
-        } else if (userInfoHolder.getUser().getPrivilege() == 1) {
-            toOperatorActivity(userInfoHolder.getUser());
+        User user = userInfoHolder.getUser();
+        //如果用户已经登录过,则自动登录并跳转到主界面
+        if (user.getId() > 0) {
+            userBiz.login(user.getUsername(), user.getPassword(), new CommonCallback<User>() {
+                @Override
+                public void onFail(Exception e) {
+                    ToastUtils.showToast(e.getMessage());
+                }
+
+                @Override
+                public void onSuccess(User response) {
+                    if (response.getPrivilege() > 1) {
+                        toNormalUserActivity(userInfoHolder.getUser());
+                    } else if (response.getPrivilege() == 1) {
+                        toOperatorActivity(userInfoHolder.getUser());
+                    }
+                }
+            });
         }
-        //ToastUtils.showToast(userInfoHolder.getUser().getName()+" "+userInfoHolder.getUser().getPrivilege());
     }
 
     @Override
@@ -85,6 +97,8 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onSuccess(User response) {
                 ToastUtils.showToast("欢迎回来," + response.getName());
+                //返回的密码会被MD5加密,所以保存原来的密码
+                response.setPassword(password);
                 //保存用户信息
                 userInfoHolder.setUser(response);
                 //判断用户身份

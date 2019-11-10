@@ -6,8 +6,4 @@
     <item android:id="@+id/navigation_device_data"
         android:title="@string/device_data"
         android:icon="@mipmap/tools_navi"/>
-    <item android:id="@+id/navigation_farm_info"
-        android:title="@string/farm_info"
-        android:icon="@mipmap/farm_navi"/>
-
 </menu>

@@ -51,7 +51,7 @@ import androidx.core.view.ViewCompat;
  * result of the gesture and can only support one direct child. This view will
  * also be made the target of the gesture and will be forced to match both the
  * width and the height supplied in this layout. The SwipeRefreshLayout does not
- * provide accessibility events; instead, a menu item must be provided to allow
+ * provide accessibility events; instead, a farm_detail_menu item must be provided to allow
  * refresh of the content wherever this gesture is used.
  * </p>
  */

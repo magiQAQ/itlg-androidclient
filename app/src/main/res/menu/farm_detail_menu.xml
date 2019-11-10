@@ -9,8 +9,4 @@
         android:title="@string/add_device_data"
         android:icon="@mipmap/tools"
         app:showAsAction="never"/>
-    <item android:id="@+id/menu_add_new_farm"
-        android:title="@string/add_new_farm"
-        android:icon="@mipmap/farm"
-        app:showAsAction="never"/>
 </menu>

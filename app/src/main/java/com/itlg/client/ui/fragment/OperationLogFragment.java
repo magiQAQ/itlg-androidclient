@@ -4,6 +4,7 @@ package com.itlg.client.ui.fragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,6 @@ import com.itlg.client.utils.ToastUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,7 +45,7 @@ public class OperationLogFragment extends Fragment {
     RecyclerView recyclerView;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-    private List<OperationLog> operationLogs;
+    private ArrayList<OperationLog> operationLogs;
     private int sch_page;
     private OperationLogAdapter adapter;
 
@@ -96,10 +96,15 @@ public class OperationLogFragment extends Fragment {
         operationLogBiz.getOperationLogs(userId, 1, new CommonCallback<ArrayList<OperationLog>>() {
             @Override
             public void onFail(Exception e) {
+                Log.e("OperationLogFragment", e.getMessage());
                 ToastUtils.showToast(e.getMessage());
                 //如果载入动画在显示的话就关闭载入动画
-                if (swipeRefreshLayout.isRefreshing()) {
+                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
                     swipeRefreshLayout.setRefreshing(false);
+                }
+                if (e.getMessage().contains("没有更多") && operationLogs != null) {
+                    operationLogs.clear();
+                    setupRecyclerView();
                 }
             }
 
@@ -109,11 +114,14 @@ public class OperationLogFragment extends Fragment {
                 args.putParcelableArrayList(KEY_OPERATION_LOGS, response);
                 args.putInt(KEY_SCH_KEY, 1);
                 setArguments(args);
-                operationLogs = response;
+                if (operationLogs == null) operationLogs = new ArrayList<>();
+                operationLogs.clear();
+                operationLogs.addAll(response);
                 sch_page = 1;
                 setupRecyclerView();
+
                 //如果载入动画在显示的话就关闭载入动画
-                if (swipeRefreshLayout.isRefreshing()) {
+                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
                     ToastUtils.showToast("刷新成功");
                     swipeRefreshLayout.setRefreshing(false);
                 }
@@ -137,6 +145,7 @@ public class OperationLogFragment extends Fragment {
 
             @Override
             public void onSuccess(ArrayList<OperationLog> response) {
+
                 operationLogs.addAll(response);
                 adapter.notifyDataSetChanged();
                 swipeRefreshLayout.setPullUpRefreshing(false);
@@ -146,17 +155,23 @@ public class OperationLogFragment extends Fragment {
 
 
     private void setupRecyclerView() {
-        adapter = new OperationLogAdapter(getActivity(), operationLogs);
+        if (adapter == null) {
+            adapter = new OperationLogAdapter(getActivity(), operationLogs);
+        } else {
+            adapter.notifyDataSetChanged();
+        }
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
-
 
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        if (operationLogs != null && getArguments() != null) {
+            getArguments().putParcelableArrayList(KEY_OPERATION_LOGS, operationLogs);
+        }
         if (operationLogBiz != null) {
             operationLogBiz.onDestroy();
         }

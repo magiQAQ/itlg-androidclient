@@ -1,12 +1,25 @@
 package com.itlg.client.ui.adapter;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.itlg.client.bean.DeviceData;
+
+import java.util.List;
+
 public class DeviceDataAdapter extends RecyclerView.Adapter<DeviceDataAdapter.DeviceDataViewHolder> {
+
+    private Context context;
+    private List<DeviceData> deviceData;
+
+    public DeviceDataAdapter(Context context, List<DeviceData> deviceData) {
+        this.context = context;
+        this.deviceData = deviceData;
+    }
 
     @NonNull
     @Override

@@ -1,10 +1,18 @@
 <component name="ProjectDictionaryState">
   <dictionary name="Seven Deadly Sins">
     <words>
+      <w>barcodescanner</w>
+      <w>farminfomodel</w>
+      <w>fileprovider</w>
+      <w>infos</w>
       <w>itlg</w>
+      <w>journeyapps</w>
+      <w>loginout</w>
       <w>navi</w>
+      <w>qrcode</w>
       <w>succ</w>
       <w>userid</w>
+      <w>zxing</w>
     </words>
   </dictionary>
 </component>

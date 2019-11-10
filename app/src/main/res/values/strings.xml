@@ -19,6 +19,7 @@
     <string name="add_operation_log">添加操作日志</string>
     <string name="add_device_data">添加设备日志</string>
     <string name="add_new_farm">添加新农场</string>
+    <string name="scan_qr_code">扫描农场二维码</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -27,4 +28,9 @@
     <string name="device_data">设备日志</string>
     <string name="farm_info">农场信息</string>
     <string name="operation_log_info">在%d号田%s</string>
+    <string name="logout">退出登录</string>
+    <string name="operator">操作员</string>
+    <string name="typename_id">%s%d</string>
+    <string name="my_farms">我的农场</string>
+
 </resources>

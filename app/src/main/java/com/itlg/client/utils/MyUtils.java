@@ -30,6 +30,7 @@ public class MyUtils {
     public static final String USER_AVATAR_FILENAME = "avatar.jpg";
     public static final String KEY_USERNAME = "key_username";
     public static final String KEY_PASSWORD = "key_password";
+    public static final String KEY_FARMINFOMODEL = "key_farmInfo";
 
     /**
      * 通过相册返回的contentUri得到图片和旋转信息,修正后保存
@@ -60,8 +61,6 @@ public class MyUtils {
             outputStream.close();
             //将图片保存并返回图片路径
             return saveBitmap(context, bitmap, ORIGIN_AVATAR_FILENAME);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

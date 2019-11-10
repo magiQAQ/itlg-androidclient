@@ -5,17 +5,17 @@ import android.os.Parcelable;
 
 public class OperationLog implements Parcelable {
     private int id;
-    private int userID;
+    private int userId;
     private String operationInfo;
     private long operationTime;
-    private int FarmId;
+    private int farmId;
 
-    protected OperationLog(Parcel in) {
+    private OperationLog(Parcel in) {
         id = in.readInt();
-        userID = in.readInt();
+        userId = in.readInt();
         operationInfo = in.readString();
         operationTime = in.readLong();
-        FarmId = in.readInt();
+        farmId = in.readInt();
     }
 
     public static final Creator<OperationLog> CREATOR = new Creator<OperationLog>() {
@@ -38,12 +38,12 @@ public class OperationLog implements Parcelable {
         this.id = id;
     }
 
-    public int getUserID() {
-        return userID;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getOperationInfo() {
@@ -63,11 +63,11 @@ public class OperationLog implements Parcelable {
     }
 
     public int getFarmId() {
-        return FarmId;
+        return farmId;
     }
 
     public void setFarmId(int farmId) {
-        FarmId = farmId;
+        this.farmId = farmId;
     }
 
     @Override
@@ -78,9 +78,9 @@ public class OperationLog implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(id);
-        parcel.writeInt(userID);
+        parcel.writeInt(userId);
         parcel.writeString(operationInfo);
         parcel.writeLong(operationTime);
-        parcel.writeInt(FarmId);
+        parcel.writeInt(farmId);
     }
 }
