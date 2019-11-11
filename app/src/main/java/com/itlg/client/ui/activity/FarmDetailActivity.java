@@ -69,8 +69,8 @@ public class FarmDetailActivity extends BaseActivity {
         farmStatusTextView.setText("状态正常");
 
         //操作记录和设备日志
-        Fragment[] fragments = {OperationLogFragment.getInstance(),
-                DeviceDataFragment.getInstance()};
+        Fragment[] fragments = {OperationLogFragment.newInstance(model.getFarmInfo().getId()),
+                DeviceDataFragment.newInstance(model.getFarmInfo().getId())};
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(adapter);
 

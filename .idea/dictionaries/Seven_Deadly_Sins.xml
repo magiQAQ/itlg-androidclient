@@ -2,8 +2,10 @@
   <dictionary name="Seven Deadly Sins">
     <words>
       <w>barcodescanner</w>
+      <w>baseurl</w>
       <w>farminfomodel</w>
       <w>fileprovider</w>
+      <w>fileurl</w>
       <w>infos</w>
       <w>itlg</w>
       <w>journeyapps</w>

@@ -7,18 +7,18 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.itlg.client.bean.DeviceData;
+import com.itlg.client.bean.DeviceDataModel;
 
 import java.util.List;
 
 public class DeviceDataAdapter extends RecyclerView.Adapter<DeviceDataAdapter.DeviceDataViewHolder> {
 
     private Context context;
-    private List<DeviceData> deviceData;
+    private List<DeviceDataModel> deviceDataModels;
 
-    public DeviceDataAdapter(Context context, List<DeviceData> deviceData) {
+    public DeviceDataAdapter(Context context, List<DeviceDataModel> deviceDataModels) {
         this.context = context;
-        this.deviceData = deviceData;
+        this.deviceDataModels = deviceDataModels;
     }
 
     @NonNull
