@@ -35,7 +35,7 @@ import butterknife.Unbinder;
 public class OperationLogFragment extends Fragment {
 
     public static final String KEY_OPERATION_LOGS = "operationLogs";
-    public static final String KEY_SCH_KEY = "sch_key";
+    public static final String KEY_SCH_PAGE = "sch_page";
     public static final String KEY_FARM_ID = "farmId";
     private Unbinder unbinder;
 
@@ -62,7 +62,7 @@ public class OperationLogFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             operationLogs = savedInstanceState.getParcelableArrayList(KEY_OPERATION_LOGS);
-            sch_page = savedInstanceState.getInt(KEY_SCH_KEY);
+            sch_page = savedInstanceState.getInt(KEY_SCH_PAGE);
             farmId = savedInstanceState.getInt(KEY_FARM_ID);
         }
     }
@@ -103,6 +103,16 @@ public class OperationLogFragment extends Fragment {
         super.onDestroy();
     }
 
+    private void setupRecyclerView() {
+        if (adapter == null) {
+            adapter = new OperationLogAdapter(getActivity(), operationLogs);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        } else {
+            adapter.notifyDataSetChanged();
+        }
+    }
+
     //第一次载入数据或者刷新RecyclerView时调用
     private void loadData() {
         operationLogBiz.getOperationLogs(farmId, 1, new CommonCallback<ArrayList<OperationLog>>() {
@@ -121,15 +131,15 @@ public class OperationLogFragment extends Fragment {
 
             @Override
             public void onSuccess(ArrayList<OperationLog> response) {
+                sch_page = 1;
                 Bundle args = getArguments() == null ? new Bundle() : getArguments();
                 args.putParcelableArrayList(KEY_OPERATION_LOGS, response);
-                args.putInt(KEY_SCH_KEY, 1);
+                args.putInt(KEY_SCH_PAGE, sch_page);
                 args.putInt(KEY_FARM_ID, farmId);
                 setArguments(args);
                 if (operationLogs == null) operationLogs = new ArrayList<>();
                 operationLogs.clear();
                 operationLogs.addAll(response);
-                sch_page = 1;
                 setupRecyclerView();
 
                 //如果载入动画在显示的话就关闭载入动画
@@ -143,34 +153,25 @@ public class OperationLogFragment extends Fragment {
 
     //用户底部上拉想看更多内容时调用
     private void loadMore() {
-        sch_page += 1;
-        operationLogBiz.getOperationLogs(farmId, sch_page, new CommonCallback<ArrayList<OperationLog>>() {
+
+        operationLogBiz.getOperationLogs(farmId, sch_page + 1, new CommonCallback<ArrayList<OperationLog>>() {
             @Override
             public void onFail(Exception e) {
                 ToastUtils.showToast(e.getMessage());
                 swipeRefreshLayout.setPullUpRefreshing(false);
-                if (e.getMessage().contains("没有更多")) {
-                    sch_page -= 1;
-                }
             }
 
             @Override
             public void onSuccess(ArrayList<OperationLog> response) {
+                sch_page += 1;
                 operationLogs.addAll(response);
                 adapter.notifyDataSetChanged();
                 swipeRefreshLayout.setPullUpRefreshing(false);
+                Bundle args = getArguments() == null ? new Bundle() : getArguments();
+                args.putInt(KEY_SCH_PAGE, sch_page);
+                setArguments(args);
             }
         });
-    }
-
-    private void setupRecyclerView() {
-        if (adapter == null) {
-            adapter = new OperationLogAdapter(getActivity(), operationLogs);
-            recyclerView.setAdapter(adapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        } else {
-            adapter.notifyDataSetChanged();
-        }
     }
 
 }

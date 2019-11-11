@@ -34,7 +34,7 @@ import butterknife.Unbinder;
 public class DeviceDataFragment extends Fragment {
 
     public static final String KEY_DEVICE_DATA_MODELS = "deviceDataModels";
-    public static final String KEY_SCH_KEY = "sch_key";
+    public static final String KEY_SCH_PAGE = "sch_page";
     public static final String KEY_FARM_ID = "farmId";
     private static DeviceDataBiz deviceDataBiz = new DeviceDataBiz();
     @BindView(R.id.recyclerView)
@@ -60,7 +60,7 @@ public class DeviceDataFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             deviceDataModels = savedInstanceState.getParcelableArrayList(KEY_DEVICE_DATA_MODELS);
-            sch_page = savedInstanceState.getInt(KEY_SCH_KEY);
+            sch_page = savedInstanceState.getInt(KEY_SCH_PAGE);
             farmId = savedInstanceState.getInt(KEY_FARM_ID);
         }
     }
@@ -111,11 +111,13 @@ public class DeviceDataFragment extends Fragment {
         }
     }
 
+    //第一次载入数据或者刷新RecyclerView时调用
     private void loadData() {
         deviceDataBiz.getDeviceData(farmId, 1, new CommonCallback<ArrayList<DeviceDataModel>>() {
             @Override
             public void onFail(Exception e) {
                 ToastUtils.showToast(e.getMessage());
+                //如果载入动画在显示的话就关闭载入动画
                 if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
                     swipeRefreshLayout.setRefreshing(false);
                 }
@@ -127,17 +129,45 @@ public class DeviceDataFragment extends Fragment {
 
             @Override
             public void onSuccess(ArrayList<DeviceDataModel> response) {
+                sch_page = 1;
                 Bundle args = getArguments() == null ? new Bundle() : getArguments();
                 args.putParcelableArrayList(KEY_DEVICE_DATA_MODELS, response);
-                args.putInt(KEY_SCH_KEY, 1);
+                args.putInt(KEY_SCH_PAGE, sch_page);
                 args.putInt(KEY_FARM_ID, farmId);
+                setArguments(args);
+                if (deviceDataModels == null) deviceDataModels = new ArrayList<>();
+                deviceDataModels.clear();
+                deviceDataModels.addAll(response);
+                setupRecyclerView();
 
+                //如果载入动画在显示的话就关闭载入动画
+                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
+                    ToastUtils.showToast("刷新成功");
+                    swipeRefreshLayout.setRefreshing(false);
+                }
             }
         });
     }
 
-
+    //用户底部上拉想看更多内容时调用
     private void loadMore() {
+        deviceDataBiz.getDeviceData(farmId, sch_page + 1, new CommonCallback<ArrayList<DeviceDataModel>>() {
+            @Override
+            public void onFail(Exception e) {
+                ToastUtils.showToast(e.getMessage());
+                swipeRefreshLayout.setPullUpRefreshing(false);
+            }
 
+            @Override
+            public void onSuccess(ArrayList<DeviceDataModel> response) {
+                sch_page += 1;
+                deviceDataModels.addAll(response);
+                adapter.notifyDataSetChanged();
+                swipeRefreshLayout.setPullUpRefreshing(false);
+                Bundle args = getArguments() == null ? new Bundle() : getArguments();
+                args.putInt(KEY_SCH_PAGE, sch_page);
+                setArguments(args);
+            }
+        });
     }
 }
