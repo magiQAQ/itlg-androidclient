@@ -33,19 +33,20 @@ import butterknife.Unbinder;
  */
 public class DeviceDataFragment extends Fragment {
 
-    public static final String KEY_DEVICE_DATA_MODELS = "deviceDataModels";
-    public static final String KEY_SCH_PAGE = "sch_page";
-    public static final String KEY_FARM_ID = "farmId";
-    private static DeviceDataBiz deviceDataBiz = new DeviceDataBiz();
+    private static final String KEY_DEVICE_DATA_MODELS = "deviceDataModels";
+    private static final String KEY_SCH_PAGE = "sch_page";
+    private static final String KEY_FARM_ID = "farmId";
+    private Unbinder unbinder;
+
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-    private Unbinder unbinder;
     private List<DeviceDataModel> deviceDataModels;
     private int sch_page;
     private int farmId;
     private DeviceDataAdapter adapter;
+    private DeviceDataBiz deviceDataBiz;
 
     public static DeviceDataFragment newInstance(int farmId) {
         DeviceDataFragment fragment = new DeviceDataFragment();
@@ -55,14 +56,16 @@ public class DeviceDataFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            deviceDataModels = savedInstanceState.getParcelableArrayList(KEY_DEVICE_DATA_MODELS);
-            sch_page = savedInstanceState.getInt(KEY_SCH_PAGE);
-            farmId = savedInstanceState.getInt(KEY_FARM_ID);
+        if (getArguments() != null) {
+            deviceDataModels = getArguments().getParcelableArrayList(KEY_DEVICE_DATA_MODELS);
+            sch_page = getArguments().getInt(KEY_SCH_PAGE);
+            farmId = getArguments().getInt(KEY_FARM_ID);
         }
+        deviceDataBiz = new DeviceDataBiz();
     }
 
     @Override
@@ -89,17 +92,23 @@ public class DeviceDataFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
+
     @Override
     public void onDestroyView() {
         unbinder.unbind();
+        if (deviceDataBiz != null) {
+            deviceDataBiz.onDestroy();
+        }
         super.onDestroyView();
     }
 
-    @Override
-    public void onDestroy() {
-        deviceDataBiz.onDestroy();
-        super.onDestroy();
+    /**
+     * 给Activity调用的刷新列表的方法
+     */
+    public void refreshRecyclerList() {
+        loadData();
     }
+
 
     private void setupRecyclerView() {
         if (adapter == null) {
@@ -121,7 +130,7 @@ public class DeviceDataFragment extends Fragment {
                 if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
                     swipeRefreshLayout.setRefreshing(false);
                 }
-                if (e.getMessage().contains("没有更多了")) {
+                if (e.getMessage().contains("没有更多了") && deviceDataModels != null) {
                     deviceDataModels.clear();
                     setupRecyclerView();
                 }
@@ -141,7 +150,7 @@ public class DeviceDataFragment extends Fragment {
                 setupRecyclerView();
 
                 //如果载入动画在显示的话就关闭载入动画
-                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
+                if (swipeRefreshLayout.isRefreshing()) {
                     ToastUtils.showToast("刷新成功");
                     swipeRefreshLayout.setRefreshing(false);
                 }

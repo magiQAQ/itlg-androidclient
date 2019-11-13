@@ -113,7 +113,7 @@ public class OperatorActivity extends BaseActivity {
                 ToastUtils.showToast("取消扫描");
             } else {
                 farmInfoBiz = new FarmInfoBiz();
-                farmInfoBiz.getFarmInfoModel(result.getContents(), holder.getUser().getId(),
+                farmInfoBiz.getFarmInfoModel(result.getContents(),
                         new CommonCallback<FarmInfoModel>() {
                             @Override
                             public void onFail(Exception e) {
@@ -245,7 +245,7 @@ public class OperatorActivity extends BaseActivity {
         //被扫描的二维码图片是否保存到本地
         intentIntegrator.setBarcodeImageEnabled(false);
         //是否开启扫码后的提示音
-        intentIntegrator.setBeepEnabled(true);
+        intentIntegrator.setBeepEnabled(false);
         //设置使用的摄像头,0表示后置,1表示前置
         intentIntegrator.setCameraId(0);
         //设置期望的条形码格式,这里选择二维码

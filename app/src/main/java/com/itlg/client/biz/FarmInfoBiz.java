@@ -13,13 +13,11 @@ public class FarmInfoBiz {
      * 得到农场信息
      *
      * @param qrCodeContent  从二维码中解析出的参数
-     * @param userId         当前操作员的id
      * @param commonCallback 得到信息后执行的操作
      */
-    public void getFarmInfoModel(String qrCodeContent, int userId, CommonCallback<FarmInfoModel> commonCallback) {
-        OkHttpUtils.post()
+    public void getFarmInfoModel(String qrCodeContent, CommonCallback<FarmInfoModel> commonCallback) {
+        OkHttpUtils.get()
                 .url(qrCodeContent)
-                .addParams("userId", String.valueOf(userId))
                 .tag(this)
                 .build()
                 .execute(commonCallback);

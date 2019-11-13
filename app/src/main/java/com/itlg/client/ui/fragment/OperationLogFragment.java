@@ -34,9 +34,9 @@ import butterknife.Unbinder;
  */
 public class OperationLogFragment extends Fragment {
 
-    public static final String KEY_OPERATION_LOGS = "operationLogs";
-    public static final String KEY_SCH_PAGE = "sch_page";
-    public static final String KEY_FARM_ID = "farmId";
+    private static final String KEY_OPERATION_LOGS = "operationLogs";
+    private static final String KEY_SCH_PAGE = "sch_page";
+    private static final String KEY_FARM_ID = "farmId";
     private Unbinder unbinder;
 
     @BindView(R.id.recyclerView)
@@ -45,9 +45,9 @@ public class OperationLogFragment extends Fragment {
     SwipeRefreshLayout swipeRefreshLayout;
     private ArrayList<OperationLog> operationLogs;
     private int sch_page;
-    private static OperationLogBiz operationLogBiz = new OperationLogBiz();
-    private OperationLogAdapter adapter;
     private int farmId;
+    private OperationLogAdapter adapter;
+    private OperationLogBiz operationLogBiz;
 
     public static OperationLogFragment newInstance(int farmId) {
         OperationLogFragment fragment = new OperationLogFragment();
@@ -60,11 +60,12 @@ public class OperationLogFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            operationLogs = savedInstanceState.getParcelableArrayList(KEY_OPERATION_LOGS);
-            sch_page = savedInstanceState.getInt(KEY_SCH_PAGE);
-            farmId = savedInstanceState.getInt(KEY_FARM_ID);
+        if (getArguments() != null) {
+            operationLogs = getArguments().getParcelableArrayList(KEY_OPERATION_LOGS);
+            sch_page = getArguments().getInt(KEY_SCH_PAGE);
+            farmId = getArguments().getInt(KEY_FARM_ID);
         }
+        operationLogBiz = new OperationLogBiz();
     }
 
     @Override
@@ -94,13 +95,17 @@ public class OperationLogFragment extends Fragment {
     @Override
     public void onDestroyView() {
         unbinder.unbind();
+        if (operationLogBiz != null) {
+            operationLogBiz.onDestroy();
+        }
         super.onDestroyView();
     }
 
-    @Override
-    public void onDestroy() {
-        operationLogBiz.onDestroy();
-        super.onDestroy();
+    /**
+     * 给Activity调用的刷新列表的方法
+     */
+    public void refreshRecyclerList() {
+        loadData();
     }
 
     private void setupRecyclerView() {
@@ -143,7 +148,7 @@ public class OperationLogFragment extends Fragment {
                 setupRecyclerView();
 
                 //如果载入动画在显示的话就关闭载入动画
-                if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
+                if (swipeRefreshLayout.isRefreshing()) {
                     ToastUtils.showToast("刷新成功");
                     swipeRefreshLayout.setRefreshing(false);
                 }
@@ -153,7 +158,6 @@ public class OperationLogFragment extends Fragment {
 
     //用户底部上拉想看更多内容时调用
     private void loadMore() {
-
         operationLogBiz.getOperationLogs(farmId, sch_page + 1, new CommonCallback<ArrayList<OperationLog>>() {
             @Override
             public void onFail(Exception e) {
@@ -173,5 +177,6 @@ public class OperationLogFragment extends Fragment {
             }
         });
     }
+
 
 }

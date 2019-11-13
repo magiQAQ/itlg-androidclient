@@ -4,6 +4,7 @@ import com.itlg.client.bean.OperationLog;
 import com.itlg.client.config.Config;
 import com.itlg.client.net.CommonCallback;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 
@@ -25,6 +26,24 @@ public class OperationLogBiz {
                 .tag(this)
                 .build()
                 .execute(commonCallback);
+    }
+
+    /**
+     * 用户提交操作日志的方法
+     *
+     * @param farmId         当前农场的id
+     * @param operationInfo  操作内容
+     * @param stringCallback 获得数据后的回调操作
+     */
+    public void commitOperationLog(int farmId, String operationInfo, StringCallback stringCallback) {
+        OkHttpUtils.post()
+                .url(Config.BASEURL)
+                .addParams("key", "OperationLogTP.commitOperationLogByPhone")
+                .addParams("farmId", String.valueOf(farmId))
+                .addParams("operationInfo", operationInfo)
+                .tag(this)
+                .build()
+                .execute(stringCallback);
     }
 
     /**
