@@ -1,22 +1,27 @@
 package com.itlg.client.ui.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.itlg.client.R;
@@ -35,9 +40,11 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.Call;
 
 /**
@@ -47,10 +54,16 @@ public class OperatorActivity extends BaseActivity {
 
     public static final int REQUEST_CODE_CAMERA = 5;
     private static final String TAG = "OperatorActivity";
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.userImg_imageView)
     ImageView userImgImageView;
     @BindView(R.id.farmInfo_recyclerView)
     RecyclerView farmInfoRecyclerView;
+    @BindView(R.id.menu_floatButton)
+    FloatingActionButton menuFloatButton;
+    @BindView(R.id.user_name_textView)
+    TextView userNameTextView;
 
     private UserInfoHolder holder = UserInfoHolder.getInstance();
     private UserBiz userBiz;
@@ -63,26 +76,30 @@ public class OperatorActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_operater);
         ButterKnife.bind(this);
-        setStatusBarColor(R.color.blueGreen, true);
 
         user = holder.getUser();
-        setTitle(user.getName());
-        setupToolbar();
         //验证用户是否为合法登录
         if (user.getPrivilege() != 1) {
             ToastUtils.showToast("你的身份不是操作员");
             finish();
         }
-
         initView();
     }
 
     private void initView() {
+        setStatusBarColor(R.color.transparent, false);
+        setSupportActionBar(toolbar);
+        //不显示Title
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+
         //加载头像
         Glide.with(this)
                 .load(Config.FILEURL + user.getUserImg())
                 .circleCrop()
                 .into(userImgImageView);
+
+        //显示当前用户的名字
+        userNameTextView.setText(user.getName());
 
         //加载"我的农场"信息
         farmInfoBiz = new FarmInfoBiz();
@@ -145,11 +162,6 @@ public class OperatorActivity extends BaseActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.operator_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
 
     @Override
     public boolean onMenuOpened(int featureId, Menu menu) {
@@ -167,22 +179,6 @@ public class OperatorActivity extends BaseActivity {
         return super.onMenuOpened(featureId, menu);
     }
 
-    /**
-     * 菜单选项被按下的事件
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.scan_qr_code:
-                toScanActivity();
-                break;
-            case R.id.logout:
-                logout();
-                break;
-        }
-        return false;
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -192,6 +188,43 @@ public class OperatorActivity extends BaseActivity {
         if (farmInfoBiz != null) {
             farmInfoBiz.onDestroy();
         }
+    }
+
+    /**
+     * 点击虚浮按钮出现菜单
+     */
+    @SuppressLint("PrivateApi")
+    @OnClick(R.id.menu_floatButton)
+    public void showMenu(View view) {
+        //创建弹出式菜单
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        //设置菜单内容
+        popupMenu.getMenuInflater().inflate(R.menu.operator_menu, popupMenu.getMenu());
+        //设置菜单选项点击事件
+        popupMenu.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.scan_qr_code:
+                    toScanActivity();
+                    break;
+                case R.id.logout:
+                    logout();
+                    break;
+            }
+            return false;
+        });
+        //默认不显示图标,但我想要显示,通过java反射实现
+        Class<?> clazz;
+        try {
+            clazz = Class.forName("com.android.internal.view.menu.MenuBuilder");
+            Method m = clazz.getDeclaredMethod("setOptionalIconsVisible", boolean.class);
+            m.setAccessible(true);
+            //传入参数
+            m.invoke(popupMenu.getMenu(), true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //显示
+        popupMenu.show();
     }
 
 

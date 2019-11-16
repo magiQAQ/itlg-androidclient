@@ -16,7 +16,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:background="@color/blueGreen"
+            android:background="@color/colorTheme"
             app:menu="@menu/farm_detail_menu"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:theme="@style/ToolBarTheme"
@@ -36,6 +36,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="30dp"
                 android:tint="@color/white"
+                android:contentDescription="@null"
                 tools:srcCompat="@mipmap/nongchang" />
 
             <TextView

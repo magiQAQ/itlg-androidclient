@@ -5,8 +5,11 @@
     <color name="colorAccent">#D81B60</color>
     <color name="greenStroke">#33C8A0</color>
     <color name="grayStroke">#C5C5C5</color>
-    <color name="blueGreen">#33C8BB</color>
+    <color name="colorTheme">#33C8BB</color>
     <color name="red">#ff0000</color>
     <color name="white">#ffffff</color>
     <color name="transparent">#00ffffff</color>
+    <color name="cangqing">#000080</color>
+    <color name="orange">#FF8A65</color>
+    <color name="blue">#7272FF</color>
 </resources>

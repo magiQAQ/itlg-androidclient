@@ -33,5 +33,6 @@
     <string name="cancel">取消</string>
     <string name="detailed_data">详细数据</string>
     <string name="spinner_error">请选择设备</string>
+    <string name="itlg_operator">智慧农业操作员</string>
 
 </resources>

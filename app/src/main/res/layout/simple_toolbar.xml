@@ -4,7 +4,7 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/blueGreen"
+    android:background="@color/colorTheme"
     app:menu="@menu/farm_detail_menu"
     app:titleTextColor="#ffffff"/>
 

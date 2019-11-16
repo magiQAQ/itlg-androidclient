@@ -77,7 +77,7 @@ public class RegisterActivity extends BaseActivity {
 
         ButterKnife.bind(this);
         setupCommonToolbar();
-        setStatusBarColor(R.color.blueGreen, true);
+        setStatusBarColor(R.color.colorTheme, true);
         setTitle("新用户注册");
 
     }
@@ -162,7 +162,7 @@ public class RegisterActivity extends BaseActivity {
 
     @OnTextChanged(R.id.password2_editText)
     public void password2TextChanged(CharSequence s){
-        String password = passwordEditText.getText().toString();
+        String password = passwordEditText.getEditableText().toString();
         if (password.equals(s.toString())){
             password2Layout.setErrorEnabled(false);
         } else {
@@ -203,12 +203,12 @@ public class RegisterActivity extends BaseActivity {
             return;
         }
 
-        String name = nameEditText.getText().toString();
-        String username = usernameEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
-        String password2 = password2EditText.getText().toString();
-        String cellphone = cellphoneEditText.getText().toString();
-        String email = emailEditText.getText().toString();
+        String name = nameEditText.getEditableText().toString();
+        String username = usernameEditText.getEditableText().toString();
+        String password = passwordEditText.getEditableText().toString();
+        String password2 = password2EditText.getEditableText().toString();
+        String cellphone = cellphoneEditText.getEditableText().toString();
+        String email = emailEditText.getEditableText().toString();
         //检查是否有没有填写的项目
         if (name.equals("")||username.equals("")||password.equals("")
         ||password2.equals("")||cellphone.equals("")||email.equals("")){

@@ -95,7 +95,7 @@ public class FarmDetailActivity extends BaseActivity {
     private void initView() {
         //设置ToolBar和StatusBar
         setSupportActionBar(toolbar);
-        setStatusBarColor(R.color.blueGreen, true);
+        setStatusBarColor(R.color.colorTheme, true);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
         int typeId = model.getFarmInfo().getTypeId();
