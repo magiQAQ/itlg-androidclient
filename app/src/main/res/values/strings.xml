@@ -33,5 +33,9 @@
     <string name="detailed_data">详细数据</string>
     <string name="spinner_error">请选择设备</string>
     <string name="itlg_operator">智慧农业操作员</string>
+    <string name="product_mall">农产品商城</string>
+    <string name="farm_mall">农田商城</string>
+    <string name="news">新闻资讯</string>
+    <string name="mime">我的</string>
 
 </resources>
