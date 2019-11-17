@@ -38,12 +38,14 @@ public class FarmInfoAdapter extends RecyclerView.Adapter<FarmInfoAdapter.FarmIn
     public void onBindViewHolder(@NonNull FarmInfoViewHolder holder, int position) {
         FarmInfoModel model = list.get(position);
         if (model.getFarmInfo().getTypeId() == 1) {
-            holder.farmIconImageView.setImageResource(R.mipmap.nongchang);
+            holder.farmIconImageView.setImageResource(R.drawable.nongchang);
         } else if (model.getFarmInfo().getTypeId() == 2) {
-            holder.farmIconImageView.setImageResource(R.mipmap.yangzhichang);
+            holder.farmIconImageView.setImageResource(R.drawable.yangzhichang);
         }
         holder.farmNameTextView.setText(String.format(context.getString(R.string.typename_id),
                 model.getTypeName(), model.getFarmInfo().getId()));
+        holder.farmNewMessage.setText("目前暂无新的任务");
+        holder.farmMessageCount.setText(String.valueOf(2));
     }
 
     @Override
@@ -56,6 +58,10 @@ public class FarmInfoAdapter extends RecyclerView.Adapter<FarmInfoAdapter.FarmIn
         ImageView farmIconImageView;
         @BindView(R.id.farm_name_textView)
         TextView farmNameTextView;
+        @BindView(R.id.farm_new_message)
+        TextView farmNewMessage;
+        @BindView(R.id.farm_message_count)
+        TextView farmMessageCount;
 
         FarmInfoViewHolder(@NonNull View itemView) {
             super(itemView);

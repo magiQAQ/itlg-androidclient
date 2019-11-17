@@ -38,9 +38,8 @@ public class OperationLogAdapter extends RecyclerView.Adapter<OperationLogAdapte
     @Override
     public void onBindViewHolder(@NonNull OperationLogViewHolder holder, int position) {
         OperationLog operationLog = list.get(position);
-        //显示样式为: 在5号田浇水
-        holder.operationInfo.setText(String.format(context.getString(R.string.operation_log_info),
-                operationLog.getFarmId(), operationLog.getOperationInfo()));
+        //显示样式为: 浇水
+        holder.operationInfo.setText(operationLog.getOperationInfo());
         //人性化的时间显示
         holder.operationTime.setText(MyUtils.longTypeTimeToString(operationLog.getOperationTime()));
     }

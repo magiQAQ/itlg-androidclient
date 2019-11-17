@@ -18,6 +18,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -103,9 +106,11 @@ public class FarmDetailActivity extends BaseActivity {
 
         //农场详情
         if (typeId == 1) {
-            farmIconImageView.setImageResource(R.mipmap.nongchang);
+            Glide.with(this).load(R.drawable.nongchang)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(20))).into(farmIconImageView);
         } else if (typeId == 2) {
-            farmIconImageView.setImageResource(R.mipmap.yangzhichang);
+            Glide.with(this).load(R.drawable.yangzhichang)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(20))).into(farmIconImageView);
         }
         farmNameTextView.setText(String.format(getResources().getString(R.string.typename_id),
                 model.getTypeName(), farmId));

@@ -23,7 +23,6 @@
     <string name="operation_log">操作日志</string>
     <string name="device_data">设备记录</string>
     <string name="farm_info">农场信息</string>
-    <string name="operation_log_info">在%d号田%s</string>
     <string name="logout">退出登录</string>
     <string name="operator">操作员</string>
     <string name="typename_id">%s%d</string>

@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,7 +39,6 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,8 +60,6 @@ public class OperatorActivity extends BaseActivity {
     RecyclerView farmInfoRecyclerView;
     @BindView(R.id.menu_floatButton)
     FloatingActionButton menuFloatButton;
-    @BindView(R.id.user_name_textView)
-    TextView userNameTextView;
 
     private UserInfoHolder holder = UserInfoHolder.getInstance();
     private UserBiz userBiz;
@@ -89,8 +85,6 @@ public class OperatorActivity extends BaseActivity {
     private void initView() {
         setStatusBarColor(R.color.transparent, false);
         setSupportActionBar(toolbar);
-        //不显示Title
-        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
         //加载头像
         Glide.with(this)
@@ -99,7 +93,7 @@ public class OperatorActivity extends BaseActivity {
                 .into(userImgImageView);
 
         //显示当前用户的名字
-        userNameTextView.setText(user.getName());
+        setTitle(user.getName());
 
         //加载"我的农场"信息
         farmInfoBiz = new FarmInfoBiz();
