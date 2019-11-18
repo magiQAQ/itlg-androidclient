@@ -1,6 +1,5 @@
 package com.itlg.client.ui.fragment;
 
-
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;

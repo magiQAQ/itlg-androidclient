@@ -25,4 +25,5 @@ public class FragmentAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return fragments==null?0:fragments.length;
     }
+
 }
