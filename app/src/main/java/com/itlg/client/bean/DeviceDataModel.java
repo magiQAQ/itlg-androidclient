@@ -4,6 +4,31 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class DeviceDataModel implements Parcelable {
+    private int id; //id自增
+    private String temperature; //温度
+    private String humidity; //湿度
+    private long dataTime; //时间
+
+    private DeviceDataModel(Parcel in) {
+        id = in.readInt();
+        temperature = in.readString();
+        humidity = in.readString();
+        dataTime = in.readLong();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(temperature);
+        dest.writeString(humidity);
+        dest.writeLong(dataTime);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
     public static final Creator<DeviceDataModel> CREATOR = new Creator<DeviceDataModel>() {
         @Override
         public DeviceDataModel createFromParcel(Parcel in) {
@@ -15,38 +40,36 @@ public class DeviceDataModel implements Parcelable {
             return new DeviceDataModel[size];
         }
     };
-    private DeviceData deviceData;
-    private DeviceInfo deviceInfo;
 
-    protected DeviceDataModel(Parcel in) {
-        deviceData = in.readParcelable(DeviceData.class.getClassLoader());
-        deviceInfo = in.readParcelable(DeviceInfo.class.getClassLoader());
+    public int getId() {
+        return id;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(deviceData, flags);
-        dest.writeParcelable(deviceInfo, flags);
+    public void setId(int id) {
+        this.id = id;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getTemperature() {
+        return temperature;
     }
 
-    public DeviceData getDeviceData() {
-        return deviceData;
+    public void setTemperature(String temperature) {
+        this.temperature = temperature;
     }
 
-    public void setDeviceData(DeviceData deviceData) {
-        this.deviceData = deviceData;
+    public String getHumidity() {
+        return humidity;
     }
 
-    public DeviceInfo getDeviceInfo() {
-        return deviceInfo;
+    public void setHumidity(String humidity) {
+        this.humidity = humidity;
     }
 
-    public void setDeviceInfo(DeviceInfo deviceInfo) {
-        this.deviceInfo = deviceInfo;
+    public long getDataTime() {
+        return dataTime;
+    }
+
+    public void setDataTime(long dataTime) {
+        this.dataTime = dataTime;
     }
 }

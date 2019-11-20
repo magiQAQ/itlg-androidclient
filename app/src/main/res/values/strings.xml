@@ -40,7 +40,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="my_cart">我的购物车</string>
     <string name="more">更多</string>
-    <string name="view_all">查看全部</string>
+    <string name="watch_all">查看全部</string>
     <string name="my_own_farms">我拥有的农场</string>
+    <string name="cart_empty">购物车是空的,犒劳下自己吧</string>
+    <string name="go_shopping">去逛逛</string>
 
 </resources>

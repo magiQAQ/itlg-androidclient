@@ -101,14 +101,6 @@ public class DeviceDataFragment extends Fragment {
         super.onDestroyView();
     }
 
-    /**
-     * 给Activity调用的刷新列表的方法
-     */
-    public void refreshRecyclerList() {
-        loadData();
-    }
-
-
     private void setupRecyclerView() {
         if (adapter == null) {
             adapter = new DeviceDataAdapter(getActivity(), deviceDataModels);

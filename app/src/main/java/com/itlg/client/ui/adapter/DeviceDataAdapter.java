@@ -37,12 +37,11 @@ public class DeviceDataAdapter extends RecyclerView.Adapter<DeviceDataAdapter.De
     @Override
     public void onBindViewHolder(@NonNull DeviceDataViewHolder holder, int position) {
         DeviceDataModel model = deviceDataModels.get(position);
-        //样式为: 液晶显示器GF40
-        holder.deviceNameTextView.setText(String.format("%s%s",
-                model.getDeviceInfo().getDeviceName(), model.getDeviceInfo().getDeviceCode()));
-        holder.deviceDataInfoTextView.setText(model.getDeviceData().getDataInfo());
+        //显示温湿度
+        holder.deviceTemperatureTextView.setText(model.getTemperature());
+        holder.deviceHumidityTextView.setText(model.getHumidity());
         //人性化的时间显示
-        holder.dataTimeTextView.setText(MyUtils.longTypeTimeToString(model.getDeviceData().getDataTime()));
+        holder.deviceDataTimeTextView.setText(MyUtils.longTypeTimeToString(model.getDataTime()));
     }
 
     @Override
@@ -50,17 +49,20 @@ public class DeviceDataAdapter extends RecyclerView.Adapter<DeviceDataAdapter.De
         return deviceDataModels == null ? 0 : deviceDataModels.size();
     }
 
+
+    static
     class DeviceDataViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.device_name_textView)
-        TextView deviceNameTextView;
-        @BindView(R.id.device_data_info_textView)
-        TextView deviceDataInfoTextView;
-        @BindView(R.id.data_time_textView)
-        TextView dataTimeTextView;
+        @BindView(R.id.device_temperature_textView)
+        TextView deviceTemperatureTextView;
+        @BindView(R.id.device_humidity_textView)
+        TextView deviceHumidityTextView;
+        @BindView(R.id.device_dataTime_textView)
+        TextView deviceDataTimeTextView;
 
         DeviceDataViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
         }
     }
 }

@@ -18,16 +18,20 @@ import com.itlg.client.ui.fragment.MineFragment;
 import com.itlg.client.ui.fragment.NewsFragment;
 import com.itlg.client.ui.fragment.ProductMallFragment;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * 普通用户和农场主界面
+ */
 public class NormalUserActivity extends BaseActivity {
 
     @BindView(R.id.viewPager)
     ViewPager viewPager;
     @BindView(R.id.tabLayout)
     TabLayout tabLayout;
-    private Fragment[] fragments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +43,7 @@ public class NormalUserActivity extends BaseActivity {
     }
 
     private void initView() {
-        fragments = new Fragment[]{ProductMallFragment.newInstance(), FarmMallFragment.newInstance(),
+        Fragment[] fragments = new Fragment[]{ProductMallFragment.newInstance(), FarmMallFragment.newInstance(),
                 NewsFragment.newInstance(), MineFragment.newInstance()};
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(adapter);
@@ -64,5 +68,9 @@ public class NormalUserActivity extends BaseActivity {
         return view;
     }
 
+    public void toShoppingFragment() {
+        Objects.requireNonNull(tabLayout.getTabAt(0)).select();
+        viewPager.setCurrentItem(0);
+    }
 
 }

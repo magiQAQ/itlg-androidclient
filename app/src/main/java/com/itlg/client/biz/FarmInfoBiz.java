@@ -5,7 +5,7 @@ import com.itlg.client.config.Config;
 import com.itlg.client.net.CommonCallback;
 import com.zhy.http.okhttp.OkHttpUtils;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class FarmInfoBiz {
 
@@ -28,7 +28,7 @@ public class FarmInfoBiz {
      *
      * @param commonCallback 得到信息后执行的操作
      */
-    public void getFarmInfoModels(CommonCallback<List<FarmInfoModel>> commonCallback) {
+    public void getFarmInfoModels(CommonCallback<ArrayList<FarmInfoModel>> commonCallback) {
         OkHttpUtils.post()
                 .url(Config.BASEURL)
                 .addParams("key", "FarmInfoTP.getFarmInfosByPhone")

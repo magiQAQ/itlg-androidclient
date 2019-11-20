@@ -26,11 +26,11 @@ public class MyUtils {
 
     private static final String TAG = "MyUtils";
 
-    public static final String ORIGIN_AVATAR_FILENAME = "origin_avatar.jpg";
+    public static final String KEY_FARM_INFO_MODEL = "key_farmInfo";
     public static final String USER_AVATAR_FILENAME = "avatar.jpg";
     public static final String KEY_USERNAME = "key_username";
     public static final String KEY_PASSWORD = "key_password";
-    public static final String KEY_FARMINFOMODEL = "key_farmInfo";
+    private static final String ORIGIN_AVATAR_FILENAME = "origin_avatar.jpg";
 
     /**
      * 通过相册返回的contentUri得到图片和旋转信息,修正后保存
@@ -49,6 +49,9 @@ public class MyUtils {
             }
             //这里inputStream需要用两次,先转化为ByteArrayOutputStream
             ByteArrayOutputStream outputStream = copyStream(inputStream);
+            if (outputStream == null) {
+                return null;
+            }
             InputStream inputStream1 = new ByteArrayInputStream(outputStream.toByteArray());
             //InputStream --> Bitmap
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream1);
@@ -118,7 +121,7 @@ public class MyUtils {
      * @param path 图片的文件路径
      * @return 图片的角度
      */
-    public static int getPictureDegree(InputStream path) {
+    private static int getPictureDegree(InputStream path) {
         int degree = 0;
         try {
             ExifInterface exifInterface = new ExifInterface(path);
@@ -151,7 +154,7 @@ public class MyUtils {
      * @param angle  旋转的角度
      * @return 旋转后的图
      */
-    public static Bitmap toTurn(Bitmap bitmap, int angle) {
+    private static Bitmap toTurn(Bitmap bitmap, int angle) {
         if (angle == 0) {
             return bitmap;
         }
@@ -174,7 +177,7 @@ public class MyUtils {
      * @param inputStream 要复制的输入流
      * @return 复制完的输出流
      */
-    public static ByteArrayOutputStream copyStream(InputStream inputStream) {
+    private static ByteArrayOutputStream copyStream(InputStream inputStream) {
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];

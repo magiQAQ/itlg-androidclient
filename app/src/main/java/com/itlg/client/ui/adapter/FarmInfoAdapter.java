@@ -37,15 +37,29 @@ public class FarmInfoAdapter extends RecyclerView.Adapter<FarmInfoAdapter.FarmIn
     @Override
     public void onBindViewHolder(@NonNull FarmInfoViewHolder holder, int position) {
         FarmInfoModel model = list.get(position);
-        if (model.getFarmInfo().getTypeId() == 1) {
+        int typeId = model.getFarmInfo().getTypeId();
+        StringBuilder builder = new StringBuilder();
+        if (typeId == 1) {
             holder.farmIconImageView.setImageResource(R.drawable.nongchang);
-        } else if (model.getFarmInfo().getTypeId() == 2) {
+            builder.append("当前种植：");
+        } else if (typeId == 2) {
             holder.farmIconImageView.setImageResource(R.drawable.yangzhichang);
+            builder.append("当前养殖：");
         }
         holder.farmNameTextView.setText(String.format(context.getString(R.string.typename_id),
                 model.getTypeName(), model.getFarmInfo().getId()));
-        holder.farmNewMessage.setText("目前暂无新的任务");
-        holder.farmMessageCount.setText(String.valueOf(2));
+        for (int i = 0; i < model.getProductInfos().size(); i++) {
+            if (i != 0) {
+                builder.append("、");
+            }
+            builder.append(model.getProductInfos().get(i).getProductName());
+            if (i > 1) {
+                builder.append("等");
+                break;
+            }
+        }
+        //当前种植:苹果、黄富帅等
+        holder.farmCurrentProductTextView.setText(builder.toString());
     }
 
     @Override
@@ -58,10 +72,8 @@ public class FarmInfoAdapter extends RecyclerView.Adapter<FarmInfoAdapter.FarmIn
         ImageView farmIconImageView;
         @BindView(R.id.farm_name_textView)
         TextView farmNameTextView;
-        @BindView(R.id.farm_new_message)
-        TextView farmNewMessage;
-        @BindView(R.id.farm_message_count)
-        TextView farmMessageCount;
+        @BindView(R.id.farm_current_product_textView)
+        TextView farmCurrentProductTextView;
 
         FarmInfoViewHolder(@NonNull View itemView) {
             super(itemView);

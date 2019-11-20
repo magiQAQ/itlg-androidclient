@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,7 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.itlg.client.R;
@@ -28,22 +26,19 @@ import com.itlg.client.UserInfoHolder;
 import com.itlg.client.bean.FarmInfoModel;
 import com.itlg.client.bean.User;
 import com.itlg.client.biz.FarmInfoBiz;
-import com.itlg.client.biz.UserBiz;
 import com.itlg.client.config.Config;
 import com.itlg.client.net.CommonCallback;
 import com.itlg.client.ui.adapter.FarmInfoAdapter;
 import com.itlg.client.utils.MyUtils;
 import com.itlg.client.utils.ToastUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.Call;
 
 /**
  * 操作员登录后看到的界面
@@ -58,11 +53,8 @@ public class OperatorActivity extends BaseActivity {
     ImageView userImgImageView;
     @BindView(R.id.farmInfo_recyclerView)
     RecyclerView farmInfoRecyclerView;
-    @BindView(R.id.menu_floatButton)
-    FloatingActionButton menuFloatButton;
 
     private UserInfoHolder holder = UserInfoHolder.getInstance();
-    private UserBiz userBiz;
     private FarmInfoBiz farmInfoBiz;
     private User user;
 
@@ -97,14 +89,14 @@ public class OperatorActivity extends BaseActivity {
 
         //加载"我的农场"信息
         farmInfoBiz = new FarmInfoBiz();
-        farmInfoBiz.getFarmInfoModels(new CommonCallback<List<FarmInfoModel>>() {
+        farmInfoBiz.getFarmInfoModels(new CommonCallback<ArrayList<FarmInfoModel>>() {
             @Override
             public void onFail(Exception e) {
                 ToastUtils.showToast(e.getMessage());
             }
 
             @Override
-            public void onSuccess(List<FarmInfoModel> response) {
+            public void onSuccess(ArrayList<FarmInfoModel> response) {
                 FarmInfoAdapter adapter = new FarmInfoAdapter(OperatorActivity.this, response);
                 farmInfoRecyclerView.setAdapter(adapter);
                 farmInfoRecyclerView.setLayoutManager(new LinearLayoutManager(OperatorActivity.this));
@@ -134,7 +126,7 @@ public class OperatorActivity extends BaseActivity {
                             @Override
                             public void onSuccess(FarmInfoModel response) {
                                 Intent intent = new Intent(OperatorActivity.this, FarmDetailActivity.class);
-                                intent.putExtra(MyUtils.KEY_FARMINFOMODEL, response);
+                                intent.putExtra(MyUtils.KEY_FARM_INFO_MODEL, response);
                                 startActivity(intent);
                             }
                         });
@@ -176,9 +168,6 @@ public class OperatorActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (userBiz != null) {
-            userBiz.onDestroy();
-        }
         if (farmInfoBiz != null) {
             farmInfoBiz.onDestroy();
         }
@@ -222,29 +211,6 @@ public class OperatorActivity extends BaseActivity {
     }
 
 
-    /**
-     * 用户退出登录
-     */
-    private void logout() {
-        //用户选择登出,同时把session中的用户登录状态清除
-        userBiz = new UserBiz();
-        userBiz.logout(new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                Log.e(TAG, e.getMessage());
-                ToastUtils.showToast("登出失败,请确认网络连接");
-            }
-
-            @Override
-            public void onResponse(String response, int id) {
-                //清理用户登录登录信息
-                UserInfoHolder.getInstance().clearUser();
-                ToastUtils.showToast("登出成功");
-                startActivity(new Intent(OperatorActivity.this, LoginActivity.class));
-                finish();
-            }
-        });
-    }
 
     /**
      * 得到拍二维码需要的权限

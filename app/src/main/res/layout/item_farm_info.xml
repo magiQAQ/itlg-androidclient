@@ -42,26 +42,13 @@
                 tools:text="养殖场3" />
 
             <TextView
-                android:id="@+id/farm_new_message"
+                android:id="@+id/farm_current_product_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                tools:text="没有新消息" />
+                tools:text="当前种植:苹果" />
 
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/farm_message_count"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/message_count_background"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            tools:text="1" />
 
 
     </LinearLayout>

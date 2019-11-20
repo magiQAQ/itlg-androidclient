@@ -25,7 +25,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="@color/list_background">
 
         <LinearLayout
@@ -34,7 +35,6 @@
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/my_cart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -63,18 +63,21 @@
                             android:text="@string/my_cart" />
 
                         <TextView
+                            android:id="@+id/watch_all_my_cart_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="@string/view_all" />
+                            android:text="@string/watch_all" />
 
                         <ImageView
+                            android:id="@+id/watch_all_my_cart_imageView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:adjustViewBounds="true"
                             android:contentDescription="@null"
                             app:srcCompat="@drawable/ic_navigate_next_black_24dp" />
+
                     </LinearLayout>
 
                     <View
@@ -83,13 +86,41 @@
                         android:background="@color/list_background" />
 
                     <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/my_cart_recyclerView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:orientation="horizontal"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         tools:itemCount="5"
-                        tools:listitem="@layout/item_preview_cart" />
+                        tools:listitem="@layout/item_preview_my_cart"
+                        tools:visibility="visible" />
+
+
+                    <LinearLayout
+                        android:id="@+id/empty_cart_linearLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="@string/cart_empty" />
+
+                        <Button
+                            android:id="@+id/go_shopping_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:background="@drawable/transparent_button"
+                            android:text="@string/go_shopping"
+                            android:textColor="#707070" />
+                    </LinearLayout>
+
 
                 </LinearLayout>
 
@@ -97,14 +128,16 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/my_farms"
+                android:id="@+id/my_farms_cardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="16dp"
                 app:cardCornerRadius="10dp"
-                app:cardElevation="4dp">
+                android:visibility="gone"
+                app:cardElevation="4dp"
+                tools:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -125,12 +158,14 @@
                             android:text="@string/my_own_farms" />
 
                         <TextView
+                            android:id="@+id/watch_all_my_farms_textView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="@string/view_all" />
+                            android:text="@string/watch_all" />
 
                         <ImageView
+                            android:id="@+id/watch_all_my_farms_imageView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -147,8 +182,7 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp">
+                        android:layout_height="120dp">
 
                         <ImageView
                             android:id="@+id/farm_icon_imageView"
@@ -159,8 +193,35 @@
                             android:layout_alignParentBottom="true"
                             android:layout_marginStart="20dp"
                             android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
                             android:contentDescription="@null"
                             tools:srcCompat="@tools:sample/avatars" />
+
+                        <TextView
+                            android:id="@+id/farm_name_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="40dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_toEndOf="@id/farm_icon_imageView"
+                            android:textSize="24sp"
+                            tools:text="农场3" />
+
+                        <TextView
+                            android:id="@+id/farm_current_product_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginStart="40dp"
+                            android:layout_marginBottom="25dp"
+                            android:layout_toEndOf="@id/farm_icon_imageView"
+                            android:ellipsize="end"
+                            android:textSize="20sp"
+                            tools:text="当前种植:苹果"
+
+                            />
+
 
                     </RelativeLayout>
 
@@ -171,7 +232,21 @@
 
         </LinearLayout>
 
+
     </ScrollView>
 
+    <Button
+        android:id="@+id/logout_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/red_button"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:text="@string/logout"
+        android:textColor="@color/white"
+        android:textSize="22sp" />
 
 </LinearLayout>
