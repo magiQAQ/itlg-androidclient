@@ -14,4 +14,5 @@
     <color name="blue">#7272FF</color>
     <color name="black">#000000</color>
     <color name="list_background">#E6E6E6</color>
+    <color name="price_text">#7FBA00</color>
 </resources>

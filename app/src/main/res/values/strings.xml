@@ -44,5 +44,7 @@
     <string name="my_own_farms">我拥有的农场</string>
     <string name="cart_empty">购物车是空的,犒劳下自己吧</string>
     <string name="go_shopping">去逛逛</string>
+    <string name="search_hint">水果蔬菜家畜</string>
+    <string name="search">搜索</string>
 
 </resources>
