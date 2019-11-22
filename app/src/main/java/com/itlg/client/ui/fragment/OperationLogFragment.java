@@ -61,7 +61,7 @@ public class OperationLogFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             operationLogs = getArguments().getParcelableArrayList(KEY_OPERATION_LOGS);
-            sch_page = getArguments().getInt(KEY_SCH_PAGE);
+            sch_page = getArguments().getInt(KEY_SCH_PAGE, 1);
             farmId = getArguments().getInt(KEY_FARM_ID);
         }
         operationLogBiz = new OperationLogBiz();

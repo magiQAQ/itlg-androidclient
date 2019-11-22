@@ -1,5 +1,6 @@
 package com.itlg.client.ui.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.itlg.client.biz.ProductInfoBiz;
 import com.itlg.client.net.CommonCallback;
 import com.itlg.client.ui.adapter.ProductMallAdapter;
 import com.itlg.client.ui.view.SwipeRefreshLayout;
+import com.itlg.client.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,16 +30,19 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTextChanged;
 
 /**
  * 农产品商城
  */
 public class ProductMallFragment extends Fragment {
 
-    private static final String KEY_PRODUCT_TYPES = "productTypes";
     private static final String KEY_SCH_PAGE = "sch_page";
     private static final String KEY_SCH_KEYWORD = "sch_keyword";
     private static final String KEY_SCH_TYPE = "sch_type";
+    private static final String KEY_SCH_ORDER = "sch_order";
+    private static final String KEY_PRODUCT_TYPES = "productTypes";
     private static final String KEY_PRODUCT_INFOS = "productInfos";
     private static final String TAG = "ProductMallFragment";
 
@@ -55,6 +60,7 @@ public class ProductMallFragment extends Fragment {
     private int sch_page;
     private String sch_keyword;
     private int sch_type;
+    private String sch_order;
     private ArrayList<ProductTypes> productTypes;
     private ArrayList<ProductInfo> productInfos;
 
@@ -69,9 +75,15 @@ public class ProductMallFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            sch_page = getArguments().getInt(KEY_SCH_PAGE);
-            sch_keyword = getArguments().getString(KEY_SCH_KEYWORD);
-            sch_type = getArguments().getInt(KEY_SCH_TYPE);
+            sch_page = getArguments().getInt(KEY_SCH_PAGE, 1);
+            sch_keyword = getArguments().getString(KEY_SCH_KEYWORD, "");
+            sch_type = getArguments().getInt(KEY_SCH_TYPE, 0);
+            sch_order = getArguments().getString(KEY_SCH_ORDER, "");
+        } else {
+            sch_page = 1;
+            sch_type = 0;
+            sch_order = "";
+            sch_keyword = "";
         }
         productInfoBiz = new ProductInfoBiz();
     }
@@ -94,10 +106,46 @@ public class ProductMallFragment extends Fragment {
         } else {
             loadTypeSpinner();
         }
-
         //加载价格排序下拉框
-
+        loadPriceSpinner();
         //加载商品列表
+        loadProductInfos();
+
+        swipeRefreshLayout.setMode(SwipeRefreshLayout.Mode.BOTH);
+        swipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLACK, Color.GREEN, Color.YELLOW);
+        swipeRefreshLayout.setOnRefreshListener(this::loadProductInfos);
+        swipeRefreshLayout.setOnPullUpRefreshListener(this::loadMoreProductInfo);
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        productInfoBiz.onDestroy();
+    }
+
+    private void loadPriceSpinner() {
+        List<String> itemList = new ArrayList<>();
+        itemList.add("默认排列");
+        itemList.add("升序排列");
+        itemList.add("降序排列");
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
+                android.R.layout.simple_spinner_item, itemList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        priceSpinner.setAdapter(adapter);
+        priceSpinner.setOnItemClickListener((parent, view, position, id) -> {
+            switch (position) {
+                case 0:
+                    sch_order = "";
+                    break;
+                case 1:
+                    sch_order = "asc";
+                    break;
+                case 2:
+                    sch_order = "desc";
+            }
+            loadProductInfos();
+        });
     }
 
     private void loadTypeSpinner() {
@@ -130,18 +178,86 @@ public class ProductMallFragment extends Fragment {
         typeSpinner.setAdapter(arrayAdapter);
         typeSpinner.setOnItemClickListener((parent, view, position, id) -> {
             sch_type = productTypes.get(position).getId();
-            loadProductRecyclerView();
+            loadProductInfos();
         });
     }
 
-    private void loadProductRecyclerView() {
+    //第一次载入商品列表或者刷新商品列表时调用
+    private void loadProductInfos() {
+        sch_page = 1;
+        productInfoBiz.getProductInfos(sch_page, sch_type, sch_keyword, sch_order,
+                new CommonCallback<ArrayList<ProductInfo>>() {
+                    @Override
+                    public void onFail(Exception e) {
+                        ToastUtils.showToast(e.getMessage());
+                        if (swipeRefreshLayout.isRefreshing()) {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    }
 
+                    @Override
+                    public void onSuccess(ArrayList<ProductInfo> response) {
+                        if (productInfos == null) {
+                            productInfos = response;
+                        } else {
+                            productInfos.clear();
+                            productInfos.addAll(response);
+                        }
+                        Bundle bundle = getArguments() == null ? new Bundle() : getArguments();
+                        bundle.putParcelableArrayList(KEY_PRODUCT_INFOS, productInfos);
+                        setArguments(bundle);
+                        setupRecyclerView();
+                        if (swipeRefreshLayout.isRefreshing()) {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    }
+                });
     }
 
+    private void loadMoreProductInfo() {
+        productInfoBiz.getProductInfos(++sch_page, sch_type, sch_keyword, sch_order,
+                new CommonCallback<ArrayList<ProductInfo>>() {
+                    @Override
+                    public void onFail(Exception e) {
+                        ToastUtils.showToast(e.getMessage());
+                        //关闭上拉更多载入图标
+                        swipeRefreshLayout.setPullUpRefreshing(false);
+                        sch_page--;
+                    }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        productInfoBiz.onDestroy();
+                    @Override
+                    public void onSuccess(ArrayList<ProductInfo> response) {
+                        if (productInfos == null) {
+                            sch_page--;
+                            return;
+                        }
+                        productInfos.addAll(response);
+                        Bundle bundle = getArguments() == null ? new Bundle() : getArguments();
+                        bundle.putParcelableArrayList(KEY_PRODUCT_INFOS, productInfos);
+                        setArguments(bundle);
+                        setupRecyclerView();
+                        swipeRefreshLayout.setPullUpRefreshing(false);
+                    }
+                });
     }
+
+    private void setupRecyclerView() {
+        if (adapter == null) {
+            adapter = new ProductMallAdapter(getActivity(), productInfos);
+        } else {
+            adapter.notifyDataSetChanged();
+        }
+        productRecyclerView.setAdapter(adapter);
+    }
+
+    @OnTextChanged(R.id.search_editText)
+    void setSchKeyword() {
+        sch_keyword = searchEditText.getEditableText().toString();
+    }
+
+    @OnClick(R.id.search_button)
+    void searchProductInfos() {
+        loadProductInfos();
+    }
+
 }
