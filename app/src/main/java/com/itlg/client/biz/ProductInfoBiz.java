@@ -39,8 +39,9 @@ public class ProductInfoBiz {
                                 CommonCallback<ArrayList<ProductInfo>> commonCallback) {
 
         Map<String, String> map = new HashMap<>();
+        map.put("key", "FrontShopTP.getProductInfosByPhone");
         map.put("sch_page", String.valueOf(sch_page));
-        if (sch_type != 0) {
+        if (sch_type > 0) {
             map.put("sch_type", String.valueOf(sch_type));
         }
         if (!sch_keyword.isEmpty()) {
@@ -52,7 +53,6 @@ public class ProductInfoBiz {
 
         OkHttpUtils.post()
                 .url(Config.BASEURL)
-                .addParams("key", "FrontShopTP.getProductInfosByPhone")
                 .params(map)
                 .tag(this)
                 .build()

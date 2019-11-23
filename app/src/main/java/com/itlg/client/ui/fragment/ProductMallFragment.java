@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -66,6 +67,8 @@ public class ProductMallFragment extends Fragment {
 
     private ProductInfoBiz productInfoBiz;
     private ProductMallAdapter adapter;
+    private List<String> types;
+    private ArrayAdapter<String> arrayAdapter;
 
     public static ProductMallFragment newInstance() {
         return new ProductMallFragment();
@@ -79,6 +82,8 @@ public class ProductMallFragment extends Fragment {
             sch_keyword = getArguments().getString(KEY_SCH_KEYWORD, "");
             sch_type = getArguments().getInt(KEY_SCH_TYPE, 0);
             sch_order = getArguments().getString(KEY_SCH_ORDER, "");
+            productTypes = getArguments().getParcelableArrayList(KEY_PRODUCT_TYPES);
+            productInfos = getArguments().getParcelableArrayList(KEY_PRODUCT_INFOS);
         } else {
             sch_page = 1;
             sch_type = 0;
@@ -101,15 +106,26 @@ public class ProductMallFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //加载商品类型下拉框
+        types = new ArrayList<>();
+        //无论是否加载成功都需要先显示一个全部分类
+        types.add("全部分类");
+        arrayAdapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
+                android.R.layout.simple_spinner_item, types);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        typeSpinner.setAdapter(arrayAdapter);
         if (productTypes != null) {
             setupTypeSpinner();
         } else {
             loadTypeSpinner();
         }
         //加载价格排序下拉框
-        loadPriceSpinner();
+        setupPriceSpinner();
         //加载商品列表
-        loadProductInfos();
+        if (productInfos != null) {
+            setupRecyclerView();
+        } else {
+            loadProductInfos();
+        }
 
         swipeRefreshLayout.setMode(SwipeRefreshLayout.Mode.BOTH);
         swipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLACK, Color.GREEN, Color.YELLOW);
@@ -122,30 +138,6 @@ public class ProductMallFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         productInfoBiz.onDestroy();
-    }
-
-    private void loadPriceSpinner() {
-        List<String> itemList = new ArrayList<>();
-        itemList.add("默认排列");
-        itemList.add("升序排列");
-        itemList.add("降序排列");
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
-                android.R.layout.simple_spinner_item, itemList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        priceSpinner.setAdapter(adapter);
-        priceSpinner.setOnItemClickListener((parent, view, position, id) -> {
-            switch (position) {
-                case 0:
-                    sch_order = "";
-                    break;
-                case 1:
-                    sch_order = "asc";
-                    break;
-                case 2:
-                    sch_order = "desc";
-            }
-            loadProductInfos();
-        });
     }
 
     private void loadTypeSpinner() {
@@ -167,19 +159,70 @@ public class ProductMallFragment extends Fragment {
     }
 
     private void setupTypeSpinner() {
-        List<String> types = new ArrayList<>();
+        //提取类型名字
         for (ProductTypes type : productTypes) {
             types.add(type.getName());
         }
-        types.add(0, "全部分类");
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
-                android.R.layout.simple_spinner_item, types);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        typeSpinner.setAdapter(arrayAdapter);
-        typeSpinner.setOnItemClickListener((parent, view, position, id) -> {
-            sch_type = productTypes.get(position).getId();
-            loadProductInfos();
+        //通知适配器更新界面
+        arrayAdapter.notifyDataSetChanged();
+        typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                if (position > 0) {
+                    sch_type = productTypes.get(position - 1).getId();
+                } else {
+                    sch_type = 0;
+                }
+                loadProductInfos();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                adapterView.setSelection(0);
+            }
         });
+        //如果用户在页面销毁前选择过，就重新帮用户选择上
+        if (sch_type > 0) {
+            typeSpinner.setSelection(sch_type + 1);
+        }
+    }
+
+    private void setupPriceSpinner() {
+        List<String> itemList = new ArrayList<>();
+        itemList.add("默认排列");
+        itemList.add("升序排列");
+        itemList.add("降序排列");
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
+                android.R.layout.simple_spinner_item, itemList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        priceSpinner.setAdapter(adapter);
+        priceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        sch_order = "";
+                        break;
+                    case 1:
+                        sch_order = "asc";
+                        break;
+                    case 2:
+                        sch_order = "desc";
+                }
+                loadProductInfos();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                adapterView.setSelection(0);
+            }
+        });
+        //如果用户在页面销毁前选择过，就重新帮用户选择上
+        if (sch_order.equals("asc")) {
+            priceSpinner.setSelection(1);
+        } else if (sch_order.equals("desc")) {
+            priceSpinner.setSelection(2);
+        }
     }
 
     //第一次载入商品列表或者刷新商品列表时调用
@@ -190,9 +233,22 @@ public class ProductMallFragment extends Fragment {
                     @Override
                     public void onFail(Exception e) {
                         ToastUtils.showToast(e.getMessage());
+                        //如果刷新图标还在显示，就关闭它
                         if (swipeRefreshLayout.isRefreshing()) {
                             swipeRefreshLayout.setRefreshing(false);
                         }
+                        //非空判断，有两种原因
+                        //1.用户网络原因，productInfos将不会被初始化
+                        //2.当后台确实没有此类商品时，也需要清空原列表
+                        if (productInfos == null) {
+                            productInfos = new ArrayList<>();
+                        } else {
+                            productInfos.clear();
+                        }
+                        Bundle bundle = getArguments() == null ? new Bundle() : getArguments();
+                        bundle.putInt(KEY_SCH_PAGE, 1);
+                        setArguments(bundle);
+                        setupRecyclerView();
                     }
 
                     @Override
@@ -205,6 +261,10 @@ public class ProductMallFragment extends Fragment {
                         }
                         Bundle bundle = getArguments() == null ? new Bundle() : getArguments();
                         bundle.putParcelableArrayList(KEY_PRODUCT_INFOS, productInfos);
+                        bundle.putInt(KEY_SCH_PAGE, sch_page);
+                        bundle.putInt(KEY_SCH_TYPE, sch_type);
+                        bundle.putString(KEY_SCH_KEYWORD, sch_keyword);
+                        bundle.putString(KEY_SCH_ORDER, sch_order);
                         setArguments(bundle);
                         setupRecyclerView();
                         if (swipeRefreshLayout.isRefreshing()) {
@@ -234,6 +294,7 @@ public class ProductMallFragment extends Fragment {
                         productInfos.addAll(response);
                         Bundle bundle = getArguments() == null ? new Bundle() : getArguments();
                         bundle.putParcelableArrayList(KEY_PRODUCT_INFOS, productInfos);
+                        bundle.putInt(KEY_SCH_PAGE, sch_page);
                         setArguments(bundle);
                         setupRecyclerView();
                         swipeRefreshLayout.setPullUpRefreshing(false);

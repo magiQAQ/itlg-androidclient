@@ -14,6 +14,8 @@
         android:layout_marginEnd="50dp"
         android:background="@drawable/search_linear"
         android:gravity="center_vertical"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="horizontal">
 
         <EditText
@@ -47,7 +49,7 @@
         <Spinner
             android:id="@+id/type_spinner"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/spinner_default_height"
             android:layout_weight="1"
             android:overlapAnchor="false"
             android:spinnerMode="dropdown" />
@@ -55,7 +57,7 @@
         <Spinner
             android:id="@+id/price_spinner"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/spinner_default_height"
             android:layout_weight="1"
             android:overlapAnchor="false"
             android:spinnerMode="dropdown" />

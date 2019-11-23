@@ -1,13 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     tools:context=".ui.fragment.FarmMallFragment">
 
-    <TextView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/type_spinner"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spinner_default_height"
+            android:layout_weight="1"
+            android:overlapAnchor="false"
+            android:spinnerMode="dropdown" />
+
+        <Spinner
+            android:id="@+id/status_spinner"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spinner_default_height"
+            android:layout_weight="1"
+            android:overlapAnchor="false"
+            android:spinnerMode="dropdown" />
+
+        <Spinner
+            android:id="@+id/price_spinner"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spinner_default_height"
+            android:layout_weight="1"
+            android:overlapAnchor="false"
+            android:spinnerMode="dropdown" />
+
+    </LinearLayout>
+
+    <com.itlg.client.ui.view.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:background="@color/list_background">
 
-</FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/frontFarmModels_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_product_mall" />
+
+    </com.itlg.client.ui.view.SwipeRefreshLayout>
+
+</LinearLayout>
