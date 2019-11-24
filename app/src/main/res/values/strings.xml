@@ -46,5 +46,9 @@
     <string name="go_shopping">去逛逛</string>
     <string name="search_hint">水果蔬菜家畜</string>
     <string name="search">搜索</string>
-
+    <string name="price">￥%.1f</string>
+    <string name="welcome">Hi，%s</string>
+    <string name="intelligent_agriculture">INTELLIGENT AGRICULTURE</string>
+    <string name="huinong">慧农</string>
+    <string name="last_news">最新新闻</string>
 </resources>

@@ -48,6 +48,8 @@ public class MineFragment extends Fragment {
     private static final String KEY_FARM_INFO_MODELS = "farmInfoModels";
     @BindView(R.id.userImg_imageView)
     ImageView userImgImageView;
+    @BindView(R.id.user_name_textView)
+    TextView userNameTextView;
     @BindView(R.id.my_cart_recyclerView)
     RecyclerView myCartRecyclerView;
     @BindView(R.id.empty_cart_linearLayout)
@@ -97,6 +99,8 @@ public class MineFragment extends Fragment {
         //加载用户头像
         Glide.with(this).load(Config.FILEURL + UserInfoHolder.getInstance().getUser().getUserImg())
                 .placeholder(R.drawable.user_default_img).circleCrop().into(userImgImageView);
+        //显示当前用户名字
+        userNameTextView.setText(getString(R.string.welcome, UserInfoHolder.getInstance().getUser().getName()));
 
         //加载购物车预览
         if (buyInfoModels != null) {

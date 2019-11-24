@@ -22,6 +22,7 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnPageChange;
 
 /**
  * 普通用户和农场主界面
@@ -39,6 +40,8 @@ public class NormalUserActivity extends BaseActivity {
         setContentView(R.layout.activity_normal_user);
         ButterKnife.bind(this);
 
+        setStatusBarColor(R.color.white, false);
+
         initView();
     }
 
@@ -46,6 +49,8 @@ public class NormalUserActivity extends BaseActivity {
         Fragment[] fragments = new Fragment[]{ProductMallFragment.newInstance(), FarmMallFragment.newInstance(),
                 NewsFragment.newInstance(), MineFragment.newInstance()};
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
+        //防止viewpager在后台destroyView
+        viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(adapter);
         //该方法虽然能与viewPager关联但是会清除所有的tab并生成自己的tab,所以调用后需要手动remove所有生成的tab
         tabLayout.setupWithViewPager(viewPager);
@@ -71,6 +76,15 @@ public class NormalUserActivity extends BaseActivity {
     public void toShoppingFragment() {
         Objects.requireNonNull(tabLayout.getTabAt(0)).select();
         viewPager.setCurrentItem(0);
+    }
+
+    @OnPageChange(R.id.viewPager)
+    void onFragmentChanged(int position) {
+        if (position <= 2 && getStatusBarColor() != getResources().getColor(R.color.white)) {
+            setStatusBarColor(R.color.white, false);
+        } else if (position > 2 && getStatusBarColor() != getResources().getColor(R.color.colorTheme)) {
+            setStatusBarColor(R.color.colorTheme, true);
+        }
     }
 
 }

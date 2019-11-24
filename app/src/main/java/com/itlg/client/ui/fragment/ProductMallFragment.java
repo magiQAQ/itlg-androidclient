@@ -305,10 +305,10 @@ public class ProductMallFragment extends Fragment {
     private void setupRecyclerView() {
         if (adapter == null) {
             adapter = new ProductMallAdapter(getActivity(), productInfos);
+            productRecyclerView.setAdapter(adapter);
         } else {
             adapter.notifyDataSetChanged();
         }
-        productRecyclerView.setAdapter(adapter);
     }
 
     @OnTextChanged(R.id.search_editText)

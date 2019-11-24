@@ -53,6 +53,10 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    protected int getStatusBarColor() {
+        return getWindow().getStatusBarColor();
+    }
+
     protected ItlgApplication getMyApplication(){
         return (ItlgApplication)getApplication();
     }

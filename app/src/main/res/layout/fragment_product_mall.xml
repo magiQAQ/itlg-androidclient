@@ -49,7 +49,7 @@
         <Spinner
             android:id="@+id/type_spinner"
             android:layout_width="0dp"
-            android:layout_height="@dimen/spinner_default_height"
+            android:layout_height="48dp"
             android:layout_weight="1"
             android:overlapAnchor="false"
             android:spinnerMode="dropdown" />
@@ -57,7 +57,7 @@
         <Spinner
             android:id="@+id/price_spinner"
             android:layout_width="0dp"
-            android:layout_height="@dimen/spinner_default_height"
+            android:layout_height="48dp"
             android:layout_weight="1"
             android:overlapAnchor="false"
             android:spinnerMode="dropdown" />

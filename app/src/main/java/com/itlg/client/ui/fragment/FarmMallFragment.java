@@ -23,6 +23,7 @@ import com.itlg.client.biz.FarmInfoBiz;
 import com.itlg.client.net.CommonCallback;
 import com.itlg.client.ui.adapter.FrontFarmModelAdapter;
 import com.itlg.client.ui.view.SwipeRefreshLayout;
+import com.itlg.client.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +85,8 @@ public class FarmMallFragment extends Fragment {
             sch_type = 0;
             sch_order = "";
             sch_state = 0;
+            farmTypes = null;
+            frontFarmModels = null;
         }
         farmInfoBiz = new FarmInfoBiz();
     }
@@ -116,10 +119,17 @@ public class FarmMallFragment extends Fragment {
         //加载价格排序下拉框
         setupPriceSpinner();
 
+        //加载待售农田列表
+        if (frontFarmModels != null) {
+            setupRecyclerView();
+        } else {
+            loadFrontFarmModels();
+        }
         swipeRefreshLayout.setMode(SwipeRefreshLayout.Mode.BOTH);
         swipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLACK, Color.GREEN, Color.YELLOW);
         swipeRefreshLayout.setOnRefreshListener(this::loadFrontFarmModels);
         swipeRefreshLayout.setOnPullUpRefreshListener(this::loadMoreFrontFarmModels);
+
     }
 
     @Override
@@ -154,11 +164,8 @@ public class FarmMallFragment extends Fragment {
         typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                if (position > 0) {
-                    sch_type = farmTypes.get(position - 1).getId();
-                } else {
-                    sch_type = 0;
-                }
+                //sch_type为要搜索的类型的id，0表示全部
+                sch_type = position > 0 ? farmTypes.get(position - 1).getId() : 0;
                 loadFrontFarmModels();
             }
 
@@ -186,9 +193,8 @@ public class FarmMallFragment extends Fragment {
         statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                if (position > 0) {
-                    sch_state = position;
-                }
+                sch_state = position;
+                loadFrontFarmModels();
             }
 
             @Override
@@ -241,19 +247,79 @@ public class FarmMallFragment extends Fragment {
     }
 
     private void loadFrontFarmModels() {
+        sch_page = 1;
+        farmInfoBiz.getFrontFarmModels(sch_page, sch_type, sch_state, sch_order,
+                new CommonCallback<ArrayList<FrontFarmModel>>() {
+                    @Override
+                    public void onFail(Exception e) {
+                        ToastUtils.showToast(e.getMessage());
+                        Bundle bundle = getArguments() == null ? new Bundle() : getArguments();
+                        bundle.putInt(KEY_SCH_PAGE, 1);
+                        setArguments(bundle);
+                        if (swipeRefreshLayout.isRefreshing()) {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                        if (frontFarmModels != null) {
+                            frontFarmModels.clear();
+                            setupRecyclerView();
+                        }
+                    }
 
+                    @Override
+                    public void onSuccess(ArrayList<FrontFarmModel> response) {
+                        if (frontFarmModels == null) {
+                            frontFarmModels = response;
+                        } else {
+                            frontFarmModels.clear();
+                            frontFarmModels.addAll(response);
+                        }
+                        Bundle bundle = getArguments() == null ? new Bundle() : getArguments();
+                        bundle.putParcelableArrayList(KEY_FRONT_FARM_MODELS, frontFarmModels);
+                        bundle.putString(KEY_SCH_ORDER, sch_order);
+                        bundle.putInt(KEY_SCH_PAGE, sch_page);
+                        bundle.putInt(KEY_SCH_STATE, sch_state);
+                        setArguments(bundle);
+                        setupRecyclerView();
+                        if (swipeRefreshLayout.isRefreshing()) {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    }
+                });
     }
 
     private void loadMoreFrontFarmModels() {
+        farmInfoBiz.getFrontFarmModels(++sch_page, sch_type, sch_state, sch_order,
+                new CommonCallback<ArrayList<FrontFarmModel>>() {
+                    @Override
+                    public void onFail(Exception e) {
+                        ToastUtils.showToast(e.getMessage());
+                        swipeRefreshLayout.setPullUpRefreshing(false);
+                        sch_page--;
+                    }
 
+                    @Override
+                    public void onSuccess(ArrayList<FrontFarmModel> response) {
+                        if (frontFarmModels == null) {
+                            sch_page--;
+                            return;
+                        }
+                        frontFarmModels.addAll(response);
+                        Bundle bundle = getArguments() == null ? new Bundle() : getArguments();
+                        bundle.putInt(KEY_SCH_PAGE, sch_page);
+                        bundle.putParcelableArrayList(KEY_FRONT_FARM_MODELS, frontFarmModels);
+                        setArguments(bundle);
+                        setupRecyclerView();
+                        swipeRefreshLayout.setPullUpRefreshing(false);
+                    }
+                });
     }
 
     private void setupRecyclerView() {
         if (adapter == null) {
             adapter = new FrontFarmModelAdapter(getActivity(), frontFarmModels);
+            frontFarmModelsRecyclerView.setAdapter(adapter);
         } else {
             adapter.notifyDataSetChanged();
         }
-        frontFarmModelsRecyclerView.setAdapter(adapter);
     }
 }

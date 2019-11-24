@@ -52,6 +52,10 @@ public abstract class CommonCallback<T> extends StringCallback {
 
     @Override
     public void onResponse(String response, int id) {
+        if (response.isEmpty()) {
+            Log.e(TAG, "response 为空字符串");
+            return;
+        }
         try {
             JSONObject jsonObject = new JSONObject(response);
             boolean succ = jsonObject.getBoolean("succ");

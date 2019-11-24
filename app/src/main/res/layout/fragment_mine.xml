@@ -17,9 +17,21 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_gravity="center"
-            android:layout_margin="50dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="60dp"
             android:contentDescription="@null"
             tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/user_name_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="Hi,user'sName" />
 
     </FrameLayout>
 
@@ -97,7 +109,7 @@
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         tools:itemCount="5"
                         tools:listitem="@layout/item_preview_my_cart"
-                        tools:visibility="visible" />
+                        tools:visibility="gone" />
 
 
                     <LinearLayout
@@ -106,7 +118,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:orientation="vertical"
-                        android:visibility="gone">
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:visibility="visible">
 
                         <TextView
                             android:layout_width="wrap_content"
