@@ -24,16 +24,15 @@ public class ProductMallAdapter extends RecyclerView.Adapter<ProductMallAdapter.
 
     private Context context;
     private List<ProductInfo> productInfos;
+    private OnItemClickListener onItemClickListener;
 
     public ProductMallAdapter(Context context, List<ProductInfo> productInfos) {
         this.context = context;
         this.productInfos = productInfos;
     }
 
-    @NonNull
-    @Override
-    public ProductMallViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ProductMallViewHolder(LayoutInflater.from(context).inflate(R.layout.item_product_mall, parent, false));
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -44,6 +43,21 @@ public class ProductMallAdapter extends RecyclerView.Adapter<ProductMallAdapter.
         holder.productNameTextView.setText(productInfo.getProductName());
         holder.productPriceTextView.setText(String.valueOf(productInfo.getPrice()));
         holder.productUnitTextView.setText(productInfo.getUnit());
+        holder.itemView.setOnClickListener(view -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onClick(position);
+            }
+        });
+    }
+
+    @NonNull
+    @Override
+    public ProductMallViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ProductMallViewHolder(LayoutInflater.from(context).inflate(R.layout.item_product_mall, parent, false));
+    }
+
+    public interface OnItemClickListener {
+        void onClick(int position);
     }
 
     @Override

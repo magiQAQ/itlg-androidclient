@@ -1,5 +1,6 @@
 package com.itlg.client.ui.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,7 @@ import com.itlg.client.bean.ProductInfo;
 import com.itlg.client.bean.ProductTypes;
 import com.itlg.client.biz.ProductInfoBiz;
 import com.itlg.client.net.CommonCallback;
+import com.itlg.client.ui.activity.ProductDetailActivity;
 import com.itlg.client.ui.adapter.ProductMallAdapter;
 import com.itlg.client.ui.view.SwipeRefreshLayout;
 import com.itlg.client.utils.ToastUtils;
@@ -246,7 +248,11 @@ public class ProductMallFragment extends Fragment {
                             productInfos.clear();
                         }
                         Bundle bundle = getArguments() == null ? new Bundle() : getArguments();
-                        bundle.putInt(KEY_SCH_PAGE, 1);
+                        bundle.putInt(KEY_SCH_PAGE, sch_page);
+                        bundle.putInt(KEY_SCH_TYPE, sch_type);
+                        bundle.putString(KEY_SCH_KEYWORD, sch_keyword);
+                        bundle.putString(KEY_SCH_ORDER, sch_order);
+                        bundle.remove(KEY_PRODUCT_INFOS);
                         setArguments(bundle);
                         setupRecyclerView();
                     }
@@ -309,6 +315,11 @@ public class ProductMallFragment extends Fragment {
         } else {
             adapter.notifyDataSetChanged();
         }
+        adapter.setOnItemClickListener(position -> {
+            Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
+            intent.putExtra("product_detail", productInfos.get(position));
+            startActivity(intent);
+        });
     }
 
     @OnTextChanged(R.id.search_editText)
