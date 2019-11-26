@@ -51,4 +51,8 @@
     <string name="intelligent_agriculture">INTELLIGENT AGRICULTURE</string>
     <string name="huinong">慧农</string>
     <string name="last_news">最新新闻</string>
+    <string name="news_icon">NEW</string>
+    <string name="sale_icon">SALE</string>
+    <string name="one">1</string>
+    <string name="buy_spot">购买现货</string>
 </resources>

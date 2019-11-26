@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     tools:context=".ui.activity.ProductDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -36,8 +37,9 @@
                 android:layout_height="?attr/actionBarSize"
                 android:layout_marginTop="20dp"
                 app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/ic_navigate_before_black_24dp"
+                style="@style/ToolBarTheme"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:navigationIcon="@drawable/ic_navigate_before_white_24dp"
                 tools:title="红富士" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -46,10 +48,114 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/list_background"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/product_price_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/price_text"
+                    android:textSize="30sp"
+                    tools:text="价格" />
+
+                <TextView
+                    android:id="@+id/product_unit_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="15dp"
+                    android:textColor="#8a8a8a"
+                    android:textSize="24sp"
+                    tools:text="单位" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/corners_bg"
+                    android:backgroundTint="#92D2A7"
+                    android:text="@string/news_icon"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/corners_bg"
+                    android:backgroundTint="#79D1D6"
+                    android:text="@string/sale_icon"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/product_note_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:textColor="#8a8a8a"
+                android:textSize="20sp"
+                tools:text="猪是一种脊椎动物、哺乳动物、家畜，也是古杂食类哺乳动物，主要分为家猪和野猪。当前人们认为猪是猪科动物的简称。" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/remove_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/transparent"
+                    android:contentDescription="@null"
+                    app:srcCompat="@drawable/ic_remove_circle_gray_24dp" />
+
+                <TextView
+                    android:id="@+id/product_count_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/one" />
+
+                <ImageButton
+                    android:id="@+id/add_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/transparent"
+                    android:contentDescription="@null"
+                    app:srcCompat="@drawable/ic_add_circle_gray_24dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="30dp"
+                    android:text="@string/buy_spot" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 

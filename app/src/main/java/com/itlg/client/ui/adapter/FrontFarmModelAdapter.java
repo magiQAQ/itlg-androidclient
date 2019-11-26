@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.itlg.client.R;
 import com.itlg.client.bean.FrontFarmModel;
+import com.itlg.client.config.Config;
 
 import java.util.List;
 
@@ -39,11 +40,7 @@ public class FrontFarmModelAdapter extends RecyclerView.Adapter<FrontFarmModelAd
     @Override
     public void onBindViewHolder(@NonNull FrontFarmModelViewHolder holder, int position) {
         FrontFarmModel model = frontFarmModels.get(position);
-        if (model.getFarmInfo().getTypeId() == 1) {
-            Glide.with(context).load(R.drawable.nongchang).into(holder.farmIconImageView);
-        } else if (model.getFarmInfo().getTypeId() == 2) {
-            Glide.with(context).load(R.drawable.yangzhichang).into(holder.farmIconImageView);
-        }
+        Glide.with(context).load(Config.FILEURL + model.getFarmInfo().getImg()).into(holder.farmIconImageView);
         holder.farmNameTextView.setText(context.getString(R.string.typename_id,
                 model.getTypeName(), model.getFarmInfo().getId()));
         holder.productPriceTextView.setText(context.getString(R.string.price,

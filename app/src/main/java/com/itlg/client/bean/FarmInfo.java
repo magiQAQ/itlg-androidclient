@@ -4,6 +4,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class FarmInfo implements Parcelable {
+
+    private int id;//农场自增编号
+    private int typeId;//农场类型
+    private String farmQrcode;//农场二维码
+    private double longitude;//GPS经度
+    private double latitude;//GPS纬度
     public static final Creator<FarmInfo> CREATOR = new Creator<FarmInfo>() {
         @Override
         public FarmInfo createFromParcel(Parcel in) {
@@ -15,11 +21,7 @@ public class FarmInfo implements Parcelable {
             return new FarmInfo[size];
         }
     };
-    private int id;//农场自增编号
-    private int typeId;//农场类型
-    private String farmQrcode;//农场二维码
-    private double longitude;//GPS经度
-    private double latitude;//GPS纬度
+    private String img;//农场图片
 
     private FarmInfo(Parcel in) {
         id = in.readInt();
@@ -27,6 +29,12 @@ public class FarmInfo implements Parcelable {
         farmQrcode = in.readString();
         longitude = in.readDouble();
         latitude = in.readDouble();
+        img = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     @Override
@@ -36,11 +44,7 @@ public class FarmInfo implements Parcelable {
         dest.writeString(farmQrcode);
         dest.writeDouble(longitude);
         dest.writeDouble(latitude);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+        dest.writeString(img);
     }
 
     public int getId() {
@@ -81,5 +85,13 @@ public class FarmInfo implements Parcelable {
 
     public void setLatitude(double latitude) {
         this.latitude = latitude;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 }

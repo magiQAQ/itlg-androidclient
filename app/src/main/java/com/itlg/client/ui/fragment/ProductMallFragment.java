@@ -25,6 +25,7 @@ import com.itlg.client.net.CommonCallback;
 import com.itlg.client.ui.activity.ProductDetailActivity;
 import com.itlg.client.ui.adapter.ProductMallAdapter;
 import com.itlg.client.ui.view.SwipeRefreshLayout;
+import com.itlg.client.utils.MyUtils;
 import com.itlg.client.utils.ToastUtils;
 
 import java.util.ArrayList;
@@ -317,7 +318,7 @@ public class ProductMallFragment extends Fragment {
         }
         adapter.setOnItemClickListener(position -> {
             Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
-            intent.putExtra("product_detail", productInfos.get(position));
+            intent.putExtra(MyUtils.KEY_PRODUCT_INFO_DETAIL, productInfos.get(position));
             startActivity(intent);
         });
     }

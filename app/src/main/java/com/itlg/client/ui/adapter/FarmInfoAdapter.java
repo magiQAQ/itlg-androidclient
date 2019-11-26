@@ -10,8 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.itlg.client.R;
 import com.itlg.client.bean.FarmInfoModel;
+import com.itlg.client.config.Config;
 
 import java.util.List;
 
@@ -39,11 +41,10 @@ public class FarmInfoAdapter extends RecyclerView.Adapter<FarmInfoAdapter.FarmIn
         FarmInfoModel model = list.get(position);
         int typeId = model.getFarmInfo().getTypeId();
         StringBuilder builder = new StringBuilder();
+        Glide.with(context).load(Config.FILEURL + model.getFarmInfo().getImg()).into(holder.farmIconImageView);
         if (typeId == 1) {
-            holder.farmIconImageView.setImageResource(R.drawable.nongchang);
             builder.append("当前种植：");
         } else if (typeId == 2) {
-            holder.farmIconImageView.setImageResource(R.drawable.yangzhichang);
             builder.append("当前养殖：");
         }
         holder.farmNameTextView.setText(String.format(context.getString(R.string.typename_id),
