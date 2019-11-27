@@ -318,7 +318,7 @@ public class ProductMallFragment extends Fragment {
         }
         adapter.setOnItemClickListener(position -> {
             Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
-            intent.putExtra(MyUtils.KEY_PRODUCT_INFO_DETAIL, productInfos.get(position));
+            intent.putExtra(MyUtils.KEY_PRODUCT_ID, productInfos.get(position).getId());
             startActivity(intent);
         });
     }

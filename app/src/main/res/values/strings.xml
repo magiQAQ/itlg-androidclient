@@ -55,4 +55,6 @@
     <string name="sale_icon">SALE</string>
     <string name="one">1</string>
     <string name="buy_spot">购买现货</string>
+    <string name="tips">标签:</string>
+    <string name="add_to_cart">加入购物车</string>
 </resources>

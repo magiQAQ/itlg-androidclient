@@ -1,6 +1,7 @@
 package com.itlg.client.biz;
 
 import com.itlg.client.bean.ProductInfo;
+import com.itlg.client.bean.ProductInfoModel;
 import com.itlg.client.bean.ProductTypes;
 import com.itlg.client.config.Config;
 import com.itlg.client.net.CommonCallback;
@@ -58,6 +59,24 @@ public class ProductInfoBiz {
                 .build()
                 .execute(commonCallback);
     }
+
+    /**
+     * 根据产品id获得对应产品详情
+     *
+     * @param productId      产品id
+     * @param commonCallback 得到结果后的回调
+     */
+    public void getProductInfoModel(int productId, CommonCallback<ProductInfoModel> commonCallback) {
+        OkHttpUtils.post()
+                .url(Config.BASEURL)
+                .addParams("key", "FrontShopTP.getProductInfoModelByPhone")
+                .addParams("id", String.valueOf(productId))
+                .tag(this)
+                .build()
+                .execute(commonCallback);
+    }
+
+
 
 
     /**

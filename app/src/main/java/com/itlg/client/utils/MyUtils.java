@@ -27,7 +27,7 @@ public class MyUtils {
     private static final String TAG = "MyUtils";
 
     public static final String KEY_FARM_INFO_MODEL = "key_farm_info";
-    public static final String KEY_PRODUCT_INFO_DETAIL = "key_product_info_detail";
+    public static final String KEY_PRODUCT_ID = "key_product_id";
     public static final String USER_AVATAR_FILENAME = "avatar.jpg";
     public static final String KEY_USERNAME = "key_username";
     public static final String KEY_PASSWORD = "key_password";

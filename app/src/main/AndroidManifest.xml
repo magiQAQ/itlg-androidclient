@@ -21,9 +21,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity
-            android:name=".ui.activity.ProductDetailActivity"
-            android:theme="@style/TranslucentTheme" />
+        <activity android:name=".ui.activity.ProductDetailActivity" />
         <activity android:name=".ui.activity.MyFarmsListActivity" />
         <activity android:name=".ui.activity.MyCartDetailActivity" />
         <activity android:name=".ui.activity.SplashActivity">

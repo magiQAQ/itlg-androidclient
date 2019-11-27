@@ -198,6 +198,38 @@ public final class RegexUtil {
         return Pattern.matches(regex, ipAddress);
     }
 
+    /**
+     * 匹配合法的用户名(字母开头，允许4-19字节，允许字母数字下划线)
+     *
+     * @param username 用户名
+     * @return 验证成功返回true，验证失败返回false
+     */
+    public static boolean checkUsername(String username) {
+        String regex = "^[a-zA-Z][a-zA-Z0-9_]{3,19}$";
+        return Pattern.matches(regex, username);
+    }
+
+    /**
+     * 用于验证密码(字母开头，允许6-20字节，允许字母数字下划线)
+     *
+     * @param password 密码
+     * @return 验证成功返回true，验证失败返回false
+     */
+    public static boolean checkPassword(String password) {
+        String regex = "^[a-zA-Z]\\w{5,19}$";
+        return Pattern.matches(regex, password);
+    }
+
+    /**
+     * 由于工信部放号段不定时，所以使用泛解析
+     *
+     * @param cellPhone 手机号码
+     * @return 验证成功返回true，验证失败返回false
+     */
+    public static boolean checkCellPhone(String cellPhone) {
+        String regex = "^([1][3-9])\\d{9}$";
+        return Pattern.matches(regex, cellPhone);
+    }
 
 
 
