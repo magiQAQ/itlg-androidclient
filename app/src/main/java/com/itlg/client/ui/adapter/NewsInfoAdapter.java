@@ -1,6 +1,7 @@
 package com.itlg.client.ui.adapter;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,8 @@ public class NewsInfoAdapter extends RecyclerView.Adapter<NewsInfoAdapter.NewsIn
     public void onBindViewHolder(@NonNull NewsInfoViewHolder holder, int position) {
         NewsInfo newsInfo = newsInfos.get(position);
         holder.newsTitleTextView.setText(newsInfo.getTitle());
-        holder.newsContentTextView.setText(newsInfo.getContent());
+        CharSequence charSequence = Html.fromHtml(newsInfo.getContent());
+        holder.newsContentTextView.setText(charSequence);
         holder.newsTimeTextView.setText(MyUtils.longTypeTimeToString(newsInfo.getNewsTime()));
         if (position % 3 == 1) {
             Glide.with(context).load(Config.FILEURL + "/itlg/uploadfiles/default2.jpg")
