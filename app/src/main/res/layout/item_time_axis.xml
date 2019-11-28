@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="350dp">
+
+    <View
+        android:layout_width="4dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="76dp"
+        android:background="#AAB2BD" />
+
+    <TextView
+        android:id="@+id/axis_year_month_textView"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/corners_bg"
+        android:backgroundTint="#AAB2BD"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        tools:text="消息年月" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="28dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/axis_month_day_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#bbbbbb"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            tools:text="消息月日" />
+
+        <TextView
+            android:id="@+id/axis_operator_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#dddddd"
+            android:padding="15dp"
+            android:textColor="#525252"
+            android:textSize="16sp"
+            tools:text="操作员：李四" />
+
+        <TextView
+            android:id="@+id/axis_operation_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#dddddd"
+            android:padding="15dp"
+            android:textColor="#525252"
+            android:textSize="16sp"
+            tools:text="操作内容：施肥" />
+
+        <TextView
+            android:id="@+id/axis_device_data_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#dddddd"
+            android:padding="15dp"
+            android:textColor="#525252"
+            android:textSize="16sp"
+            tools:text="传感器：温度：40°C 湿度：43%" />
+
+
+    </LinearLayout>
+
+
+</FrameLayout>
