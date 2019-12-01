@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.itlg.client.R;
 import com.itlg.client.bean.OperationLogModel;
+import com.itlg.client.utils.MyUtils;
 
 import java.util.ArrayList;
 
@@ -38,6 +39,10 @@ public class TimeAxisAdapter extends RecyclerView.Adapter<TimeAxisAdapter.TimeAx
     @Override
     public void onBindViewHolder(@NonNull TimeAxisViewHolder holder, int position) {
         OperationLogModel operationLogModel = new OperationLogModel();
+        holder.axisYearMonthTextView.setText(MyUtils.getTimeyyyyMM(operationLogModel
+                .getOperationLog().getOperationTime()));
+        holder.axisMonthDayTextView.setText(MyUtils.getTimeMMdd(operationLogModel
+                .getOperationLog().getOperationTime()));
     }
 
     @Override

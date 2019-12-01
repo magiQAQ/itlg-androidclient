@@ -232,4 +232,16 @@ public class MyUtils {
         return simpleDateFormat.format(date);
     }
 
+    public static String getTimeyyyyMM(long time) {
+        Date date = new Date(time);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月", Locale.CHINA);
+        return simpleDateFormat.format(date);
+    }
+
+    public static String getTimeMMdd(long time) {
+        Date date = new Date(time);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM月dd日", Locale.CHINA);
+        return simpleDateFormat.format(date);
+    }
+
 }
