@@ -13,7 +13,7 @@ import com.itlg.client.R;
 import com.itlg.client.bean.OperationLogModel;
 import com.itlg.client.utils.MyUtils;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,9 +22,9 @@ import butterknife.ButterKnife;
 public class TimeAxisAdapter extends RecyclerView.Adapter<TimeAxisAdapter.TimeAxisViewHolder> {
 
     private Context context;
-    private ArrayList<OperationLogModel> operationLogModels;
+    private List<OperationLogModel> operationLogModels;
 
-    public TimeAxisAdapter(Context context, ArrayList<OperationLogModel> operationLogModels) {
+    public TimeAxisAdapter(Context context, List<OperationLogModel> operationLogModels) {
         this.context = context;
         this.operationLogModels = operationLogModels;
     }
@@ -38,11 +38,14 @@ public class TimeAxisAdapter extends RecyclerView.Adapter<TimeAxisAdapter.TimeAx
 
     @Override
     public void onBindViewHolder(@NonNull TimeAxisViewHolder holder, int position) {
-        OperationLogModel operationLogModel = new OperationLogModel();
+        OperationLogModel operationLogModel = operationLogModels.get(position);
         holder.axisYearMonthTextView.setText(MyUtils.getTimeyyyyMM(operationLogModel
                 .getOperationLog().getOperationTime()));
         holder.axisMonthDayTextView.setText(MyUtils.getTimeMMdd(operationLogModel
                 .getOperationLog().getOperationTime()));
+        holder.axisOperatorTextView.setText(context.getString(R.string.operator_format, operationLogModel.getOperatorName()));
+        holder.axisOperationTextView.setText(context.getString(R.string.operation_format, operationLogModel.getOperationLog().getOperationInfo()));
+        holder.axisDeviceDataTextView.setText(context.getString(R.string.device_data_format, operationLogModel.getDataInfo()));
     }
 
     @Override

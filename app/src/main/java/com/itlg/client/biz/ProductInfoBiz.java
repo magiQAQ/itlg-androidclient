@@ -1,14 +1,17 @@
 package com.itlg.client.biz;
 
+import com.itlg.client.bean.OperationLogModel;
 import com.itlg.client.bean.ProductInfo;
 import com.itlg.client.bean.ProductInfoModel;
 import com.itlg.client.bean.ProductTypes;
 import com.itlg.client.config.Config;
 import com.itlg.client.net.CommonCallback;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ProductInfoBiz {
@@ -76,8 +79,39 @@ public class ProductInfoBiz {
                 .execute(commonCallback);
     }
 
+    /**
+     * 通过农场id得到该产品时间轴
+     *
+     * @param farmId         农场id
+     * @param commonCallback 得到结果后的回调
+     */
+    public void getTimeAxis(int farmId, CommonCallback<List<OperationLogModel>> commonCallback) {
+        OkHttpUtils.post()
+                .url(Config.BASEURL)
+                .addParams("key", "FrontShopTP.getTimeAxisByPhone")
+                .addParams("farmId", String.valueOf(farmId))
+                .tag(this)
+                .build()
+                .execute(commonCallback);
+    }
 
-
+    /**
+     * 将商品添加到购物车
+     *
+     * @param id             商品id
+     * @param count          商品数量
+     * @param stringCallback 得到结果后执行的操作
+     */
+    public void addToCart(int id, int count, StringCallback stringCallback) {
+        OkHttpUtils.post()
+                .url(Config.BASEURL)
+                .addParams("key", "FrontShopTP.addCart")
+                .addParams("id", String.valueOf(id))
+                .addParams("count", String.valueOf(count))
+                .tag(this)
+                .build()
+                .execute(stringCallback);
+    }
 
     /**
      * 取消该Biz中的网络请求,一般在Activity中OnDestroy()时调用

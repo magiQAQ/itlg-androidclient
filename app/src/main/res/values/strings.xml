@@ -57,4 +57,8 @@
     <string name="buy_spot">购买现货</string>
     <string name="tips">标签:</string>
     <string name="add_to_cart">加入购物车</string>
+    <string name="operator_format">操作员:%s</string>
+    <string name="operation_format">操作内容:%s</string>
+    <string name="device_data_format">传感器:%s</string>
+
 </resources>

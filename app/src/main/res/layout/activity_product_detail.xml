@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    android:background="@color/list_background"
     tools:context=".ui.activity.ProductDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -33,12 +34,12 @@
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
+                style="@style/ToolBarTheme"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                style="@style/ToolBarTheme"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:navigationIcon="@drawable/ic_navigate_before_white_24dp"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
                 tools:title="红富士" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -48,6 +49,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
         android:background="@color/list_background"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -165,15 +167,19 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="5"
+                tools:listitem="@layout/item_time_axis" />
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_gravity="bottom"
+        android:background="@color/list_background"
         android:fitsSystemWindows="true"
         android:focusable="true"
         android:focusableInTouchMode="true"
@@ -181,7 +187,7 @@
 
 
         <ImageButton
-            android:id="@+id/remove_button"
+            android:id="@+id/decrease_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/transparent"
@@ -198,12 +204,13 @@
             android:gravity="center"
             android:importantForAutofill="no"
             android:inputType="number"
+            android:maxLength="2"
             android:text="@string/one"
             android:textColor="@color/black"
             tools:ignore="LabelFor" />
 
         <ImageButton
-            android:id="@+id/add_button"
+            android:id="@+id/insert_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/transparent"
@@ -214,9 +221,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="@string/buy_spot" />
+            android:buttonTint="@color/black"
+            android:text="@string/buy_spot"
+            android:textColor="@color/black" />
 
         <Button
+            android:id="@+id/add_cart_button"
             style="?attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
