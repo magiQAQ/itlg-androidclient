@@ -2,7 +2,7 @@ package com.itlg.client.bean;
 
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class UserInfo implements Serializable {
     private int id;				//用户id
     private String name;		//用户姓名
     private String username;	//用户登录名

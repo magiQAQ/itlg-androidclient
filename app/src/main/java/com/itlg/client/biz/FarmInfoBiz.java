@@ -30,6 +30,22 @@ public class FarmInfoBiz {
     }
 
     /**
+     * 得到农场信息
+     *
+     * @param farmId         农场序号
+     * @param commonCallback 得到信息后执行的操作
+     */
+    public void getFarmInfoModel(int farmId, CommonCallback<FarmInfoModel> commonCallback) {
+        OkHttpUtils.get()
+                .url(Config.BASEURL)
+                .addParams("key", "FarmInfoTP.getFarmInfoModel")
+                .addParams("farmId", String.valueOf(farmId))
+                .tag(this)
+                .build()
+                .execute(commonCallback);
+    }
+
+    /**
      * 得到当前登录用户负责的所有农场信息
      *
      * @param commonCallback 得到信息后执行的操作

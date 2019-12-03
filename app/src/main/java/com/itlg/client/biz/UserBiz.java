@@ -1,6 +1,6 @@
 package com.itlg.client.biz;
 
-import com.itlg.client.bean.User;
+import com.itlg.client.bean.UserInfo;
 import com.itlg.client.config.Config;
 import com.itlg.client.net.CommonCallback;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -18,7 +18,7 @@ public class UserBiz {
      * @param password       密码
      * @param commonCallback post发送后执行的回调
      */
-    public void login(String username, String password, CommonCallback<User> commonCallback) {
+    public void login(String username, String password, CommonCallback<UserInfo> commonCallback) {
         OkHttpUtils.post()
                 .url(Config.BASEURL)
                 .tag(this)
@@ -32,25 +32,25 @@ public class UserBiz {
     /**
      * 用户注册的方法 (含头像)
      *
-     * @param user           构造好的user对象
+     * @param userInfo           构造好的user对象
      * @param password2      第二遍重复输入的密码
      * @param userImg        用户的头像
      * @param stringCallback post发送后执行的回调
      */
-    public void register(User user, String password2, File userImg, StringCallback stringCallback) {
+    public void register(UserInfo userInfo, String password2, File userImg, StringCallback stringCallback) {
         OkHttpUtils.post()
                 .url(Config.BASEURL + "?key=UserInfoTP.registerByPhone")
                 //.url(Config.BASEURL)
                 .tag(this)
                 //.addParams("key","UserInfoTP.registerByPhone")
-                .addParams("id", String.valueOf(user.getId()))
-                .addParams("name", user.getName())
-                .addParams("username", user.getUsername())
-                .addParams("password", user.getPassword())
+                .addParams("id", String.valueOf(userInfo.getId()))
+                .addParams("name", userInfo.getName())
+                .addParams("username", userInfo.getUsername())
+                .addParams("password", userInfo.getPassword())
                 .addParams("password2", password2)
-                .addParams("cellphone", user.getCellphone())
-                .addParams("email", user.getEmail())
-                .addParams("privilege", String.valueOf(user.getPrivilege()))
+                .addParams("cellphone", userInfo.getCellphone())
+                .addParams("email", userInfo.getEmail())
+                .addParams("privilege", String.valueOf(userInfo.getPrivilege()))
                 .addFile("file", userImg.getName(), userImg)
                 .build()
                 .execute(stringCallback);
@@ -59,23 +59,23 @@ public class UserBiz {
     /**
      * 用户注册的方法 (无头像)
      *
-     * @param user           构造好的user对象
+     * @param userInfo           构造好的user对象
      * @param password2      第二遍重复输入的密码
      * @param stringCallback post发送后执行的回调
      */
-    public void register(User user, String password2, StringCallback stringCallback) {
+    public void register(UserInfo userInfo, String password2, StringCallback stringCallback) {
         OkHttpUtils.post()
                 .url(Config.BASEURL)
                 .tag(this)
                 .addParams("key", "UserInfoTP.registerByPhone")
-                .addParams("id", String.valueOf(user.getId()))
-                .addParams("name", user.getName())
-                .addParams("username", user.getUsername())
-                .addParams("password", user.getPassword())
+                .addParams("id", String.valueOf(userInfo.getId()))
+                .addParams("name", userInfo.getName())
+                .addParams("username", userInfo.getUsername())
+                .addParams("password", userInfo.getPassword())
                 .addParams("password2", password2)
-                .addParams("cellphone", user.getCellphone())
-                .addParams("email", user.getEmail())
-                .addParams("privilege", String.valueOf(user.getPrivilege()))
+                .addParams("cellphone", userInfo.getCellphone())
+                .addParams("email", userInfo.getEmail())
+                .addParams("privilege", String.valueOf(userInfo.getPrivilege()))
                 .build()
                 .execute(stringCallback);
     }

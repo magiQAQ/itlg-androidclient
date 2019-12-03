@@ -4,14 +4,17 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.itlg.client.ItlgApplication;
 import com.itlg.client.R;
 import com.itlg.client.UserInfoHolder;
 import com.itlg.client.biz.UserBiz;
@@ -20,8 +23,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import okhttp3.Call;
 
-@SuppressLint("Registered")
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     private UserBiz userBiz;
 
@@ -57,8 +59,24 @@ public class BaseActivity extends AppCompatActivity {
         return getWindow().getStatusBarColor();
     }
 
-    protected ItlgApplication getMyApplication(){
-        return (ItlgApplication)getApplication();
+    protected void showCompleteDialog(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        @SuppressLint("InflateParams")
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_confirm, null, false);
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        //把警告图标换掉
+        ImageView iconImageView = dialogView.findViewById(R.id.icon_imageView);
+        iconImageView.setImageResource(R.drawable.ic_done_green_24dp);
+        //设置提示信息
+        TextView messageTextView = dialogView.findViewById(R.id.message_textView);
+        messageTextView.setText(message);
+        //设置取消按钮不可见
+        dialogView.findViewById(R.id.cancel_button).setVisibility(View.GONE);
+        //设置确认按钮
+        dialogView.findViewById(R.id.confirm_button).setOnClickListener(v -> alertDialog.dismiss());
+        //显示提示消息
+        alertDialog.show();
     }
 
     /**

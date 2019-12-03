@@ -42,6 +42,9 @@ public class NewsInfoAdapter extends RecyclerView.Adapter<NewsInfoAdapter.NewsIn
     @Override
     public void onBindViewHolder(@NonNull NewsInfoViewHolder holder, int position) {
         NewsInfo newsInfo = newsInfos.get(position);
+        if (newsInfo == null) {
+            return;
+        }
         holder.newsTitleTextView.setText(newsInfo.getTitle());
         CharSequence charSequence = Html.fromHtml(newsInfo.getContent());
         holder.newsContentTextView.setText(charSequence);

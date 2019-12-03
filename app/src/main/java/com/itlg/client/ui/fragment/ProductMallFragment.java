@@ -12,9 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.itlg.client.R;
@@ -40,7 +38,7 @@ import butterknife.OnTextChanged;
 /**
  * 农产品商城
  */
-public class ProductMallFragment extends Fragment {
+public class ProductMallFragment extends BaseFragment {
 
     private static final String KEY_SCH_PAGE = "sch_page";
     private static final String KEY_SCH_KEYWORD = "sch_keyword";
@@ -105,9 +103,7 @@ public class ProductMallFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
+    public void onLazyLoad() {
         //加载商品类型下拉框
         types = new ArrayList<>();
         //无论是否加载成功都需要先显示一个全部分类
@@ -135,7 +131,6 @@ public class ProductMallFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(this::loadProductInfos);
         swipeRefreshLayout.setOnPullUpRefreshListener(this::loadMoreProductInfo);
     }
-
 
     @Override
     public void onDestroy() {
@@ -313,14 +308,16 @@ public class ProductMallFragment extends Fragment {
         if (adapter == null) {
             adapter = new ProductMallAdapter(getActivity(), productInfos);
             productRecyclerView.setAdapter(adapter);
+            adapter.setOnItemClickListener(this::toProductDetailActivity);
         } else {
             adapter.notifyDataSetChanged();
         }
-        adapter.setOnItemClickListener(position -> {
-            Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
-            intent.putExtra(MyUtils.KEY_PRODUCT_ID, productInfos.get(position).getId());
-            startActivity(intent);
-        });
+    }
+
+    private void toProductDetailActivity(int position) {
+        Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
+        intent.putExtra(MyUtils.KEY_PRODUCT_ID, productInfos.get(position).getId());
+        startActivity(intent);
     }
 
     @OnTextChanged(R.id.search_editText)

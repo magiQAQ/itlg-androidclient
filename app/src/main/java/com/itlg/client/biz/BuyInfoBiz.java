@@ -4,6 +4,7 @@ import com.itlg.client.bean.BuyInfoModel;
 import com.itlg.client.config.Config;
 import com.itlg.client.net.CommonCallback;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,36 @@ public class BuyInfoBiz {
                 .tag(this)
                 .build()
                 .execute(commonCallback);
+    }
+
+    /**
+     * 从购物车中移除商品
+     *
+     * @param id       订单id
+     * @param callback 得到结果后执行的操作
+     */
+    public void removeBuyInfoModel(int id, StringCallback callback) {
+        OkHttpUtils.post()
+                .url(Config.BASEURL)
+                .addParams("key", "BuyInfoTP.del")
+                .addParams("id", String.valueOf(id))
+                .tag(this)
+                .build()
+                .execute(callback);
+    }
+
+    /**
+     * 用户完成付款的操作
+     *
+     * @param callback 得到结果后执行的操作
+     */
+    public void pay(StringCallback callback) {
+        OkHttpUtils.post()
+                .url(Config.BASEURL)
+                .addParams("key", "FrontShopTP.pay")
+                .tag(this)
+                .build()
+                .execute(callback);
     }
 
     /**

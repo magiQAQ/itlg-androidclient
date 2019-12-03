@@ -60,5 +60,15 @@
     <string name="operator_format">操作员:%s</string>
     <string name="operation_format">操作内容:%s</string>
     <string name="device_data_format">传感器:%s</string>
+    <string name="total_price">总价:</string>
+    <string name="pay">付款</string>
+    <string name="count">数量:%d</string>
+    <string name="sure">确定</string>
+    <string name="geolocation">地理位置:</string>
+    <string name="product_list">农产品清单</string>
+    <string name="buy">购 买</string>
+    <string name="sold">已售</string>
+    <string name="longitude">经度:%f</string>
+    <string name="latitude">纬度:%f</string>
 
 </resources>

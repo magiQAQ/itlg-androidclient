@@ -38,14 +38,17 @@ public class TimeAxisAdapter extends RecyclerView.Adapter<TimeAxisAdapter.TimeAx
 
     @Override
     public void onBindViewHolder(@NonNull TimeAxisViewHolder holder, int position) {
-        OperationLogModel operationLogModel = operationLogModels.get(position);
-        holder.axisYearMonthTextView.setText(MyUtils.getTimeyyyyMM(operationLogModel
+        OperationLogModel model = operationLogModels.get(position);
+        if (model == null) {
+            return;
+        }
+        holder.axisYearMonthTextView.setText(MyUtils.getTimeyyyyMM(model
                 .getOperationLog().getOperationTime()));
-        holder.axisMonthDayTextView.setText(MyUtils.getTimeMMdd(operationLogModel
+        holder.axisMonthDayTextView.setText(MyUtils.getTimeMMdd(model
                 .getOperationLog().getOperationTime()));
-        holder.axisOperatorTextView.setText(context.getString(R.string.operator_format, operationLogModel.getOperatorName()));
-        holder.axisOperationTextView.setText(context.getString(R.string.operation_format, operationLogModel.getOperationLog().getOperationInfo()));
-        holder.axisDeviceDataTextView.setText(context.getString(R.string.device_data_format, operationLogModel.getDataInfo()));
+        holder.axisOperatorTextView.setText(context.getString(R.string.operator_format, model.getOperatorName()));
+        holder.axisOperationTextView.setText(context.getString(R.string.operation_format, model.getOperationLog().getOperationInfo()));
+        holder.axisDeviceDataTextView.setText(context.getString(R.string.device_data_format, model.getDataInfo()));
     }
 
     @Override

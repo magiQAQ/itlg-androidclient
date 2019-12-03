@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/list_background"
     android:orientation="vertical"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    android:background="@color/list_background"
-    tools:context=".ui.activity.ProductDetailActivity">
+    tools:context=".ui.activity.FrontDetailFarmActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -24,7 +24,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <ImageView
-                android:id="@+id/product_img_imageView"
+                android:id="@+id/farm_img_imageView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
@@ -40,7 +40,7 @@
                 app:layout_collapseMode="pin"
                 app:navigationIcon="@drawable/ic_navigate_before_white_24dp"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
-                tools:title="红富士" />
+                tools:title="养殖场" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -66,22 +66,12 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/product_price_textView"
+                    android:id="@+id/farm_price_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/price_text"
                     android:textSize="30sp"
                     tools:text="价格" />
-
-                <TextView
-                    android:id="@+id/product_unit_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="15dp"
-                    android:textColor="#8a8a8a"
-                    android:textSize="24sp"
-                    tools:text="单位" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -108,7 +98,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/product_note_textView"
+                android:id="@+id/farm_note_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
@@ -126,43 +116,48 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="20dp"
-                    android:text="@string/tips"
+                    android:text="@string/geolocation"
                     android:textColor="#404040"
                     android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/tip1"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_margin="20dp"
-                    android:background="@drawable/corners_bg"
-                    android:backgroundTint="#7FBA00"
-                    android:paddingStart="30dp"
-                    android:paddingTop="5dp"
-                    android:paddingEnd="30dp"
-                    android:paddingBottom="5dp"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    tools:text="水果" />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tip2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="20dp"
-                    android:background="@drawable/corners_bg"
-                    android:backgroundTint="#7FBA00"
-                    android:paddingStart="30dp"
-                    android:paddingTop="5dp"
-                    android:paddingEnd="30dp"
-                    android:paddingBottom="5dp"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    tools:text="苹果" />
+                    <TextView
+                        android:id="@+id/longitude_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        tools:text="经度：150.33" />
+
+                    <TextView
+                        android:id="@+id/latitude_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        tools:text="纬度：123.21" />
+
+                </LinearLayout>
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/product_list_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="@string/product_list"
+                android:textColor="@color/gray"
+                android:textSize="20sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
@@ -170,7 +165,7 @@
                 android:layout_height="wrap_content"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="5"
-                tools:listitem="@layout/item_time_axis" />
+                tools:listitem="@layout/item_preview_product" />
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
@@ -181,61 +176,17 @@
         android:layout_gravity="bottom"
         android:background="@color/list_background"
         android:fitsSystemWindows="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:orientation="horizontal">
 
-
-        <ImageButton
-            android:id="@+id/decrease_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/transparent"
-            android:contentDescription="@null"
-            app:srcCompat="@drawable/ic_remove_circle_gray_24dp" />
-
-        <EditText
-            android:id="@+id/product_count_editText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:background="@null"
-            android:gravity="center"
-            android:importantForAutofill="no"
-            android:inputType="number"
-            android:maxLength="2"
-            android:text="@string/one"
-            android:textColor="@color/black"
-            tools:ignore="LabelFor" />
-
-        <ImageButton
-            android:id="@+id/insert_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/transparent"
-            android:contentDescription="@null"
-            app:srcCompat="@drawable/ic_add_circle_gray_24dp" />
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:buttonTint="@color/black"
-            android:text="@string/buy_spot"
-            android:textColor="@color/black" />
-
         <Button
-            android:id="@+id/add_cart_button"
+            android:id="@+id/buy_farm_button"
             style="?attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:layout_weight="4"
             android:background="@color/colorTheme"
-            android:text="@string/add_to_cart"
+            android:text="@string/buy"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
     </LinearLayout>

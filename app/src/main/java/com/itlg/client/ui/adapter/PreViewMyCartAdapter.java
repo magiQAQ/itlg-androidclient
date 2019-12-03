@@ -40,7 +40,11 @@ public class PreViewMyCartAdapter extends RecyclerView.Adapter<PreViewMyCartAdap
 
     @Override
     public void onBindViewHolder(@NonNull PreViewMyCartViewHolder holder, int position) {
-        Glide.with(context).load(Config.FILEURL + buyInfoModels.get(position).getImg())
+        BuyInfoModel model = buyInfoModels.get(position);
+        if (model == null) {
+            return;
+        }
+        Glide.with(context).load(Config.FILEURL + model.getImg())
                 .placeholder(R.drawable.placeholder)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(10)))
                 .into(holder.cartPreviewImageView);

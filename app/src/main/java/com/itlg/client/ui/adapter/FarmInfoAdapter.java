@@ -39,6 +39,9 @@ public class FarmInfoAdapter extends RecyclerView.Adapter<FarmInfoAdapter.FarmIn
     @Override
     public void onBindViewHolder(@NonNull FarmInfoViewHolder holder, int position) {
         FarmInfoModel model = list.get(position);
+        if (model == null) {
+            return;
+        }
         int typeId = model.getFarmInfo().getTypeId();
         StringBuilder builder = new StringBuilder();
         Glide.with(context).load(Config.FILEURL + model.getFarmInfo().getImg()).into(holder.farmIconImageView);

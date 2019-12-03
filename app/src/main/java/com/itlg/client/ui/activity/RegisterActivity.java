@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.itlg.client.R;
-import com.itlg.client.bean.User;
+import com.itlg.client.bean.UserInfo;
 import com.itlg.client.biz.UserBiz;
 import com.itlg.client.utils.MyUtils;
 import com.itlg.client.utils.RegexUtil;
@@ -216,14 +216,14 @@ public class RegisterActivity extends BaseActivity {
             return;
         }
         //所有内容确认后,开始构造user对象
-        User user = new User();
-        user.setId(0);//新建用户id则为0
-        user.setName(name);
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setCellphone(cellphone);
-        user.setEmail(email);
-        user.setPrivilege(50);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(0);//新建用户id则为0
+        userInfo.setName(name);
+        userInfo.setUsername(username);
+        userInfo.setPassword(password);
+        userInfo.setCellphone(cellphone);
+        userInfo.setEmail(email);
+        userInfo.setPrivilege(50);
         StringCallback stringCallback = new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -255,9 +255,9 @@ public class RegisterActivity extends BaseActivity {
             }
         };
         if (hasAvatar){
-            userBiz.register(user, password2, new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), MyUtils.USER_AVATAR_FILENAME), stringCallback);
+            userBiz.register(userInfo, password2, new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), MyUtils.USER_AVATAR_FILENAME), stringCallback);
         } else {
-            userBiz.register(user, password2, stringCallback);
+            userBiz.register(userInfo, password2, stringCallback);
         }
     }
 

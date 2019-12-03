@@ -44,7 +44,7 @@ import butterknife.OnClick;
 public class MineFragment extends Fragment {
 
     private static final String TAG = "MineFragment";
-    private static final String KEY_BUY_INFO_MODELS = "buyInfoModels";
+    public static final String KEY_BUY_INFO_MODELS = "buyInfoModels";
     private static final String KEY_FARM_INFO_MODELS = "farmInfoModels";
     @BindView(R.id.userImg_imageView)
     ImageView userImgImageView;
@@ -97,23 +97,24 @@ public class MineFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //加载用户头像
-        Glide.with(this).load(Config.FILEURL + UserInfoHolder.getInstance().getUser().getUserImg())
+        Glide.with(this).load(Config.FILEURL + UserInfoHolder.getInstance().getUserInfo().getUserImg())
                 .placeholder(R.drawable.user_default_img).circleCrop().into(userImgImageView);
         //显示当前用户名字
-        userNameTextView.setText(getString(R.string.welcome, UserInfoHolder.getInstance().getUser().getName()));
+        userNameTextView.setText(getString(R.string.welcome, UserInfoHolder.getInstance().getUserInfo().getName()));
+    }
 
+    //用户每次点击我的慧农时,需要重新加载购物车
+    @Override
+    public void onResume() {
+        super.onResume();
         //加载购物车预览
-        if (buyInfoModels != null) {
-            setupMyCartRecyclerView();
-        } else {
-            loadMyCart();
-        }
+        loadMyCart();
 
-        //加载第一个农田信息
-        if (farmInfoModels != null) {
-            setupFarmInfoView();
-        } else {
-            loadFirstFarmInfo();
+        if (UserInfoHolder.getInstance().getUserInfo().getPrivilege() == 70) {
+            //加载第一个农田信息
+            if (farmInfoModels != null) {
+                loadFirstFarmInfo();
+            }
         }
     }
 
@@ -191,7 +192,12 @@ public class MineFragment extends Fragment {
 
             @Override
             public void onSuccess(ArrayList<BuyInfoModel> response) {
-                buyInfoModels = response;
+                if (buyInfoModels == null) {
+                    buyInfoModels = response;
+                } else {
+                    buyInfoModels.clear();
+                    buyInfoModels.addAll(response);
+                }
                 Bundle bundle = getArguments() != null ? getArguments() : new Bundle();
                 bundle.putParcelableArrayList(KEY_BUY_INFO_MODELS, buyInfoModels);
                 setArguments(bundle);

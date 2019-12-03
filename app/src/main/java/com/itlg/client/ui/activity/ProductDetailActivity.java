@@ -129,7 +129,7 @@ public class ProductDetailActivity extends BaseActivity {
     }
 
     @OnClick(R.id.insert_button)
-    void insertCount() {
+    void increaseCount() {
         int count = Integer.parseInt(productCountEditText.getEditableText().toString());
         if (count < 99) {
             count++;

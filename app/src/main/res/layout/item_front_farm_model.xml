@@ -15,15 +15,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/farm_icon_imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="140dp"
-            android:adjustViewBounds="true"
-            android:contentDescription="@null"
-            tools:srcCompat="@tools:sample/avatars" />
+        <FrameLayout
+            android:layout_width="220dp"
+            android:layout_height="140dp">
+
+            <ImageView
+                android:id="@+id/farm_icon_imageView"
+                android:layout_width="220dp"
+                android:layout_height="140dp"
+                android:contentDescription="@null"
+                android:scaleType="fitCenter"
+                tools:srcCompat="@drawable/hfsapple" />
+
+            <TextView
+                android:id="@+id/sold_textView"
+                android:layout_width="220dp"
+                android:layout_height="140dp"
+                android:layout_gravity="center"
+                android:background="#aa808080"
+                android:gravity="center"
+                android:text="@string/sold"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:visibility="invisible"
+                tools:visibility="visible" />
+
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="0dp"

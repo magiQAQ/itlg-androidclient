@@ -31,7 +31,7 @@
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
-            tools:text="Hi,user'sName" />
+            tools:text="Hi,userInfo'sName" />
 
     </FrameLayout>
 

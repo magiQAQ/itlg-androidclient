@@ -24,7 +24,7 @@ import com.google.zxing.integration.android.IntentResult;
 import com.itlg.client.R;
 import com.itlg.client.UserInfoHolder;
 import com.itlg.client.bean.FarmInfoModel;
-import com.itlg.client.bean.User;
+import com.itlg.client.bean.UserInfo;
 import com.itlg.client.biz.FarmInfoBiz;
 import com.itlg.client.config.Config;
 import com.itlg.client.net.CommonCallback;
@@ -56,7 +56,7 @@ public class OperatorActivity extends BaseActivity {
 
     private UserInfoHolder holder = UserInfoHolder.getInstance();
     private FarmInfoBiz farmInfoBiz;
-    private User user;
+    private UserInfo userInfo;
 
 
     @Override
@@ -65,9 +65,9 @@ public class OperatorActivity extends BaseActivity {
         setContentView(R.layout.activity_operater);
         ButterKnife.bind(this);
 
-        user = holder.getUser();
+        userInfo = holder.getUserInfo();
         //验证用户是否为合法登录
-        if (user.getPrivilege() != 1) {
+        if (userInfo.getPrivilege() != 1) {
             ToastUtils.showToast("你的身份不是操作员");
             finish();
         }
@@ -80,12 +80,12 @@ public class OperatorActivity extends BaseActivity {
 
         //加载头像
         Glide.with(this)
-                .load(Config.FILEURL + user.getUserImg())
+                .load(Config.FILEURL + userInfo.getUserImg())
                 .circleCrop()
                 .into(userImgImageView);
 
         //显示当前用户的名字
-        setTitle(user.getName());
+        setTitle(userInfo.getName());
 
         //加载"我的农场"信息
         farmInfoBiz = new FarmInfoBiz();

@@ -37,6 +37,9 @@ public class DeviceDataAdapter extends RecyclerView.Adapter<DeviceDataAdapter.De
     @Override
     public void onBindViewHolder(@NonNull DeviceDataViewHolder holder, int position) {
         DeviceDataModel model = deviceDataModels.get(position);
+        if (model == null) {
+            return;
+        }
         //显示温湿度
         holder.deviceTemperatureTextView.setText(model.getTemperature());
         holder.deviceHumidityTextView.setText(model.getHumidity());

@@ -6,9 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.itlg.client.R;
@@ -27,7 +25,7 @@ import butterknife.ButterKnife;
 /**
  * 新闻资讯碎片
  */
-public class NewsFragment extends Fragment {
+public class NewsFragment extends BaseFragment {
 
     private static final String KEY_SCH_PAGE = "sch_page";
     private static final String KEY_NEWS_INFOS = "newsInfos";
@@ -69,8 +67,7 @@ public class NewsFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onLazyLoad() {
         if (newsInfos != null) {
             setupRecyclerView();
         } else {

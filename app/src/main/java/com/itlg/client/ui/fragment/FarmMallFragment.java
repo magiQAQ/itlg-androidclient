@@ -1,6 +1,7 @@
 package com.itlg.client.ui.fragment;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,9 +12,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.itlg.client.R;
@@ -21,8 +19,10 @@ import com.itlg.client.bean.FrontFarmModel;
 import com.itlg.client.bean.ProductTypes;
 import com.itlg.client.biz.FarmInfoBiz;
 import com.itlg.client.net.CommonCallback;
+import com.itlg.client.ui.activity.FrontDetailFarmActivity;
 import com.itlg.client.ui.adapter.FrontFarmModelAdapter;
 import com.itlg.client.ui.view.SwipeRefreshLayout;
+import com.itlg.client.utils.MyUtils;
 import com.itlg.client.utils.ToastUtils;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class FarmMallFragment extends Fragment {
+public class FarmMallFragment extends BaseFragment {
 
     private static final String TAG = "FarmMallFragment";
     private static final String KEY_SCH_PAGE = "sch_page";
@@ -100,8 +100,7 @@ public class FarmMallFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onLazyLoad() {
         //加载农田类型下拉框
         types = new ArrayList<>();
         types.add("全部分类");
@@ -129,7 +128,6 @@ public class FarmMallFragment extends Fragment {
         swipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLACK, Color.GREEN, Color.YELLOW);
         swipeRefreshLayout.setOnRefreshListener(this::loadFrontFarmModels);
         swipeRefreshLayout.setOnPullUpRefreshListener(this::loadMoreFrontFarmModels);
-
     }
 
     @Override
@@ -318,8 +316,15 @@ public class FarmMallFragment extends Fragment {
         if (adapter == null) {
             adapter = new FrontFarmModelAdapter(getActivity(), frontFarmModels);
             frontFarmModelsRecyclerView.setAdapter(adapter);
+            adapter.setOnItemClickListener(this::toFrontDetailFarmActivity);
         } else {
             adapter.notifyDataSetChanged();
         }
+    }
+
+    private void toFrontDetailFarmActivity(int position) {
+        Intent intent = new Intent(getActivity(), FrontDetailFarmActivity.class);
+        intent.putExtra(MyUtils.KEY_FRONT_FARM_MODEL, frontFarmModels.get(position));
+        startActivity(intent);
     }
 }

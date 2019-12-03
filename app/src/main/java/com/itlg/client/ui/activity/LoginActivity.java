@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 
 import com.itlg.client.R;
 import com.itlg.client.UserInfoHolder;
-import com.itlg.client.bean.User;
+import com.itlg.client.bean.UserInfo;
 import com.itlg.client.biz.UserBiz;
 import com.itlg.client.net.CommonCallback;
 import com.itlg.client.utils.MyUtils;
@@ -40,21 +40,21 @@ public class LoginActivity extends BaseActivity {
 
         setStatusBarColor(R.color.transparent, false);
 
-        User user = userInfoHolder.getUser();
+        UserInfo userInfo = userInfoHolder.getUserInfo();
         //如果用户已经登录过,则自动登录并跳转到主界面
-        if (user.getId() > 0) {
-            userBiz.login(user.getUsername(), user.getPassword(), new CommonCallback<User>() {
+        if (userInfo.getId() > 0) {
+            userBiz.login(userInfo.getUsername(), userInfo.getPassword(), new CommonCallback<UserInfo>() {
                 @Override
                 public void onFail(Exception e) {
                     ToastUtils.showToast(e.getMessage());
                 }
 
                 @Override
-                public void onSuccess(User response) {
+                public void onSuccess(UserInfo response) {
                     if (response.getPrivilege() > 1) {
-                        toNormalUserActivity(userInfoHolder.getUser());
+                        toNormalUserActivity(userInfoHolder.getUserInfo());
                     } else if (response.getPrivilege() == 1) {
-                        toOperatorActivity(userInfoHolder.getUser());
+                        toOperatorActivity(userInfoHolder.getUserInfo());
                     }
                 }
             });
@@ -88,19 +88,19 @@ public class LoginActivity extends BaseActivity {
             return;
         }
 
-        userBiz.login(username, password, new CommonCallback<User>() {
+        userBiz.login(username, password, new CommonCallback<UserInfo>() {
             @Override
             public void onFail(Exception e) {
                 ToastUtils.showToast(e.getMessage());
             }
 
             @Override
-            public void onSuccess(User response) {
+            public void onSuccess(UserInfo response) {
                 ToastUtils.showToast("欢迎回来," + response.getName());
                 //返回的密码会被MD5加密,所以保存原来的密码
                 response.setPassword(password);
                 //保存用户信息
-                userInfoHolder.setUser(response);
+                userInfoHolder.setUserInfo(response);
                 //判断用户身份
                 if (response.getPrivilege() == 50 || response.getPrivilege() == 70) {
                     //是普通用户或农场主
@@ -119,16 +119,16 @@ public class LoginActivity extends BaseActivity {
     }
 
 
-    private void toNormalUserActivity(User user) {
+    private void toNormalUserActivity(UserInfo userInfo) {
         Intent intent = new Intent(this,NormalUserActivity.class);
-        intent.putExtra("user",user);
+        intent.putExtra("userInfo", userInfo);
         startActivity(intent);
         finish();
     }
 
-    private void toOperatorActivity(User user) {
+    private void toOperatorActivity(UserInfo userInfo) {
         Intent intent = new Intent(this,OperatorActivity.class);
-        intent.putExtra("user",user);
+        intent.putExtra("userInfo", userInfo);
         startActivity(intent);
         finish();
     }
