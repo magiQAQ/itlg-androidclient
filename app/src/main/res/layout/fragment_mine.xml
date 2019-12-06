@@ -52,10 +52,11 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="4dp"
                 app:cardPreventCornerOverlap="true"
-                app:cardUseCompatPadding="false">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -131,9 +132,13 @@
                         <Button
                             android:id="@+id/go_shopping_button"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
+                            style="?android:attr/buttonBarButtonStyle"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
                             android:background="@drawable/transparent_button"
+                            android:backgroundTint="@color/colorTheme"
+                            android:textSize="16sp"
                             android:text="@string/go_shopping"
                             android:textColor="#707070" />
                     </LinearLayout>
@@ -152,10 +157,11 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="16dp"
                 android:visibility="gone"
+                app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="4dp"
                 app:cardPreventCornerOverlap="true"
-                app:cardUseCompatPadding="false"
+                app:cardUseCompatPadding="true"
                 tools:visibility="visible">
 
                 <LinearLayout
@@ -255,18 +261,26 @@
 
     </ScrollView>
 
-    <Button
-        android:id="@+id/logout_button"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/red_button"
-        android:paddingStart="15dp"
-        android:paddingEnd="15dp"
-        android:text="@string/logout"
-        android:textColor="@color/white"
-        android:textSize="22sp" />
+        android:background="@color/list_background">
+
+        <Button
+            android:id="@+id/logout_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/red_button"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:text="@string/logout"
+            android:textColor="@color/white"
+            android:textSize="22sp" />
+
+    </FrameLayout>
+
 
 </LinearLayout>

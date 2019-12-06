@@ -26,7 +26,7 @@
     <string name="logout">退出登录</string>
     <string name="operator">操作员</string>
     <string name="typename_id">%s%d</string>
-    <string name="my_farms">我的农场</string>
+    <string name="my_farms">我负责的农场</string>
     <string name="specific_operation_record">具体操作记录</string>
     <string name="commit">提交</string>
     <string name="cancel">取消</string>
@@ -70,5 +70,6 @@
     <string name="sold">已售</string>
     <string name="longitude">经度:%f</string>
     <string name="latitude">纬度:%f</string>
+    <string name="last_operation_log">近期操作记录</string>
 
 </resources>

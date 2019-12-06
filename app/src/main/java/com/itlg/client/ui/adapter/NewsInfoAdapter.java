@@ -26,17 +26,15 @@ public class NewsInfoAdapter extends RecyclerView.Adapter<NewsInfoAdapter.NewsIn
 
     private Context context;
     private ArrayList<NewsInfo> newsInfos;
+    private OnItemClickListener listener;
 
     public NewsInfoAdapter(Context context, ArrayList<NewsInfo> newsInfos) {
         this.context = context;
         this.newsInfos = newsInfos;
     }
 
-    @NonNull
-    @Override
-    public NewsInfoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new NewsInfoViewHolder(LayoutInflater.from(context)
-                .inflate(R.layout.item_news_info, parent, false));
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -49,16 +47,39 @@ public class NewsInfoAdapter extends RecyclerView.Adapter<NewsInfoAdapter.NewsIn
         CharSequence charSequence = Html.fromHtml(newsInfo.getContent());
         holder.newsContentTextView.setText(charSequence);
         holder.newsTimeTextView.setText(MyUtils.longTypeTimeToString(newsInfo.getNewsTime()));
-        if (position % 3 == 1) {
-            Glide.with(context).load(Config.FILEURL + "/itlg/uploadfiles/default2.jpg")
+        if (position % 5 == 1) {
+            Glide.with(context).load(Config.FILEURL + "/itlg/assets/img/extra/menu-1.png")
                     .placeholder(R.drawable.placeholder).into(holder.newsImgImageView);
-        } else if (position % 3 == 2) {
-            Glide.with(context).load(Config.FILEURL + "/itlg/uploadfiles/hfsapple.jpg")
+        } else if (position % 5 == 2) {
+            Glide.with(context).load(Config.FILEURL + "/itlg/assets/img/extra/menu-2.png")
+                    .placeholder(R.drawable.placeholder).into(holder.newsImgImageView);
+        } else if (position % 5 == 3) {
+            Glide.with(context).load(Config.FILEURL + "/itlg/assets/img/extra/menu-3.png")
+                    .placeholder(R.drawable.placeholder).into(holder.newsImgImageView);
+        } else if (position % 5 == 4) {
+            Glide.with(context).load(Config.FILEURL + "/itlg/assets/img/extra/menu-6.png")
                     .placeholder(R.drawable.placeholder).into(holder.newsImgImageView);
         } else {
-            Glide.with(context).load(Config.FILEURL + "/itlg/uploadfiles/yzc.jpg")
+            Glide.with(context).load(Config.FILEURL + "/itlg/assets/img/extra/menu-5.png")
                     .placeholder(R.drawable.placeholder).into(holder.newsImgImageView);
         }
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onClick(position);
+            }
+        });
+    }
+
+    @NonNull
+    @Override
+    public NewsInfoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new NewsInfoViewHolder(LayoutInflater.from(context)
+                .inflate(R.layout.item_news_info, parent, false));
+    }
+
+    public interface OnItemClickListener {
+        void onClick(int position);
     }
 
     @Override

@@ -27,6 +27,7 @@ public class ItlgApplication extends Application {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(4, TimeUnit.SECONDS)
                 .readTimeout(4,TimeUnit.SECONDS)
+                .retryOnConnectionFailure(false)
                 .cookieJar(cookieJar)
                 .build();
         OkHttpUtils.initClient(okHttpClient);

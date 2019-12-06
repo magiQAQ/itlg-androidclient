@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activity.NewsInfoDetailActivity">
+
+    <include layout="@layout/common_toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/news_title_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="30sp"
+                tools:text="鸡蛋质量好不好 快检一下就知道" />
+
+            <TextView
+                android:id="@+id/news_time_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_margin="10dp"
+                android:textColor="@color/gray"
+                android:textSize="20sp"
+                tools:text="2019-08-02" />
+
+            <TextView
+                android:id="@+id/news_content_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                tools:text="随着现在很多野生名贵中药材资源的减少，人工栽培中药材的农户越来
+                越多起来，为了供应市场上稀缺的野生药材资源，人工栽培就是另外一种选择
+                了，那么目前农村有哪" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>

@@ -2,8 +2,6 @@ package com.itlg.client.ui.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -30,7 +28,6 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 
 import butterknife.BindView;
@@ -65,7 +62,6 @@ public class ProductDetailActivity extends BaseActivity {
 
     private int productId;
     private ProductInfoBiz productInfoBiz;
-    private MyHandler myHandler = new MyHandler(this);
     private TimeAxisAdapter adapter;
     private ProductInfoModel productInfoModel;
 
@@ -178,9 +174,7 @@ public class ProductDetailActivity extends BaseActivity {
         productInfoBiz.getProductInfoModel(productId, new CommonCallback<ProductInfoModel>() {
             @Override
             public void onFail(Exception e) {
-                Log.e(TAG, e.getMessage());
-                ToastUtils.showToast("网络不给力哦,3s后为您重试");
-                myHandler.sendEmptyMessageDelayed(0, 3000);
+                ToastUtils.showToast(e.getMessage());
             }
 
             @Override
@@ -242,27 +236,9 @@ public class ProductDetailActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         productInfoBiz.onDestroy();
-        myHandler.removeCallbacksAndMessages(null);
         super.onDestroy();
     }
 
-    //用于计时三秒
-    static class MyHandler extends Handler {
-
-
-        private WeakReference<ProductDetailActivity> activityWeakReference;
-
-        MyHandler(ProductDetailActivity activity) {
-            this.activityWeakReference = new WeakReference<>(activity);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 0)
-                activityWeakReference.get().getProductInfoModel();
-        }
-    }
 
 
 }

@@ -1,5 +1,6 @@
 package com.itlg.client.ui.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,8 +14,10 @@ import com.itlg.client.R;
 import com.itlg.client.bean.NewsInfo;
 import com.itlg.client.biz.NewsInfoBiz;
 import com.itlg.client.net.CommonCallback;
+import com.itlg.client.ui.activity.NewsInfoDetailActivity;
 import com.itlg.client.ui.adapter.NewsInfoAdapter;
 import com.itlg.client.ui.view.SwipeRefreshLayout;
+import com.itlg.client.utils.MyUtils;
 import com.itlg.client.utils.ToastUtils;
 
 import java.util.ArrayList;
@@ -150,7 +153,14 @@ public class NewsFragment extends BaseFragment {
         } else {
             adapter = new NewsInfoAdapter(getActivity(), newsInfos);
             recyclerView.setAdapter(adapter);
+            adapter.setOnItemClickListener(position -> toNewsInfoDetailActivity(newsInfos.get(position)));
         }
+    }
+
+    private void toNewsInfoDetailActivity(NewsInfo newsInfo) {
+        Intent intent = new Intent(getActivity(), NewsInfoDetailActivity.class);
+        intent.putExtra(MyUtils.KEY_NEWS_INFO, newsInfo);
+        startActivity(intent);
     }
 
     @Override

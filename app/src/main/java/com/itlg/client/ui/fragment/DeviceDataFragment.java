@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,7 +29,7 @@ import butterknife.Unbinder;
 /**
  * 设备记录的碎片
  */
-public class DeviceDataFragment extends Fragment {
+public class DeviceDataFragment extends BaseFragment {
 
     private static final String KEY_DEVICE_DATA_MODELS = "deviceDataModels";
     private static final String KEY_SCH_PAGE = "sch_page";
@@ -83,14 +82,17 @@ public class DeviceDataFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(this::loadData);
         //底部上拉载入更多
         swipeRefreshLayout.setOnPullUpRefreshListener(this::loadMore);
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onLazyLoad() {
         if (deviceDataModels != null) {
             setupRecyclerView();
         } else {
             loadData();
         }
-        super.onViewCreated(view, savedInstanceState);
     }
-
 
     @Override
     public void onDestroyView() {

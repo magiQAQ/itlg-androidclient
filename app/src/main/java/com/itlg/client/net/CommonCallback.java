@@ -6,7 +6,6 @@ import com.google.gson.internal.$Gson$Types;
 import com.itlg.client.utils.GsonUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.ParameterizedType;
@@ -53,19 +52,18 @@ public abstract class CommonCallback<T> extends StringCallback {
     @Override
     public void onResponse(String response, int id) {
         if (response.isEmpty()) {
-            Log.e(TAG, "response 为空字符串");
+            onFail(new RuntimeException("服务器返回为空"));
             return;
         }
         try {
             JSONObject jsonObject = new JSONObject(response);
             boolean succ = jsonObject.getBoolean("succ");
             if (succ) {
-                String data = jsonObject.getString("data");
-                onSuccess(GsonUtils.getGson().fromJson(data, type));
+                onSuccess(GsonUtils.getGson().fromJson(jsonObject.getString("data"), type));
             } else {
                 onFail(new RuntimeException(jsonObject.getString("stmt")));
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             Log.e(TAG, response);
             onFail(e);
             e.printStackTrace();

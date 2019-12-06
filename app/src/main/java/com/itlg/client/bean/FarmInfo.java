@@ -21,7 +21,8 @@ public class FarmInfo implements Parcelable {
             return new FarmInfo[size];
         }
     };
-    private String img;//农场图片
+    private String img;        //农田照片
+    private String note;  //农田简介
 
     private FarmInfo(Parcel in) {
         id = in.readInt();
@@ -30,11 +31,7 @@ public class FarmInfo implements Parcelable {
         longitude = in.readDouble();
         latitude = in.readDouble();
         img = in.readString();
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+        note = in.readString();
     }
 
     @Override
@@ -45,6 +42,12 @@ public class FarmInfo implements Parcelable {
         dest.writeDouble(longitude);
         dest.writeDouble(latitude);
         dest.writeString(img);
+        dest.writeString(note);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public int getId() {
@@ -93,5 +96,13 @@ public class FarmInfo implements Parcelable {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

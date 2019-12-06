@@ -8,6 +8,7 @@ import com.itlg.client.bean.ProductTypes;
 import com.itlg.client.config.Config;
 import com.itlg.client.net.CommonCallback;
 import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +54,7 @@ public class FarmInfoBiz {
     public void getFarmInfoModels(CommonCallback<ArrayList<FarmInfoModel>> commonCallback) {
         OkHttpUtils.post()
                 .url(Config.BASEURL)
-                .addParams("key", "FarmInfoTP.getFarmInfosByPhone")
+                .addParams("key", "FarmInfoTP.getFarmInfoModelsByPhone")
                 .tag(this)
                 .build()
                 .execute(commonCallback);
@@ -103,6 +104,22 @@ public class FarmInfoBiz {
                 .tag(this)
                 .build()
                 .execute(commonCallback);
+    }
+
+    /**
+     * 购买田地的方法
+     *
+     * @param farmId         购买的农场id
+     * @param stringCallback 得到结果后的回调
+     */
+    public void buyFarm(int farmId, StringCallback stringCallback) {
+        OkHttpUtils.post()
+                .url(Config.BASEURL)
+                .addParams("key", "FrontFarmTP.buyfarm")
+                .addParams("id", String.valueOf(farmId))
+                .tag(this)
+                .build()
+                .execute(stringCallback);
     }
 
     /**

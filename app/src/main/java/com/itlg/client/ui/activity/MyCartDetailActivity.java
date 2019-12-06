@@ -14,7 +14,7 @@ import com.itlg.client.R;
 import com.itlg.client.bean.BuyInfoModel;
 import com.itlg.client.biz.BuyInfoBiz;
 import com.itlg.client.ui.adapter.DetailMyCartAdapter;
-import com.itlg.client.ui.fragment.MineFragment;
+import com.itlg.client.utils.MyUtils;
 import com.itlg.client.utils.ToastUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -51,7 +51,7 @@ public class MyCartDetailActivity extends BaseActivity {
         setStatusBarColor(R.color.white, false);
         buyInfoBiz = new BuyInfoBiz();
 
-        buyInfoModels = getIntent().getParcelableArrayListExtra(MineFragment.KEY_BUY_INFO_MODELS);
+        buyInfoModels = getIntent().getParcelableArrayListExtra(MyUtils.KEY_BUY_INFO_MODELS);
         adapter = new DetailMyCartAdapter(this, buyInfoModels);
         recyclerView.setAdapter(adapter);
         adapter.setOnRemoveButtonClickListener(buyInfoModel -> {

@@ -26,9 +26,10 @@ import com.itlg.client.biz.FarmInfoBiz;
 import com.itlg.client.config.Config;
 import com.itlg.client.net.CommonCallback;
 import com.itlg.client.ui.activity.MyCartDetailActivity;
-import com.itlg.client.ui.activity.MyFarmsListActivity;
+import com.itlg.client.ui.activity.MyDetailFarmsActivity;
 import com.itlg.client.ui.activity.NormalUserActivity;
 import com.itlg.client.ui.adapter.PreViewMyCartAdapter;
+import com.itlg.client.utils.MyUtils;
 import com.itlg.client.utils.ToastUtils;
 
 import java.util.ArrayList;
@@ -44,8 +45,7 @@ import butterknife.OnClick;
 public class MineFragment extends Fragment {
 
     private static final String TAG = "MineFragment";
-    public static final String KEY_BUY_INFO_MODELS = "buyInfoModels";
-    private static final String KEY_FARM_INFO_MODELS = "farmInfoModels";
+
     @BindView(R.id.userImg_imageView)
     ImageView userImgImageView;
     @BindView(R.id.user_name_textView)
@@ -78,8 +78,8 @@ public class MineFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            buyInfoModels = getArguments().getParcelableArrayList(KEY_BUY_INFO_MODELS);
-            farmInfoModels = getArguments().getParcelableArrayList(KEY_FARM_INFO_MODELS);
+            buyInfoModels = getArguments().getParcelableArrayList(MyUtils.KEY_BUY_INFO_MODELS);
+            farmInfoModels = getArguments().getParcelableArrayList(MyUtils.KEY_FARM_INFO_MODELS);
         }
         buyInfoBiz = new BuyInfoBiz();
         farmInfoBiz = new FarmInfoBiz();
@@ -109,13 +109,6 @@ public class MineFragment extends Fragment {
         super.onResume();
         //加载购物车预览
         loadMyCart();
-
-        if (UserInfoHolder.getInstance().getUserInfo().getPrivilege() == 70) {
-            //加载第一个农田信息
-            if (farmInfoModels != null) {
-                loadFirstFarmInfo();
-            }
-        }
     }
 
     @Override
@@ -138,7 +131,7 @@ public class MineFragment extends Fragment {
             public void onSuccess(ArrayList<FarmInfoModel> response) {
                 farmInfoModels = response;
                 Bundle bundle = getArguments() != null ? getArguments() : new Bundle();
-                bundle.putParcelableArrayList(KEY_FARM_INFO_MODELS, farmInfoModels);
+                bundle.putParcelableArrayList(MyUtils.KEY_FARM_INFO_MODELS, farmInfoModels);
                 setArguments(bundle);
                 setupFarmInfoView();
             }
@@ -148,16 +141,14 @@ public class MineFragment extends Fragment {
     //显示农场信息
     private void setupFarmInfoView() {
         FarmInfoModel model = farmInfoModels.get(0);
+        Glide.with(Objects.requireNonNull(getActivity())).load(Config.FILEURL + model.getFarmInfo().getImg())
+                .placeholder(R.drawable.placeholder).into(farmIconImageView);
         //组装当前农场种植的农产品的字符串
         StringBuilder builder = new StringBuilder();
-        if (model.getFarmInfo().getTypeId() == 1) {
+        if (model.getTypeName().equals("农场")) {
             builder.append("当前种植：");
-            //显示农场图标
-            Glide.with(Objects.requireNonNull(getActivity())).load(R.drawable.nongchang).into(farmIconImageView);
-        } else if (model.getFarmInfo().getTypeId() == 2) {
+        } else if (model.getTypeName().equals("养殖场")) {
             builder.append("当前养殖：");
-            //显示养殖场图标
-            Glide.with(Objects.requireNonNull(getActivity())).load(R.drawable.yangzhichang).into(farmIconImageView);
         }
         //农场名字
         farmNameTextView.setText(String.format(getString(R.string.typename_id), model.getTypeName(), model.getFarmInfo().getId()));
@@ -188,6 +179,12 @@ public class MineFragment extends Fragment {
                 //显示空购物车提示,隐藏列表
                 myCartRecyclerView.setVisibility(View.GONE);
                 emptyCartLinearLayout.setVisibility(View.VISIBLE);
+
+                //之前请求完成后,再加载农田
+                if (UserInfoHolder.getInstance().getUserInfo().getPrivilege() == 70) {
+                    //农田信息
+                    loadFirstFarmInfo();
+                }
             }
 
             @Override
@@ -199,9 +196,15 @@ public class MineFragment extends Fragment {
                     buyInfoModels.addAll(response);
                 }
                 Bundle bundle = getArguments() != null ? getArguments() : new Bundle();
-                bundle.putParcelableArrayList(KEY_BUY_INFO_MODELS, buyInfoModels);
+                bundle.putParcelableArrayList(MyUtils.KEY_BUY_INFO_MODELS, buyInfoModels);
                 setArguments(bundle);
                 setupMyCartRecyclerView();
+
+                //之前请求完成后,再加载农田
+                if (UserInfoHolder.getInstance().getUserInfo().getPrivilege() == 70) {
+                    //农田信息
+                    loadFirstFarmInfo();
+                }
             }
         });
     }
@@ -219,17 +222,17 @@ public class MineFragment extends Fragment {
         emptyCartLinearLayout.setVisibility(View.GONE);
     }
 
-    @OnClick({R.id.watch_all_my_cart_textView, R.id.watch_all_my_cart_imageView})
+    @OnClick({R.id.watch_all_my_cart_textView, R.id.watch_all_my_cart_imageView, R.id.my_cart_recyclerView})
     void toMyCartDetailActivity() {
         Intent intent = new Intent(getActivity(), MyCartDetailActivity.class);
-        intent.putExtra(KEY_BUY_INFO_MODELS, buyInfoModels);
+        intent.putExtra(MyUtils.KEY_BUY_INFO_MODELS, buyInfoModels);
         startActivity(intent);
     }
 
-    @OnClick({R.id.watch_all_my_farms_imageView, R.id.watch_all_my_farms_textView})
+    @OnClick({R.id.watch_all_my_farms_imageView, R.id.watch_all_my_farms_textView, R.id.my_farms_cardView})
     void toMyFarmsDetailActivity() {
-        Intent intent = new Intent(getActivity(), MyFarmsListActivity.class);
-        intent.putExtra(KEY_FARM_INFO_MODELS, farmInfoModels);
+        Intent intent = new Intent(getActivity(), MyDetailFarmsActivity.class);
+        intent.putExtra(MyUtils.KEY_FARM_INFO_MODELS, farmInfoModels);
         startActivity(intent);
     }
 

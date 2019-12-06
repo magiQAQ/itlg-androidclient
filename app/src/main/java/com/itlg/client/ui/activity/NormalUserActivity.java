@@ -18,6 +18,8 @@ import com.itlg.client.ui.fragment.MineFragment;
 import com.itlg.client.ui.fragment.NewsFragment;
 import com.itlg.client.ui.fragment.ProductMallFragment;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -46,8 +48,11 @@ public class NormalUserActivity extends BaseActivity {
     }
 
     private void initView() {
-        Fragment[] fragments = new Fragment[]{ProductMallFragment.newInstance(), FarmMallFragment.newInstance(),
-                NewsFragment.newInstance(), MineFragment.newInstance()};
+        List<Fragment> fragments = new ArrayList<>();
+        fragments.add(ProductMallFragment.newInstance());
+        fragments.add(FarmMallFragment.newInstance());
+        fragments.add(NewsFragment.newInstance());
+        fragments.add(MineFragment.newInstance());
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
         //防止viewpager在后台destroyView
         viewPager.setOffscreenPageLimit(3);

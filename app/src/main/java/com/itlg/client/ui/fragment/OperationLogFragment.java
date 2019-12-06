@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,8 +19,6 @@ import com.itlg.client.ui.adapter.OperationLogAdapter;
 import com.itlg.client.ui.view.SwipeRefreshLayout;
 import com.itlg.client.utils.ToastUtils;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -31,7 +28,7 @@ import butterknife.Unbinder;
 /**
  * 操作日志的碎片
  */
-public class OperationLogFragment extends Fragment {
+public class OperationLogFragment extends BaseFragment {
 
     private static final String KEY_OPERATION_LOGS = "operationLogs";
     private static final String KEY_SCH_PAGE = "sch_page";
@@ -68,7 +65,7 @@ public class OperationLogFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_operation_log, container, false);
         unbinder = ButterKnife.bind(this, view);
@@ -83,12 +80,16 @@ public class OperationLogFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(this::loadData);
         //底部上拉载入更多
         swipeRefreshLayout.setOnPullUpRefreshListener(this::loadMore);
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onLazyLoad() {
         if (operationLogs != null) {
             setupRecyclerView();
         } else {
             loadData();
         }
-        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override

@@ -35,6 +35,8 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -105,8 +107,9 @@ public class FarmDetailActivity extends BaseActivity {
         //操作日志和设备日志
         operationLogFragment = OperationLogFragment.newInstance(farmId);
         DeviceDataFragment deviceDataFragment = DeviceDataFragment.newInstance(farmId);
-        Fragment[] fragments = new Fragment[]{operationLogFragment, deviceDataFragment};
-
+        List<Fragment> fragments = new ArrayList<>();
+        fragments.add(operationLogFragment);
+        fragments.add(deviceDataFragment);
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(adapter);
 

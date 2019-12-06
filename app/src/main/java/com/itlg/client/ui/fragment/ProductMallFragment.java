@@ -90,6 +90,8 @@ public class ProductMallFragment extends BaseFragment {
             sch_type = 0;
             sch_order = "";
             sch_keyword = "";
+            productTypes = null;
+            productInfos = null;
         }
         productInfoBiz = new ProductInfoBiz();
     }
@@ -119,12 +121,6 @@ public class ProductMallFragment extends BaseFragment {
         }
         //加载价格排序下拉框
         setupPriceSpinner();
-        //加载商品列表
-        if (productInfos != null) {
-            setupRecyclerView();
-        } else {
-            loadProductInfos();
-        }
 
         swipeRefreshLayout.setMode(SwipeRefreshLayout.Mode.BOTH);
         swipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLACK, Color.GREEN, Color.YELLOW);
@@ -152,6 +148,12 @@ public class ProductMallFragment extends BaseFragment {
                 bundle.putParcelableArrayList(KEY_PRODUCT_TYPES, productTypes);
                 setArguments(bundle);
                 setupTypeSpinner();
+                //加载完类型列表再加载商品列表,怕服务器炸裂
+                if (productInfos != null) {
+                    setupRecyclerView();
+                } else {
+                    loadProductInfos();
+                }
             }
         });
     }
@@ -163,15 +165,22 @@ public class ProductMallFragment extends BaseFragment {
         }
         //通知适配器更新界面
         arrayAdapter.notifyDataSetChanged();
+        //如果用户在页面销毁前选择过，就重新帮用户选择上
+        if (sch_type > 0) {
+            typeSpinner.setSelection(sch_type + 1);
+        }
         typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                int before = sch_type;
                 if (position > 0) {
                     sch_type = productTypes.get(position - 1).getId();
                 } else {
                     sch_type = 0;
                 }
-                loadProductInfos();
+                if (before != sch_type) {
+                    loadProductInfos();
+                }
             }
 
             @Override
@@ -179,10 +188,7 @@ public class ProductMallFragment extends BaseFragment {
                 adapterView.setSelection(0);
             }
         });
-        //如果用户在页面销毁前选择过，就重新帮用户选择上
-        if (sch_type > 0) {
-            typeSpinner.setSelection(sch_type + 1);
-        }
+
     }
 
     private void setupPriceSpinner() {
@@ -194,9 +200,16 @@ public class ProductMallFragment extends BaseFragment {
                 android.R.layout.simple_spinner_item, itemList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         priceSpinner.setAdapter(adapter);
+        //如果用户在页面销毁前选择过，就重新帮用户选择上
+        if (sch_order.equals("asc")) {
+            priceSpinner.setSelection(1);
+        } else if (sch_order.equals("desc")) {
+            priceSpinner.setSelection(2);
+        }
         priceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                String before = sch_order;
                 switch (position) {
                     case 0:
                         sch_order = "";
@@ -207,7 +220,9 @@ public class ProductMallFragment extends BaseFragment {
                     case 2:
                         sch_order = "desc";
                 }
-                loadProductInfos();
+                if (!before.equals(sch_order)) {
+                    loadProductInfos();
+                }
             }
 
             @Override
@@ -215,12 +230,7 @@ public class ProductMallFragment extends BaseFragment {
                 adapterView.setSelection(0);
             }
         });
-        //如果用户在页面销毁前选择过，就重新帮用户选择上
-        if (sch_order.equals("asc")) {
-            priceSpinner.setSelection(1);
-        } else if (sch_order.equals("desc")) {
-            priceSpinner.setSelection(2);
-        }
+
     }
 
     //第一次载入商品列表或者刷新商品列表时调用

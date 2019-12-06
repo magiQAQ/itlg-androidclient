@@ -12,6 +12,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.itlg.client.R;
@@ -100,30 +102,30 @@ public class FarmMallFragment extends BaseFragment {
     }
 
     @Override
-    public void onLazyLoad() {
-        //加载农田类型下拉框
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //加载农田状态选项下拉框
+        setupStateSpinner();
+        //加载价格排序下拉框
+        setupPriceSpinner();
+        //农田类型下拉框默认先显示全部分类
         types = new ArrayList<>();
         types.add("全部分类");
         arrayAdapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
                 android.R.layout.simple_spinner_item, types);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typeSpinner.setAdapter(arrayAdapter);
+    }
+
+    @Override
+    public void onLazyLoad() {
+
         if (farmTypes != null) {
             setupTypeSpinner();
         } else {
             loadTypeSpinner();
         }
-        //加载农田状态选项下拉框
-        setupStateSpinner();
-        //加载价格排序下拉框
-        setupPriceSpinner();
 
-        //加载待售农田列表
-        if (frontFarmModels != null) {
-            setupRecyclerView();
-        } else {
-            loadFrontFarmModels();
-        }
         swipeRefreshLayout.setMode(SwipeRefreshLayout.Mode.BOTH);
         swipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLACK, Color.GREEN, Color.YELLOW);
         swipeRefreshLayout.setOnRefreshListener(this::loadFrontFarmModels);
@@ -132,15 +134,15 @@ public class FarmMallFragment extends BaseFragment {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         farmInfoBiz.onDestroy();
+        super.onDestroy();
     }
 
     private void loadTypeSpinner() {
         farmInfoBiz.getFarmTypes(new CommonCallback<ArrayList<ProductTypes>>() {
             @Override
             public void onFail(Exception e) {
-                Log.e(TAG, e.getMessage());
+                Log.e(TAG, "loadTypeSpinner" + e.getMessage());
             }
 
             @Override
@@ -149,6 +151,14 @@ public class FarmMallFragment extends BaseFragment {
                 Bundle bundle = getArguments() == null ? new Bundle() : getArguments();
                 bundle.putParcelableArrayList(KEY_FARM_TYPES, farmTypes);
                 setArguments(bundle);
+
+                //之前的请求完成后,再加载待售农田列表
+                if (frontFarmModels != null) {
+                    setupRecyclerView();
+                } else {
+                    loadFrontFarmModels();
+                }
+
                 setupTypeSpinner();
             }
         });
@@ -159,12 +169,19 @@ public class FarmMallFragment extends BaseFragment {
             types.add(productTypes.getName());
         }
         arrayAdapter.notifyDataSetChanged();
+        //如果用户在页面销毁前选择过，就重新帮用户选择上
+        if (sch_type > 0) {
+            typeSpinner.setSelection(sch_type + 1);
+        }
         typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                int before = sch_type;
                 //sch_type为要搜索的类型的id，0表示全部
                 sch_type = position > 0 ? farmTypes.get(position - 1).getId() : 0;
-                loadFrontFarmModels();
+                if (before != sch_type) {
+                    loadFrontFarmModels();
+                }
             }
 
             @Override
@@ -172,10 +189,6 @@ public class FarmMallFragment extends BaseFragment {
                 adapterView.setSelection(0);
             }
         });
-        //如果用户在页面销毁前选择过，就重新帮用户选择上
-        if (sch_type > 0) {
-            typeSpinner.setSelection(sch_type + 1);
-        }
     }
 
     private void setupStateSpinner() {
@@ -188,11 +201,18 @@ public class FarmMallFragment extends BaseFragment {
         //下拉显示样式
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         statusSpinner.setAdapter(arrayAdapter);
+        //如果用户在页面销毁前选择过，就重新帮用户选择上
+        if (sch_state > 0) {
+            statusSpinner.setSelection(sch_state);
+        }
         statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                int before = sch_state;
                 sch_state = position;
-                loadFrontFarmModels();
+                if (position != before) {
+                    loadFrontFarmModels();
+                }
             }
 
             @Override
@@ -200,10 +220,6 @@ public class FarmMallFragment extends BaseFragment {
                 adapterView.setSelection(0);
             }
         });
-        //如果用户在页面销毁前选择过，就重新帮用户选择上
-        if (sch_state > 0) {
-            statusSpinner.setSelection(sch_state);
-        }
     }
 
     private void setupPriceSpinner() {
@@ -215,9 +231,16 @@ public class FarmMallFragment extends BaseFragment {
                 android.R.layout.simple_spinner_item, itemList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         priceSpinner.setAdapter(adapter);
+        //如果用户在页面销毁前选择过，就重新帮用户选择上
+        if (sch_order.equals("asc")) {
+            priceSpinner.setSelection(1);
+        } else if (sch_order.equals("desc")) {
+            priceSpinner.setSelection(2);
+        }
         priceSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                String before = sch_order;
                 switch (position) {
                     case 0:
                         sch_order = "";
@@ -228,7 +251,9 @@ public class FarmMallFragment extends BaseFragment {
                     case 2:
                         sch_order = "desc";
                 }
-                loadFrontFarmModels();
+                if (!before.equals(sch_order)) {
+                    loadFrontFarmModels();
+                }
             }
 
             @Override
@@ -236,12 +261,6 @@ public class FarmMallFragment extends BaseFragment {
                 adapterView.setSelection(0);
             }
         });
-        //如果用户在页面销毁前选择过，就重新帮用户选择上
-        if (sch_order.equals("asc")) {
-            priceSpinner.setSelection(1);
-        } else if (sch_order.equals("desc")) {
-            priceSpinner.setSelection(2);
-        }
     }
 
     private void loadFrontFarmModels() {
@@ -250,14 +269,14 @@ public class FarmMallFragment extends BaseFragment {
                 new CommonCallback<ArrayList<FrontFarmModel>>() {
                     @Override
                     public void onFail(Exception e) {
-                        ToastUtils.showToast(e.getMessage());
+                        ToastUtils.showToast("loadFrontFarmModels" + e.getMessage());
                         Bundle bundle = getArguments() == null ? new Bundle() : getArguments();
                         bundle.putInt(KEY_SCH_PAGE, 1);
                         setArguments(bundle);
                         if (swipeRefreshLayout.isRefreshing()) {
                             swipeRefreshLayout.setRefreshing(false);
                         }
-                        if (frontFarmModels != null) {
+                        if (frontFarmModels != null && !frontFarmModels.isEmpty()) {
                             frontFarmModels.clear();
                             setupRecyclerView();
                         }

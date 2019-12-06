@@ -86,7 +86,7 @@ public class UserBiz {
      * @param stringCallback get发送后执行的回调
      */
     public void logout(StringCallback stringCallback) {
-        OkHttpUtils.get()
+        OkHttpUtils.post()
                 .url(Config.BASEURL)
                 .addParams("key", "UserInfoTP.loginout")
                 .tag(this)

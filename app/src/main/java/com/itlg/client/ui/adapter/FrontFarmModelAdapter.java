@@ -41,7 +41,6 @@ public class FrontFarmModelAdapter extends RecyclerView.Adapter<FrontFarmModelAd
         if (model == null) {
             return;
         }
-
         Glide.with(context).load(Config.FILEURL + model.getFarmInfo().getImg()).into(holder.farmIconImageView);
         holder.farmNameTextView.setText(context.getString(R.string.typename_id,
                 model.getTypeName(), model.getFarmInfo().getId()));
