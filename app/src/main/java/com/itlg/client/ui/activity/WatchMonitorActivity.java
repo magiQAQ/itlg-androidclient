@@ -66,4 +66,21 @@ public class WatchMonitorActivity extends AppCompatActivity {
         videoView.start();
         playButton.setVisibility(View.GONE);
     }
+
+    @Override
+    protected void onStop() {
+        if (videoView.isPlaying()) {
+            videoView.pause();
+            playButton.setVisibility(View.VISIBLE);
+        }
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (videoView != null) {
+            videoView.stopPlayback();
+        }
+        super.onDestroy();
+    }
 }
