@@ -1,9 +1,12 @@
 package com.itlg.client.ui.adapter;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+
+import com.itlg.client.ui.fragment.DetailFarmsFragment;
 
 import java.util.List;
 
@@ -28,4 +31,13 @@ public class FragmentAdapter extends FragmentPagerAdapter {
         return fragments == null ? 0 : fragments.size();
     }
 
+    @Nullable
+    @Override
+    public CharSequence getPageTitle(int position) {
+        if (fragments.get(position) instanceof DetailFarmsFragment) {
+            return ((DetailFarmsFragment) fragments.get(position)).getTitle();
+        } else {
+            return super.getPageTitle(position);
+        }
+    }
 }

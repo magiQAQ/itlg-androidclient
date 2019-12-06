@@ -21,6 +21,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
+        <activity
+            android:name=".ui.activity.WatchMonitorActivity"
+            android:screenOrientation="landscape" />
         <activity android:name=".ui.activity.NewsInfoDetailActivity" />
         <activity android:name=".ui.activity.FrontDetailFarmActivity" />
         <activity android:name=".ui.activity.ProductDetailActivity" />

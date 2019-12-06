@@ -54,10 +54,7 @@ public class MyDetailFarmsActivity extends BaseActivity {
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(fragments.size() > 2 ? fragments.size() - 1 : 1);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.removeAllTabs();
 
-        for (FarmInfoModel model : farmInfoModels) {
-            tabLayout.addTab(tabLayout.newTab().setText(model.getTypeName() + model.getFarmInfo().getId()));
-        }
+
     }
 }

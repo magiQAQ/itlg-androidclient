@@ -1,6 +1,7 @@
 package com.itlg.client.ui.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.itlg.client.biz.OperationLogBiz;
 import com.itlg.client.config.Config;
 import com.itlg.client.net.CommonCallback;
 import com.itlg.client.ui.activity.MyDetailFarmsActivity;
+import com.itlg.client.ui.activity.WatchMonitorActivity;
 import com.itlg.client.ui.adapter.OperationLogAdapter;
 import com.itlg.client.ui.adapter.PreviewProductAdapter;
 import com.itlg.client.utils.MyUtils;
@@ -30,6 +32,7 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 //农场主看到的农场详情页
 public class DetailFarmsFragment extends BaseFragment {
@@ -141,6 +144,12 @@ public class DetailFarmsFragment extends BaseFragment {
 
     }
 
+    @OnClick(R.id.watch_monitor_button)
+    void toWatchMonitorActivity() {
+        Intent intent = new Intent(getActivity(), WatchMonitorActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void onDestroy() {
         biz.onDestroy();
@@ -165,4 +174,16 @@ public class DetailFarmsFragment extends BaseFragment {
         }
     }
 
+    public String getTitle() {
+        if (getArguments() != null) {
+            FarmInfoModel model = getArguments().getParcelable(MyUtils.KEY_FARM_INFO_MODEL);
+            if (model != null) {
+                return model.getTypeName() + model.getFarmInfo().getId();
+            } else {
+                return "";
+            }
+        } else {
+            return "";
+        }
+    }
 }

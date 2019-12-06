@@ -71,5 +71,6 @@
     <string name="longitude">经度:%f</string>
     <string name="latitude">纬度:%f</string>
     <string name="last_operation_log">近期操作记录</string>
+    <string name="watch_monitor">查看监控</string>
 
 </resources>
