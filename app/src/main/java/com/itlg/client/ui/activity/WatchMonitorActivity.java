@@ -17,6 +17,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.itlg.client.R;
 import com.itlg.client.biz.VideoBiz;
+import com.itlg.client.config.Config;
 import com.itlg.client.utils.ToastUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -86,7 +87,7 @@ public class WatchMonitorActivity extends AppCompatActivity {
     private void initView() {
         //实例化播放器
         player = ExoPlayerFactory.newSimpleInstance(this);
-        Uri uri = Uri.parse("http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8");
+        Uri uri = Uri.parse(Config.VIDEOURL);
         //资源工厂
         DefaultDataSourceFactory factory = new DefaultDataSourceFactory(this, Util.getUserAgent(this, "智慧农业"));
         //解析播放资源,m3u8属于hls
@@ -110,6 +111,9 @@ public class WatchMonitorActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(String response, int id) {
+                if (player != null) {
+                    player.release();
+                }
                 Log.e(TAG, "视频流已关闭");
             }
         });
@@ -118,9 +122,7 @@ public class WatchMonitorActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        if (player != null) {
-            player.release();
-        }
+
         super.onDestroy();
     }
 }
