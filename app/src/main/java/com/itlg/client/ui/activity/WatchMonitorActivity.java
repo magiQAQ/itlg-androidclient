@@ -1,20 +1,16 @@
 package com.itlg.client.ui.activity;
 
-import android.net.Uri;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.hls.HlsMediaSource;
-import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 import com.itlg.client.R;
 import com.itlg.client.biz.VideoBiz;
 import com.itlg.client.config.Config;
@@ -24,57 +20,120 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Call;
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 public class WatchMonitorActivity extends AppCompatActivity {
 
     private static final String TAG = "WatchMonitorActivity";
-    @BindView(R.id.playerView)
-    PlayerView playerView;
-    private VideoBiz biz;
-    private SimpleExoPlayer player;
+    @BindView(R.id.surfaceView)
+    SurfaceView surfaceView;
+    @BindView(R.id.progress_linearLayout)
+    LinearLayout progressLinearLayout;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        fullScreen();
-        setContentView(R.layout.activity_watch_monitor);
-        ButterKnife.bind(this);
-        biz = new VideoBiz();
-    }
+    private VideoBiz biz;
+    private IjkMediaPlayer player;
+    private String url;
+
+    private Thread tryConnectUrlThread = new Thread(() -> {
+        while (true) {
+            Log.e(TAG, "尝试连接url");
+            try {
+                HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+                //测试连接是否可用
+                if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    //如果连接可用就初始化播放器并播放
+                    runOnUiThread(() -> {
+                        initPlayer();
+                        player.setDisplay(surfaceView.getHolder());
+                        //关闭正在打开监控的提示
+                        progressLinearLayout.setVisibility(View.GONE);
+                    });
+                    break;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //线程等待1秒
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    });
+    private SurfaceHolder.Callback callback = new SurfaceHolder.Callback() {
+        @Override
+        public void surfaceCreated(SurfaceHolder holder) {
+            biz.openVideo(new StringCallback() {
+                @Override
+                public void onError(Call call, Exception e, int id) {
+                    ToastUtils.showToast("网络连接失败");
+                    Log.e(TAG, e.getMessage());
+                }
+
+                @Override
+                public void onResponse(String response, int id) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        if (jsonObject.getBoolean("succ")) {
+                            // 让线程每秒一次去检测url是否可用
+                            tryConnectUrlThread.start();
+                        } else {
+                            ToastUtils.showToast(jsonObject.getString("stmt"));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            //提示用户正在打开监控
+            progressLinearLayout.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+        }
+
+        @Override
+        public void surfaceDestroyed(SurfaceHolder holder) {
+            if (player != null) {
+                player.stop();
+                player.release();
+                player = null;
+            }
+            biz.closeVideo(new StringCallback() {
+                @Override
+                public void onError(Call call, Exception e, int id) {
+                    ToastUtils.showToast("网络异常,非正常关闭");
+                    Log.e(TAG, e.getMessage());
+                }
+
+                @Override
+                public void onResponse(String response, int id) {
+                    Log.e(TAG, "视频流已关闭");
+                }
+            });
+            if (surfaceView != null) {
+                surfaceView.getHolder().removeCallback(callback);
+            }
+        }
+    };
+
 
     @Override
     protected void onStart() {
         super.onStart();
-        biz.openVideo(new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                ToastUtils.showToast("网络连接失败");
-                Log.e(TAG, e.getMessage());
-            }
-
-            @Override
-            public void onResponse(String response, int id) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    if (jsonObject.getBoolean("succ")) {
-                        initView();
-                    } else {
-                        ToastUtils.showToast(jsonObject.getString("stmt"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
     private void fullScreen() {
         View decorView = getWindow().getDecorView();
@@ -84,45 +143,31 @@ public class WatchMonitorActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
-    private void initView() {
-        //实例化播放器
-        player = ExoPlayerFactory.newSimpleInstance(this);
-        Uri uri = Uri.parse(Config.VIDEOURL);
-        //资源工厂
-        DefaultDataSourceFactory factory = new DefaultDataSourceFactory(this, Util.getUserAgent(this, "智慧农业"));
-        //解析播放资源,m3u8属于hls
-        MediaSource mediaSource = new HlsMediaSource.Factory(factory).createMediaSource(uri);
-        //播放器开始加载
-        player.prepare(mediaSource);
-        //视图与播放器关联
-        playerView.setPlayer(player);
-        //加载完成就自动播放
-        player.setPlayWhenReady(true);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        fullScreen();
+        setContentView(R.layout.activity_watch_monitor);
+        ButterKnife.bind(this);
+        biz = new VideoBiz();
+        surfaceView.getHolder().addCallback(callback);
     }
 
-    @Override
-    protected void onStop() {
-        biz.closeVideo(new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                ToastUtils.showToast("网络异常,非正常关闭");
-                Log.e(TAG, e.getMessage());
-            }
+    private void initPlayer() {
+        url = Config.VIDEOURL;
+        //url = "http://ivi.bupt.edu.cn/hls/cctv6hd.m3u8";
+        if (player == null) {
+            //实例化播放器
+            player = new IjkMediaPlayer();
+            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "reconnect", 5);
+        }
+        try {
+            player.setDataSource(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-            @Override
-            public void onResponse(String response, int id) {
-                if (player != null) {
-                    player.release();
-                }
-                Log.e(TAG, "视频流已关闭");
-            }
-        });
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-
-        super.onDestroy();
+        player.prepareAsync();
     }
 }
