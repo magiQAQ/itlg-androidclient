@@ -40,7 +40,6 @@ public class WatchMonitorActivity extends AppCompatActivity {
     private VideoBiz biz;
     private IjkMediaPlayer player;
     private String url;
-
     private Thread tryConnectUrlThread = new Thread(() -> {
         while (true) {
             Log.e(TAG, "尝试连接url");
@@ -133,7 +132,6 @@ public class WatchMonitorActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
     }
-
 
     private void fullScreen() {
         View decorView = getWindow().getDecorView();
