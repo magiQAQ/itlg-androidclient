@@ -115,16 +115,18 @@ public class FarmMallFragment extends BaseFragment {
                 android.R.layout.simple_spinner_item, types);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typeSpinner.setAdapter(arrayAdapter);
+
+        if (farmTypes != null) {
+            setupTypeSpinner();
+        }
+        if (frontFarmModels != null) {
+            setupRecyclerView();
+        }
     }
 
     @Override
     public void onLazyLoad() {
-
-        if (farmTypes != null) {
-            setupTypeSpinner();
-        } else {
-            loadTypeSpinner();
-        }
+        loadTypeSpinner();
 
         swipeRefreshLayout.setMode(SwipeRefreshLayout.Mode.BOTH);
         swipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLACK, Color.GREEN, Color.YELLOW);
@@ -153,11 +155,7 @@ public class FarmMallFragment extends BaseFragment {
                 setArguments(bundle);
 
                 //之前的请求完成后,再加载待售农田列表
-                if (frontFarmModels != null) {
-                    setupRecyclerView();
-                } else {
-                    loadFrontFarmModels();
-                }
+                loadFrontFarmModels();
 
                 setupTypeSpinner();
             }

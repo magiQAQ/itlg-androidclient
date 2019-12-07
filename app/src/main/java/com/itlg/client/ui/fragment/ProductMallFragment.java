@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -105,10 +106,10 @@ public class ProductMallFragment extends BaseFragment {
     }
 
     @Override
-    public void onLazyLoad() {
-        //加载商品类型下拉框
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         types = new ArrayList<>();
-        //无论是否加载成功都需要先显示一个全部分类
+        //商品类型无论是否加载成功都需要先显示一个全部分类
         types.add("全部分类");
         arrayAdapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
                 android.R.layout.simple_spinner_item, types);
@@ -116,9 +117,11 @@ public class ProductMallFragment extends BaseFragment {
         typeSpinner.setAdapter(arrayAdapter);
         if (productTypes != null) {
             setupTypeSpinner();
-        } else {
-            loadTypeSpinner();
         }
+        if (productInfos != null) {
+            setupRecyclerView();
+        }
+
         //加载价格排序下拉框
         setupPriceSpinner();
 
@@ -126,6 +129,12 @@ public class ProductMallFragment extends BaseFragment {
         swipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLACK, Color.GREEN, Color.YELLOW);
         swipeRefreshLayout.setOnRefreshListener(this::loadProductInfos);
         swipeRefreshLayout.setOnPullUpRefreshListener(this::loadMoreProductInfo);
+    }
+
+    @Override
+    public void onLazyLoad() {
+        //加载商品类型下拉框
+        loadTypeSpinner();
     }
 
     @Override
@@ -149,11 +158,7 @@ public class ProductMallFragment extends BaseFragment {
                 setArguments(bundle);
                 setupTypeSpinner();
                 //加载完类型列表再加载商品列表,怕服务器炸裂
-                if (productInfos != null) {
-                    setupRecyclerView();
-                } else {
-                    loadProductInfos();
-                }
+                loadProductInfos();
             }
         });
     }

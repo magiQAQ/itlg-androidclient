@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -70,17 +71,21 @@ public class NewsFragment extends BaseFragment {
     }
 
     @Override
-    public void onLazyLoad() {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if (newsInfos != null) {
             setupRecyclerView();
-        } else {
-            loadNewsInfos();
         }
 
         swipeRefreshLayout.setMode(SwipeRefreshLayout.Mode.BOTH);
         swipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLACK, Color.GREEN, Color.YELLOW);
         swipeRefreshLayout.setOnRefreshListener(this::loadNewsInfos);
         swipeRefreshLayout.setOnPullUpRefreshListener(this::loadMoreNewsInfo);
+    }
+
+    @Override
+    public void onLazyLoad() {
+        loadNewsInfos();
     }
 
     private void loadNewsInfos() {

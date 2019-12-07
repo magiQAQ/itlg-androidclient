@@ -125,7 +125,7 @@ public class FrontDetailFarmActivity extends BaseActivity {
 
     @OnClick(R.id.buy_farm_button)
     void buyFarm() {
-        farmInfoBiz.buyFarm(frontFarmModel.getFarmInfo().getId(), new StringCallback() {
+        farmInfoBiz.buyFarm(frontFarmModel.getSaleList().getId(), new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 ToastUtils.showToast("网络连接异常");
@@ -141,11 +141,14 @@ public class FrontDetailFarmActivity extends BaseActivity {
                     if (jsonObject.getBoolean("succ")) {
                         //购买成功的操作
                         UserInfo userInfo = UserInfoHolder.getInstance().getUserInfo();
-                        if (userInfo.getPrivilege() < 70) {
+                        if (userInfo.getPrivilege() != 70) {
                             //将当前用户权限设为农场主权限
                             userInfo.setPrivilege(70);
+                            UserInfoHolder.getInstance().setUserInfo(userInfo);
+                            ToastUtils.showToast("购买成功,您现在已经是农场主了");
+                        } else {
+                            ToastUtils.showToast("您的名下又增加了一块田地");
                         }
-                        UserInfoHolder.getInstance().setUserInfo(userInfo);
                         finish();
                     } else {
                         ToastUtils.showToast(jsonObject.getString("stmt"));

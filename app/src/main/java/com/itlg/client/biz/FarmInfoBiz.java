@@ -109,14 +109,14 @@ public class FarmInfoBiz {
     /**
      * 购买田地的方法
      *
-     * @param farmId         购买的农场id
+     * @param saleListId     购买的订单id
      * @param stringCallback 得到结果后的回调
      */
-    public void buyFarm(int farmId, StringCallback stringCallback) {
+    public void buyFarm(int saleListId, StringCallback stringCallback) {
         OkHttpUtils.post()
                 .url(Config.BASEURL)
                 .addParams("key", "FrontFarmTP.buyfarm")
-                .addParams("id", String.valueOf(farmId))
+                .addParams("id", String.valueOf(saleListId))
                 .tag(this)
                 .build()
                 .execute(stringCallback);

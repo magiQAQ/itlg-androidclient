@@ -7,34 +7,6 @@
     android:orientation="vertical"
     tools:context=".ui.fragment.MineFragment">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorTheme">
-
-        <ImageView
-            android:id="@+id/userImg_imageView"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="60dp"
-            android:contentDescription="@null"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <TextView
-            android:id="@+id/user_name_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="20dp"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            tools:text="Hi,userInfo'sName" />
-
-    </FrameLayout>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -45,6 +17,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorTheme">
+
+                <ImageView
+                    android:id="@+id/userImg_imageView"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginBottom="60dp"
+                    android:contentDescription="@null"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/user_name_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="20dp"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:text="Hi,userInfo'sName" />
+
+            </FrameLayout>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -112,7 +112,6 @@
                         tools:listitem="@layout/item_preview_my_cart"
                         tools:visibility="gone" />
 
-
                     <LinearLayout
                         android:id="@+id/empty_cart_linearLayout"
                         android:layout_width="wrap_content"
@@ -143,9 +142,7 @@
                             android:textColor="#707070" />
                     </LinearLayout>
 
-
                 </LinearLayout>
-
 
             </androidx.cardview.widget.CardView>
 
@@ -245,19 +242,16 @@
                             android:ellipsize="end"
                             android:textSize="20sp"
                             tools:text="当前种植:苹果"
-
                             />
-
 
                     </RelativeLayout>
 
 
                 </LinearLayout>
+
             </androidx.cardview.widget.CardView>
 
-
         </LinearLayout>
-
 
     </ScrollView>
 
@@ -271,8 +265,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/red_button"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
@@ -281,6 +275,5 @@
             android:textSize="22sp" />
 
     </FrameLayout>
-
 
 </LinearLayout>

@@ -6,20 +6,9 @@
     android:background="@color/black"
     tools:context=".ui.activity.WatchMonitorActivity">
 
-    <VideoView
-        android:id="@+id/videoView"
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/playerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:keepScreenOn="true" />
-
-    <ImageView
-        android:id="@+id/play_button"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:contentDescription="@null"
-        android:src="@drawable/ic_play_circle_outline_gray_24dp"
-        android:visibility="gone" />
+        android:layout_height="match_parent" />
 
 </FrameLayout>
