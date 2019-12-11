@@ -39,45 +39,15 @@ public class WatchMonitorActivity extends AppCompatActivity {
 
     private VideoBiz biz;
     private IjkMediaPlayer player;
-    private String url;
-    private Thread tryConnectUrlThread = new Thread(() -> {
-        while (true) {
-            Log.e(TAG, "尝试连接url");
-            HttpURLConnection connection = null;
-            try {
-                connection = (HttpURLConnection) new URL(url).openConnection();
-                connection.setConnectTimeout(1000);
-                connection.setReadTimeout(1000);
-                connection.connect();
-                //测试连接是否可用
-                if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    //如果连接可用就初始化播放器并播放
-                    runOnUiThread(() -> {
-                        initPlayer();
-                        player.setDisplay(surfaceView.getHolder());
-                        //关闭正在打开监控的提示
-                        progressLinearLayout.setVisibility(View.GONE);
-                    });
-                    break;
-                }
-                connection.disconnect();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (connection != null) connection.disconnect();
-            }
+    private String url = Config.VIDEOURL;
+    private TryConnectUrlThread tryConnectUrlThread;
 
-            //线程等待1秒
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    });
+    //surface的创建,销毁监听
     private SurfaceHolder.Callback callback = new SurfaceHolder.Callback() {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
+
+            //发送请求
             biz.openVideo(new StringCallback() {
                 @Override
                 public void onError(Call call, Exception e, int id) {
@@ -90,10 +60,13 @@ public class WatchMonitorActivity extends AppCompatActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         if (jsonObject.getBoolean("succ")) {
+                            tryConnectUrlThread = new TryConnectUrlThread();
+                            tryConnectUrlThread.setThreadStop(false);
                             // 让线程每秒一次去检测url是否可用
                             tryConnectUrlThread.start();
                         } else {
                             ToastUtils.showToast(jsonObject.getString("stmt"));
+                            onBackPressed();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -111,6 +84,7 @@ public class WatchMonitorActivity extends AppCompatActivity {
 
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
+            tryConnectUrlThread.setThreadStop(true);
             if (player != null) {
                 player.stop();
                 player.release();
@@ -154,8 +128,6 @@ public class WatchMonitorActivity extends AppCompatActivity {
     }
 
     private void initPlayer() {
-        url = Config.VIDEOURL;
-        //url = "http://ivi.bupt.edu.cn/hls/cctv6hd.m3u8";
         if (player == null) {
             //实例化播放器
             player = new IjkMediaPlayer();
@@ -181,5 +153,59 @@ public class WatchMonitorActivity extends AppCompatActivity {
             player = null;
         }
         super.onDestroy();
+    }
+
+    //用来检测直播流是否可用
+    class TryConnectUrlThread extends Thread {
+
+        private boolean threadStop;
+
+        TryConnectUrlThread() {
+            super();
+        }
+
+        @Override
+        public void run() {
+            super.run();
+            HttpURLConnection connection = null;
+            while (!threadStop) {
+                Log.e(TAG, "尝试连接url");
+                try {
+                    connection = (HttpURLConnection) new URL(url).openConnection();
+                    connection.setConnectTimeout(1000);
+                    connection.setReadTimeout(1000);
+                    //测试连接是否可用
+                    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                        //如果连接可用就初始化播放器并播放
+                        runOnUiThread(() -> {
+                            initPlayer();
+                            player.setDisplay(surfaceView.getHolder());
+                            //关闭正在打开监控的提示
+                            progressLinearLayout.setVisibility(View.GONE);
+                        });
+                        break;
+                    } else {
+                        Log.e(TAG, "url ResponseCode" + connection.getResponseCode());
+                    }
+                    connection.disconnect();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (connection != null) connection.disconnect();
+                }
+
+                //线程等待1秒
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        void setThreadStop(boolean threadStop) {
+            this.threadStop = threadStop;
+        }
+
     }
 }

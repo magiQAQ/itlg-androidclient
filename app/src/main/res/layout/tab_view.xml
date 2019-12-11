@@ -8,9 +8,8 @@
 
     <ImageView
         android:id="@+id/tab_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:adjustViewBounds="true"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:contentDescription="@null"
         android:scaleType="fitCenter"
         tools:srcCompat="@drawable/icon_product_mall" />
@@ -20,5 +19,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@drawable/tab_title_color"
+        android:textSize="12sp"
         tools:text="农产品商城" />
 </LinearLayout>
