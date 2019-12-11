@@ -17,9 +17,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="#AAFFFFFF"
+        android:background="#DDFFFFFF"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:paddingStart="10dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="20dp"
         android:visibility="gone"
         tools:visibility="visible">
 

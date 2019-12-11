@@ -43,8 +43,12 @@ public class WatchMonitorActivity extends AppCompatActivity {
     private Thread tryConnectUrlThread = new Thread(() -> {
         while (true) {
             Log.e(TAG, "尝试连接url");
+            HttpURLConnection connection = null;
             try {
-                HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+                connection = (HttpURLConnection) new URL(url).openConnection();
+                connection.setConnectTimeout(1000);
+                connection.setReadTimeout(1000);
+                connection.connect();
                 //测试连接是否可用
                 if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     //如果连接可用就初始化播放器并播放
@@ -56,8 +60,11 @@ public class WatchMonitorActivity extends AppCompatActivity {
                     });
                     break;
                 }
+                connection.disconnect();
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                if (connection != null) connection.disconnect();
             }
 
             //线程等待1秒
@@ -128,11 +135,6 @@ public class WatchMonitorActivity extends AppCompatActivity {
     };
 
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
     private void fullScreen() {
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
@@ -167,5 +169,17 @@ public class WatchMonitorActivity extends AppCompatActivity {
         }
 
         player.prepareAsync();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (player != null) {
+            if (player.isPlaying()) {
+                player.stop();
+            }
+            player.release();
+            player = null;
+        }
+        super.onDestroy();
     }
 }

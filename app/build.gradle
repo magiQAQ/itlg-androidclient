@@ -42,7 +42,6 @@ dependencies {
     implementation 'androidx.exifinterface:exifinterface:1.1.0'
     implementation 'com.google.zxing:core:3.4.0'
     implementation('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
-
     implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
     implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
 
