@@ -48,7 +48,7 @@ public class MyCartDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_cart_detail);
         ButterKnife.bind(this);
-        setStatusBarColor(R.color.white, false);
+        setStatusBarColor(R.color.list_background, false);
         buyInfoBiz = new BuyInfoBiz();
 
         buyInfoModels = getIntent().getParcelableArrayListExtra(MyUtils.KEY_BUY_INFO_MODELS);

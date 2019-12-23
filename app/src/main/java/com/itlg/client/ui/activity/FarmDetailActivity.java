@@ -25,6 +25,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.itlg.client.R;
 import com.itlg.client.bean.FarmInfoModel;
 import com.itlg.client.biz.OperationLogBiz;
+import com.itlg.client.config.Config;
 import com.itlg.client.ui.adapter.FragmentAdapter;
 import com.itlg.client.ui.fragment.DeviceDataFragment;
 import com.itlg.client.ui.fragment.OperationLogFragment;
@@ -89,17 +90,12 @@ public class FarmDetailActivity extends BaseActivity {
         setStatusBarColor(R.color.colorTheme, true);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
-        int typeId = model.getFarmInfo().getTypeId();
         farmId = model.getFarmInfo().getId();
 
         //农场详情
-        if (typeId == 1) {
-            Glide.with(this).load(R.drawable.nongchang)
-                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(20))).into(farmIconImageView);
-        } else if (typeId == 2) {
-            Glide.with(this).load(R.drawable.yangzhichang)
-                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(20))).into(farmIconImageView);
-        }
+        Glide.with(this).load(Config.FILEURL + model.getFarmInfo().getImg())
+                .apply(RequestOptions.bitmapTransform(new RoundedCorners(20)))
+                .into(farmIconImageView);
         farmNameTextView.setText(String.format(getResources().getString(R.string.typename_id),
                 model.getTypeName(), farmId));
         farmStatusTextView.setText("状态正常");

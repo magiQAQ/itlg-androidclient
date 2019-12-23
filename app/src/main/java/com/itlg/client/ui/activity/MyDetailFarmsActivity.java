@@ -33,7 +33,7 @@ public class MyDetailFarmsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_detail_farms);
         ButterKnife.bind(this);
-        setStatusBarColor(R.color.white, false);
+        setStatusBarColor(R.color.list_background, false);
 
         farmInfoModels = getIntent().getParcelableArrayListExtra(MyUtils.KEY_FARM_INFO_MODELS);
         if (farmInfoModels == null) {
