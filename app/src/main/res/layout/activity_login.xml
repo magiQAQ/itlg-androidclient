@@ -34,6 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/userLogin"
+                android:textColor="@color/black"
                 android:textSize="26sp"
                 android:textStyle="normal" />
 
