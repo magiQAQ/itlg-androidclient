@@ -79,7 +79,10 @@ public class NewsFragment extends BaseFragment {
 
         swipeRefreshLayout.setMode(SwipeRefreshLayout.Mode.BOTH);
         swipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLACK, Color.GREEN, Color.YELLOW);
-        swipeRefreshLayout.setOnRefreshListener(this::loadNewsInfos);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            loadNewsInfos();
+            ToastUtils.showToast("刷新成功");
+        });
         swipeRefreshLayout.setOnPullUpRefreshListener(this::loadMoreNewsInfo);
     }
 

@@ -22,7 +22,6 @@
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:adjustViewBounds="true"
-            android:layout_marginStart="5dp"
             android:contentDescription="@null"
             tools:srcCompat="@drawable/yangzhichang" />
 
@@ -48,6 +47,7 @@
                 android:id="@+id/farm_current_product_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLines="1"
                 android:textSize="18sp"
                 tools:text="当前种植:苹果" />
 

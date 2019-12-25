@@ -52,17 +52,15 @@ public class FarmInfoAdapter extends RecyclerView.Adapter<FarmInfoAdapter.FarmIn
         }
         holder.farmNameTextView.setText(String.format(context.getString(R.string.typename_id),
                 model.getTypeName(), model.getFarmInfo().getId()));
-        for (int i = 0; i < model.getProductInfos().size(); i++) {
-            if (i != 0) {
-                builder.append("、");
-            }
-            builder.append(model.getProductInfos().get(i).getProductName());
-            if (i > 1) {
+        if (model.getProductInfos() != null && !model.getProductInfos().isEmpty()) {
+            builder.append(model.getProductInfos().get(0).getProductName());
+            if (model.getProductInfos().size() > 1) {
                 builder.append("等");
-                break;
             }
+        } else {
+            builder.append("无");
         }
-        //当前种植:苹果、黄富帅等
+        //当前种植:苹果等
         holder.farmCurrentProductTextView.setText(builder.toString());
     }
 

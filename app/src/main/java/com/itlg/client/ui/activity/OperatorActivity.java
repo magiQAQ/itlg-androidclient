@@ -30,6 +30,7 @@ import com.itlg.client.config.Config;
 import com.itlg.client.net.CommonCallback;
 import com.itlg.client.ui.adapter.FarmInfoAdapter;
 import com.itlg.client.utils.MyUtils;
+import com.itlg.client.utils.RegexUtil;
 import com.itlg.client.utils.ToastUtils;
 
 import java.lang.reflect.InvocationTargetException;
@@ -111,9 +112,11 @@ public class OperatorActivity extends BaseActivity {
         //获取解析结果
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
-            //result.getContents()即为二维码的内容,应为key=FarmInfoTP.getFarmInfo&farmId=3这样的参数
+            //result.getContents()即为二维码的内容,应为url
             if (result.getContents() == null) {
                 ToastUtils.showToast("取消扫描");
+            } else if (!RegexUtil.checkURL(result.getContents())) {
+                ToastUtils.showToast("不是正确的网址");
             } else {
                 farmInfoBiz = new FarmInfoBiz();
                 farmInfoBiz.getFarmInfoModel(result.getContents(),

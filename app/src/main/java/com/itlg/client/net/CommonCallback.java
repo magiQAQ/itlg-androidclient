@@ -65,7 +65,7 @@ public abstract class CommonCallback<T> extends StringCallback {
             }
         } catch (Exception e) {
             Log.e(TAG, response);
-            onFail(e);
+            onFail(new RuntimeException("出现异常,请查看logcat"));
             e.printStackTrace();
         }
     }

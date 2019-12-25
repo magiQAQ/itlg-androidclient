@@ -127,7 +127,10 @@ public class ProductMallFragment extends BaseFragment {
 
         swipeRefreshLayout.setMode(SwipeRefreshLayout.Mode.BOTH);
         swipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLACK, Color.GREEN, Color.YELLOW);
-        swipeRefreshLayout.setOnRefreshListener(this::loadProductInfos);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            loadProductInfos();
+            ToastUtils.showToast("刷新成功");
+        });
         swipeRefreshLayout.setOnPullUpRefreshListener(this::loadMoreProductInfo);
     }
 
