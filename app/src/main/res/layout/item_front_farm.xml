@@ -16,24 +16,27 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:baselineAligned="false"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="2">
 
         <FrameLayout
-            android:layout_width="220dp"
-            android:layout_height="140dp">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
             <ImageView
                 android:id="@+id/farm_icon_imageView"
-                android:layout_width="220dp"
-                android:layout_height="140dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
                 tools:srcCompat="@drawable/hfsapple" />
 
             <TextView
                 android:id="@+id/sold_textView"
-                android:layout_width="220dp"
-                android:layout_height="140dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:background="#aa808080"
                 android:gravity="center"
@@ -71,11 +74,8 @@
                 android:textSize="20sp"
                 tools:text="价格" />
 
-
         </LinearLayout>
 
-
     </LinearLayout>
-
 
 </androidx.cardview.widget.CardView>

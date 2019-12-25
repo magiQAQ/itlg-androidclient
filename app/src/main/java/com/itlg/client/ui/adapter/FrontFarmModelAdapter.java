@@ -64,7 +64,7 @@ public class FrontFarmModelAdapter extends RecyclerView.Adapter<FrontFarmModelAd
     @Override
     public FrontFarmModelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new FrontFarmModelViewHolder(LayoutInflater.from(context)
-                .inflate(R.layout.item_front_farm_model, parent, false));
+                .inflate(R.layout.item_front_farm, parent, false));
     }
 
     public interface OnItemClickListener {

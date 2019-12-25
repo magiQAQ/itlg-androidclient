@@ -49,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_front_farm_model" />
+            tools:listitem="@layout/item_front_farm" />
 
     </com.itlg.client.ui.view.SwipeRefreshLayout>
 
