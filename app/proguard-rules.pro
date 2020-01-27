@@ -19,3 +19,31 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+#okhttputils
+-dontwarn com.zhy.http.**
+-keep class com.zhy.http.**{*;}
+
+#okhttp
+-dontwarn okhttp3.**
+-keep class okhttp3.**{*;}
+
+#okio
+-dontwarn okio.**
+-keep class okio.**{*;}
+
+#gson
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class sun.misc.Unsafe {*;}
+#bean目录下的实体类
+-keep class com.itlg.client.bean.**{ *;}
+
+#glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+

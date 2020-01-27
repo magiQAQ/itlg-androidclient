@@ -13,8 +13,18 @@ android {
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false // 是否混淆
+            zipAlignEnabled true // 是否Zipalign优化
+            shrinkResources false // 移除无用资源
+            debuggable true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
         release {
-            minifyEnabled false
+            minifyEnabled true // 是否混淆
+            zipAlignEnabled true // 是否Zipalign优化
+            shrinkResources true // 移除无用资源
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -35,10 +45,23 @@ android {
         }
     }
 
+    flavorDimensions "itlg"
+
+    productFlavors {
+        itlg_test {
+            dimension "itlg"
+        }
+
+        itlg_release {
+            dimension "itlg"
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    sourceSets { debug { java.srcDirs = ['src/debug/java', 'src/itlg_test/java/'] } }
 }
 
 dependencies {
@@ -50,12 +73,12 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.squareup.okhttp3:okhttp:4.2.1'
     implementation 'com.zhy:okhttputils:2.6.2'
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'com.google.android.material:material:1.0.0'
-    implementation 'com.jakewharton:butterknife:10.2.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
+    implementation 'com.jakewharton:butterknife:10.2.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
     implementation 'androidx.exifinterface:exifinterface:1.1.0'
     implementation 'com.google.zxing:core:3.4.0'
     implementation('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
