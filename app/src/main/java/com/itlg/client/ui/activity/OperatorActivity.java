@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -113,13 +114,15 @@ public class OperatorActivity extends BaseActivity {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             //result.getContents()即为二维码的内容,应为url
-            if (result.getContents() == null) {
+            String content = result.getContents();
+            if (content == null) {
                 ToastUtils.showToast("取消扫描");
-            } else if (!RegexUtil.checkURL(result.getContents())) {
+            } else if (!RegexUtil.checkURL(content)) {
                 ToastUtils.showToast("不是正确的网址");
             } else {
                 farmInfoBiz = new FarmInfoBiz();
-                farmInfoBiz.getFarmInfoModel(result.getContents(),
+                Log.e("QRCodeContent", content);
+                farmInfoBiz.getFarmInfoModel(content,
                         new CommonCallback<FarmInfoModel>() {
                             @Override
                             public void onFail(Exception e) {

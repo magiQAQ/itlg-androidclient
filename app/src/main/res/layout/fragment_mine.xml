@@ -225,10 +225,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
-                            android:layout_marginStart="40dp"
+                            android:layout_marginStart="20dp"
                             android:layout_marginTop="20dp"
                             android:layout_toEndOf="@id/farm_icon_imageView"
                             android:textSize="24sp"
+                            android:maxLines="1"
                             tools:text="农场3" />
 
                         <TextView
@@ -236,11 +237,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentBottom="true"
-                            android:layout_marginStart="40dp"
+                            android:layout_marginStart="20dp"
                             android:layout_marginBottom="25dp"
                             android:layout_toEndOf="@id/farm_icon_imageView"
                             android:ellipsize="end"
                             android:textSize="20sp"
+                            android:maxLines="1"
                             tools:text="当前种植:苹果"
                             />
 

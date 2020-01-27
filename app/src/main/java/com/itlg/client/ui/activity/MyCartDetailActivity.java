@@ -80,6 +80,11 @@ public class MyCartDetailActivity extends BaseActivity {
 
     @OnClick(R.id.pay_button)
     void onPayButtonClick() {
+        //先确认购物车是否有东西
+        if (buyInfoModels == null || buyInfoModels.isEmpty()) {
+            ToastUtils.showToast("购物车是空的,先回去选择商品吧");
+            return;
+        }
         //弹出提示信息询问用户是否确认付款
         AlertDialog.Builder builder = new AlertDialog.Builder(MyCartDetailActivity.this);
         View dialogView = LayoutInflater.from(MyCartDetailActivity.this).inflate(R.layout.dialog_confirm, linearLayout, false);
@@ -168,6 +173,11 @@ public class MyCartDetailActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    @OnClick(R.id.back_button)
+    void onBackButtonPressed() {
+        onBackPressed();
     }
 
 }

@@ -248,4 +248,10 @@ public class MyUtils {
         return simpleDateFormat.format(date);
     }
 
+    public static String getTimeMMddhhmm(long time) {
+        Date date = new Date(time);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM月dd日 hh:mm", Locale.CHINA);
+        return simpleDateFormat.format(date);
+    }
+
 }

@@ -143,6 +143,8 @@ public class MineFragment extends Fragment {
         FarmInfoModel model = farmInfoModels.get(0);
         Glide.with(Objects.requireNonNull(getActivity())).load(Config.FILEURL + model.getFarmInfo().getImg())
                 .placeholder(R.drawable.placeholder).into(farmIconImageView);
+        //农场名字
+        farmNameTextView.setText(String.format(getString(R.string.typename_id), model.getTypeName(), model.getFarmInfo().getId()));
         //组装当前农场种植的农产品的字符串
         StringBuilder builder = new StringBuilder();
         if (model.getTypeName().equals("农场")) {
@@ -150,17 +152,16 @@ public class MineFragment extends Fragment {
         } else if (model.getTypeName().equals("养殖场")) {
             builder.append("当前养殖：");
         }
-        //农场名字
-        farmNameTextView.setText(String.format(getString(R.string.typename_id), model.getTypeName(), model.getFarmInfo().getId()));
-        for (int i = 0; i < model.getProductInfos().size(); i++) {
-            if (i != 0) {
-                builder.append("、");
-            }
-            builder.append(model.getProductInfos().get(i).getProductName());
-            if (i > 1) {
+        if (model.getProductInfos() != null && !model.getProductInfos().isEmpty()) {
+            //显示第一个农作物的名字
+            builder.append(model.getProductInfos().get(0).getProductName());
+            //如果有多个,加一个"等"字
+            if (model.getProductInfos().size() > 1) {
                 builder.append("等");
-                break;
             }
+        } else {
+            //没有就显示一个"无"字
+            builder.append("无");
         }
         //当前农场的农产品
         farmCurrentProductTextView.setText(builder.toString());

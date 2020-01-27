@@ -43,7 +43,9 @@
             android:name=".ui.activity.OperatorActivity"
             android:theme="@style/TranslucentTheme" />
         <activity android:name=".ui.activity.LoginActivity" />
-        <activity android:name=".ui.activity.NormalUserActivity" />
+        <activity
+            android:name=".ui.activity.NormalUserActivity"
+            android:launchMode="singleTask" />
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"

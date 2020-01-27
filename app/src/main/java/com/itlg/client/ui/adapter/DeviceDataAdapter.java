@@ -43,8 +43,8 @@ public class DeviceDataAdapter extends RecyclerView.Adapter<DeviceDataAdapter.De
         //显示温湿度
         holder.deviceTemperatureTextView.setText(model.getTemperature());
         holder.deviceHumidityTextView.setText(model.getHumidity());
-        //人性化的时间显示
-        holder.deviceDataTimeTextView.setText(MyUtils.longTypeTimeToString(model.getDataTime()));
+        //按照 xx月xx日 xx:xx的样式显示
+        holder.deviceDataTimeTextView.setText(MyUtils.getTimeMMddhhmm(model.getDataTime()));
     }
 
     @Override
