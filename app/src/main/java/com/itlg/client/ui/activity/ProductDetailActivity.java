@@ -86,7 +86,7 @@ public class ProductDetailActivity extends BaseActivity {
         disableAddButton();
         disableRemoveButton();
         getProductInfoModel();
-
+        setTitle("");
         productCountEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -182,15 +182,14 @@ public class ProductDetailActivity extends BaseActivity {
                 productInfoModel = response;
                 Glide.with(ProductDetailActivity.this)
                         .load(Config.FILEURL + productInfoModel.getProductInfo().getImg()).into(productImgImageView);
-                setTitle(productInfoModel.getProductInfo().getProductName());
 
+                setTitle(productInfoModel.getProductInfo().getProductName());
                 productPriceTextView.setText(String.valueOf(productInfoModel.getProductInfo().getPrice()));
                 productUnitTextView.setText(String.valueOf(productInfoModel.getProductInfo().getUnit()));
                 productNoteTextView.setText(productInfoModel.getProductInfo().getNote());
 
                 tip1.setText(productInfoModel.getTypeOneName());
                 tip2.setText(productInfoModel.getTypeTwoName());
-
                 enableAddButton();
 
                 loadTimeAxis();

@@ -76,28 +76,26 @@ public class SharedPreferencesUtils {
 
     /**
      * 得到保存数据的方法，我们根据默认值得到保存的数据的具体类型，然后调用相对于的方法获取值
-     *
-     * @param key
-     * @param defaultObject
-     * @return
      */
-    public Object get(String key, Object defaultObject) {
+    public <T> T get(String key, T t) {
         SharedPreferences sp = mCtx.getSharedPreferences(mFileName,
                 Context.MODE_PRIVATE);
-
-        if (defaultObject instanceof String) {
-            return sp.getString(key, (String) defaultObject);
-        } else if (defaultObject instanceof Integer) {
-            return sp.getInt(key, (Integer) defaultObject);
-        } else if (defaultObject instanceof Boolean) {
-            return sp.getBoolean(key, (Boolean) defaultObject);
-        } else if (defaultObject instanceof Float) {
-            return sp.getFloat(key, (Float) defaultObject);
-        } else if (defaultObject instanceof Long) {
-            return sp.getLong(key, (Long) defaultObject);
+        Object o;
+        if (t instanceof String) {
+            o = sp.getString(key, (String) t);
+        } else if (t instanceof Integer) {
+            o = sp.getInt(key, (Integer) t);
+        } else if (t instanceof Boolean) {
+            o = sp.getBoolean(key, (Boolean) t);
+        } else if (t instanceof Float) {
+            o = sp.getFloat(key, (Float) t);
+        } else if (t instanceof Long) {
+            o = sp.getLong(key, (Long) t);
+        } else {
+            return null;
         }
 
-        return null;
+        return (T) o;
     }
 
     /**

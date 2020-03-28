@@ -23,15 +23,15 @@ public class UserInfoHolder {
     public UserInfo getUserInfo() {
         if (userInfo == null) {
             SharedPreferencesUtils instance = SharedPreferencesUtils.getInstance();
-            int id = (int) instance.get(KEY_ID,0);
-            String username = (String) instance.get(KEY_USERNAME,"");
-            String password = (String) instance.get(KEY_PASSWORD, "");
-            String name = (String) instance.get(KEY_NAME,"");
-            String email = (String) instance.get(KEY_EMAIL,"");
-            String cellphone = (String) instance.get(KEY_CELLPHONE,"");
-            String userImg = (String) instance.get(KEY_USER_IMG, "");
-            long recordTime = (long) instance.get(KEY_RECORD_TIME, 0L);
-            int privilege = (int) instance.get(KEY_PRIVILEGE, 0);
+            int id = instance.get(KEY_ID, 0);
+            String username = instance.get(KEY_USERNAME, "");
+            String password = instance.get(KEY_PASSWORD, "");
+            String name = instance.get(KEY_NAME, "");
+            String email = instance.get(KEY_EMAIL, "");
+            String cellphone = instance.get(KEY_CELLPHONE, "");
+            String userImg = instance.get(KEY_USER_IMG, "");
+            long recordTime = instance.get(KEY_RECORD_TIME, 0L);
+            int privilege = instance.get(KEY_PRIVILEGE, 0);
             userInfo = new UserInfo();
             userInfo.setId(id);
             userInfo.setUsername(username);
