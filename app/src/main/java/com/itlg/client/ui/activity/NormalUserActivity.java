@@ -17,6 +17,7 @@ import com.itlg.client.ui.fragment.FarmMallFragment;
 import com.itlg.client.ui.fragment.MineFragment;
 import com.itlg.client.ui.fragment.NewsFragment;
 import com.itlg.client.ui.fragment.ProductMallFragment;
+import com.itlg.client.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,8 @@ public class NormalUserActivity extends BaseActivity {
     ViewPager viewPager;
     @BindView(R.id.tabLayout)
     TabLayout tabLayout;
+
+    private long lastBackTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +92,17 @@ public class NormalUserActivity extends BaseActivity {
             setStatusBarColor(R.color.white, false);
         } else if (position > 2 && getStatusBarColor() != getResources().getColor(R.color.colorTheme)) {
             setStatusBarColor(R.color.colorTheme, true);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastBackTime > 1000) {
+            lastBackTime = currentTime;
+            ToastUtils.showToast("连续按两次返回键退出应用");
+        } else {
+            super.onBackPressed();
         }
     }
 

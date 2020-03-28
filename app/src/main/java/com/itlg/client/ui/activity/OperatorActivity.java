@@ -1,7 +1,6 @@
 package com.itlg.client.ui.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -59,6 +58,7 @@ public class OperatorActivity extends BaseActivity {
     private UserInfoHolder holder = UserInfoHolder.getInstance();
     private FarmInfoBiz farmInfoBiz;
     private UserInfo userInfo;
+    private long lastBackTime;
 
 
     @Override
@@ -182,7 +182,6 @@ public class OperatorActivity extends BaseActivity {
     /**
      * 点击虚浮按钮出现菜单
      */
-    @SuppressLint("PrivateApi")
     @OnClick(R.id.menu_floatButton)
     public void showMenu(View view) {
         //创建弹出式菜单
@@ -257,5 +256,14 @@ public class OperatorActivity extends BaseActivity {
         intentIntegrator.initiateScan();
     }
 
-
+    @Override
+    public void onBackPressed() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastBackTime > 1000) {
+            lastBackTime = currentTime;
+            ToastUtils.showToast("连续按两次返回键退出应用");
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

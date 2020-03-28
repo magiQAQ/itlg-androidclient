@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.itlg.client.R;
 import com.itlg.client.biz.VideoBiz;
-import com.itlg.client.config.Config;
 import com.itlg.client.utils.ToastUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -39,14 +38,14 @@ public class WatchMonitorActivity extends AppCompatActivity {
 
     private VideoBiz biz;
     private IjkMediaPlayer player;
-    private String url = Config.VIDEOURL;
+    //private String url = Config.VIDEOURL;
+    private String url = "http://ivi.bupt.edu.cn/hls/cctv3hd.m3u8";
     private TryConnectUrlThread tryConnectUrlThread;
 
     //surface的创建,销毁监听
     private SurfaceHolder.Callback callback = new SurfaceHolder.Callback() {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
-
             //发送请求
             biz.openVideo(new StringCallback() {
                 @Override
@@ -79,7 +78,9 @@ public class WatchMonitorActivity extends AppCompatActivity {
 
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
+            if (player != null) {
+                player.setDisplay(holder);
+            }
         }
 
         @Override
@@ -124,7 +125,8 @@ public class WatchMonitorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_watch_monitor);
         ButterKnife.bind(this);
         biz = new VideoBiz();
-        surfaceView.getHolder().addCallback(callback);
+        //surfaceView.getHolder().addCallback(callback);
+        initPlayer();
     }
 
     private void initPlayer() {
@@ -133,14 +135,19 @@ public class WatchMonitorActivity extends AppCompatActivity {
             player = new IjkMediaPlayer();
             player.setAudioStreamType(AudioManager.STREAM_MUSIC);
             player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "reconnect", 5);
+
+            //开启硬件解码
+            player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);//开启硬解码
+            player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
+            player.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-handle-resolution-change", 1);
         }
         try {
             player.setDataSource(url);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         player.prepareAsync();
+        player.setDisplay(surfaceView.getHolder());
     }
 
     @Override
@@ -179,7 +186,6 @@ public class WatchMonitorActivity extends AppCompatActivity {
                         //如果连接可用就初始化播放器并播放
                         runOnUiThread(() -> {
                             initPlayer();
-                            player.setDisplay(surfaceView.getHolder());
                             //关闭正在打开监控的提示
                             progressLinearLayout.setVisibility(View.GONE);
                         });
