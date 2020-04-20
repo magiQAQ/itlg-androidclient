@@ -37,7 +37,8 @@ public abstract class CommonCallback<T> extends StringCallback {
         }
         //参数化类型
         ParameterizedType parameterized = (ParameterizedType) superclass;
-        return $Gson$Types.canonicalize(Objects.requireNonNull(parameterized).getActualTypeArguments()[0]);
+        return $Gson$Types.canonicalize(Objects.requireNonNull(parameterized)
+                .getActualTypeArguments()[0]);
     }
 
     @Override
