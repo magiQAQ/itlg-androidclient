@@ -122,15 +122,13 @@ public class MyUtils {
 
     /**
      * 得到图片的旋转角度
-     *
-     * @param path 图片的文件路径
-     * @return 图片的角度
      */
     private static int getPictureDegree(InputStream path) {
         int degree = 0;
         try {
             ExifInterface exifInterface = new ExifInterface(path);
-            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL);
             switch (orientation) {
                 case ExifInterface.ORIENTATION_ROTATE_90:
                     degree = 90;

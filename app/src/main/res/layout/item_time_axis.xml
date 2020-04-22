@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="320dp">
+    android:layout_height="wrap_content">
 
     <View
         android:layout_width="4dp"
@@ -70,7 +70,7 @@
             android:padding="15dp"
             android:textColor="#525252"
             android:textSize="16sp"
-            tools:text="传感器：温度：40°C 湿度：43%" />
+            tools:text="传感器：温度：40 湿度：43" />
 
 
     </LinearLayout>

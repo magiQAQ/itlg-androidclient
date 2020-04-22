@@ -2,17 +2,17 @@
 <paths>
     <external-files-path
         name="external-files-path"
-        path="."/>
+        path="." />
     <files-path
         name="files-path"
         path="." />
     <external-path
         name="external-path"
-        path="."/>
+        path="." />
     <external-cache-path
         name="external-cache-path"
-        path="."/>
+        path="." />
     <cache-path
         name="cache-path"
-        path="."/>
+        path="." />
 </paths>

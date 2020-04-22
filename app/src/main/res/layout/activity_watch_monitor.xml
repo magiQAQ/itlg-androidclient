@@ -6,11 +6,11 @@
     android:background="@color/black"
     tools:context=".ui.activity.WatchMonitorActivity">
 
-    <SurfaceView
-        android:id="@+id/surfaceView"
+    <com.itlg.client.ui.view.JzvdStdTikTok
+        android:id="@+id/jz_player"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center" />
+        android:keepScreenOn="true" />
 
     <LinearLayout
         android:id="@+id/progress_linearLayout"

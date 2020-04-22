@@ -48,7 +48,7 @@ public class TimeAxisAdapter extends RecyclerView.Adapter<TimeAxisAdapter.TimeAx
                 .getOperationLog().getOperationTime()));
         holder.axisOperatorTextView.setText(context.getString(R.string.operator_format, model.getOperatorName()));
         holder.axisOperationTextView.setText(context.getString(R.string.operation_format, model.getOperationLog().getOperationInfo()));
-        holder.axisDeviceDataTextView.setText(context.getString(R.string.device_data_format, model.getDataInfo()));
+        holder.axisDeviceDataTextView.setText(model.getDataInfo());
     }
 
     @Override
