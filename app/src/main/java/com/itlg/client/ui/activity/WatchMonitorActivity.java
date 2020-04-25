@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.itlg.client.R;
 import com.itlg.client.biz.VideoBiz;
-import com.itlg.client.ui.view.JzvdStdTikTok;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -20,18 +19,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jzvd.JZDataSource;
 import cn.jzvd.Jzvd;
+import cn.jzvd.JzvdStd;
 
 public class WatchMonitorActivity extends AppCompatActivity {
 
     private static final String TAG = "WatchMonitorActivity";
+
     @BindView(R.id.jz_player)
-    JzvdStdTikTok jzPlayer;
+    JzvdStd jzPlayer;
     @BindView(R.id.progress_linearLayout)
     LinearLayout progressLinearLayout;
 
     private VideoBiz biz;
     //private String url = Config.VIDEOURL;
-    private String url = "http://ivi.bupt.edu.cn/hls/cctv3hd.m3u8";
+    private String url = "http://ivi.bupt.edu.cn/hls/cctv17hd.m3u8";
     private TryConnectUrlThread tryConnectUrlThread;
 
 
@@ -86,11 +87,27 @@ public class WatchMonitorActivity extends AppCompatActivity {
 
     private void initPlayer() {
         JZDataSource jzDataSource = new JZDataSource(url, "智慧农业");
-        jzDataSource.looping = true;
+        jzPlayer.setSaveEnabled(false);
         jzPlayer.setUp(jzDataSource, Jzvd.SCREEN_FULLSCREEN);
         jzPlayer.startVideoAfterPreloading();
+        jzPlayer.backButton.setOnClickListener(v -> finish());
+        jzPlayer.fullscreenButton.setVisibility(View.INVISIBLE);
         //监控已打开,关闭提示
-        progressLinearLayout.setVisibility(View.INVISIBLE);
+        progressLinearLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //重进activity继续播放
+        JzvdStd.goOnPlayOnResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //点击home时暂停播放
+        JzvdStd.goOnPlayOnPause();
     }
 
     @Override
@@ -110,7 +127,7 @@ public class WatchMonitorActivity extends AppCompatActivity {
         if (tryConnectUrlThread != null) {
             tryConnectUrlThread.setThreadStop(true);
         }
-        JzvdStdTikTok.releaseAllVideos();
+        JzvdStd.releaseAllVideos();
         super.onDestroy();
     }
 
@@ -132,11 +149,13 @@ public class WatchMonitorActivity extends AppCompatActivity {
                     connection.setReadTimeout(1000);
                     //测试连接是否可用
                     if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                        Log.e(TAG, "连接可用");
                         //如果连接可用就初始化播放器并播放
                         runOnUiThread(() -> {
                             initPlayer();
                             //关闭正在打开监控的提示
                             progressLinearLayout.setVisibility(View.GONE);
+                            threadStop = true;
                         });
                         break;
                     } else {
